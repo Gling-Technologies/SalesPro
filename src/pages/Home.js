@@ -28,7 +28,7 @@ const Home = () => {
           </Card>
         </NavLink>
       </Col>
-      <Col sm="3">
+      {/* <Col sm="3">
         <NavLink to="/test-drive">
           <Card style={{ width: "18rem" }}>
             <Card.Img
@@ -37,7 +37,7 @@ const Home = () => {
             />
           </Card>
         </NavLink>
-      </Col>
+      </Col> */}
     </Row>
   );
 }
