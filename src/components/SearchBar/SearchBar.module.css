@@ -1,0 +1,3 @@
+:global(.form-control:focus) {
+  border: none;
+}
