@@ -57,7 +57,7 @@ const EnquiryForm = (props) => {
 
 
 const Enquiry = (props) => {
-  const { location, config, inputOptions, uriLocation } = useOutletContext();
+  const { location, appConfig, inputOptions, uriLocation } = useOutletContext();
   const schema = yup.object().shape({
     "Customer Name": yup.string().required(),
     "Contact Number": yup
@@ -67,7 +67,9 @@ const Enquiry = (props) => {
         /^[0-9]{10}$/,
         "Mobile number is not valid! Enter 10 digits number."
       ),
-    "Email Address": yup.string().required().email(),
+    "Email Address": appConfig.mandatoriness.enquiryForm.EmailAddress
+      ? yup.string().required().email()
+      : yup.string().email(),
     Address: yup.string().required(),
     "Source of Enquiry": yup.string().required(),
     Model: yup.string().required(),
@@ -98,8 +100,8 @@ const Enquiry = (props) => {
         setSubmitting(false);
       })
       .insertData(
-        config.forms.enquiry.sheetName,
-        config.forms.enquiry.headerRow,
+        appConfig.forms.enquiry.sheetName,
+        appConfig.forms.enquiry.headerRow,
         payload
       );
   }

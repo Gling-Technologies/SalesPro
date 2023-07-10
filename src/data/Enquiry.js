@@ -19,7 +19,7 @@ const formFieldsMetadata = [
     id: "Email Address",
     name: "Email Address",
     type: "email",
-    required: true,
+    required: false,
     icon: "envelope-at-fill",
     placeholder: "Enter a value...",
   },

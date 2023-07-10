@@ -6,19 +6,19 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 const SearchFormField = (props) => {
   const [selected, setSelected] = useState([]);
-  const [isInitialed, setIsInitialed] = useState(false);
+  const [fieldValue, setFieldValue] = useState("");
 
-  if (!isInitialed && !!props.value) {
-    setIsInitialed(true);
+  if (props.value !== fieldValue) {
+    setFieldValue(props.value);
     setSelected([{ [props.name]: props.value }]);
   }
 
   const changeHandler = (values) => {
     console.log(values);
-    setIsInitialed(true);
     setSelected(values);
     if(values.length > 0){
-      props.handleChange(values[0].name, values[0]);
+      setFieldValue(values[0][props.name]);
+      props.handleChange(values[0][props.name], values[0][props.name]);
     } else {
       props.handleChange("", {});
     }
