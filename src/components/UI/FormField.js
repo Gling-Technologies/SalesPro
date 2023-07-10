@@ -23,6 +23,9 @@ const FormField = (props) => {
           isInvalid={props.touched && !!props.error}
           // onBlur={props.onBlur}
         >
+          <option disabled value="">
+            Select an Option
+          </option>
           {props.optionItems &&
             props.optionItems.map((optionItem) => (
               <option key={optionItem} value={optionItem}>

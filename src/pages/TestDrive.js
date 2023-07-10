@@ -32,6 +32,7 @@ const EnquiryForm = (props) => {
     handleBlur,
     handleSubmit,
     setFieldValue,
+    setValues,
     isSubmitting,
     submitCount,
   } = useFormikContext();
@@ -54,6 +55,29 @@ const EnquiryForm = (props) => {
   }, [setFieldValue]);
 
   useEffect(() => {
+    window.google &&
+      window.google.script.url.getLocation(function (location) {
+        const fieldNames = [
+          "Enquiry No.",
+          "Customer Name",
+          "Contact Number",
+          "Email Address",
+          "Address",
+          "Source of Enquiry",
+          "Model",
+          "Sales Person Name",
+        ];
+        const newValues = {};
+        for (const fieldName of fieldNames) {
+          if (fieldName in location.parameters) {
+            newValues[fieldName] = location.parameters[fieldName][0];
+          }
+        }
+        setValues(newValues, false);
+      });
+  }, [setValues]);
+
+  useEffect(() => {
     const allInputOptionsEl = document.getElementById("all-input-options");
     let allInputOptions = allInputOptionsEl.dataset.inputOptions;
     setFieldOptions(JSON.parse(allInputOptions));
@@ -66,6 +90,8 @@ const EnquiryForm = (props) => {
           name="Enquiry No."
           id="Enquiry No."
           icon="person-fill"
+          value={values["Enquiry No."]}
+          onChange={handleChange}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
@@ -111,6 +137,7 @@ const TestDrive = (props) => {
     obj[formField.name] = formField.value || "";
     return obj;
   }, {});
+  initialValues["Enquiry No."] = [];
 
   const submitHandler = (values, { setSubmitting }) => {
     console.log("Form Values", values);

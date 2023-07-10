@@ -8,6 +8,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { useFormikContext } from "formik";
 
 import FormCard from "../components/UI/FormCard";
+import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import formFieldsMetadata from '../data/EnquiryStatus';
 import * as yup from "yup";
@@ -86,6 +87,11 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
+        <SearchFormField
+          name="Enquiry No."
+          id="Enquiry No."
+          icon="person-fill"
+        />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
             <FormField
@@ -118,8 +124,10 @@ const EnquiryForm = (props) => {
 
 
 const EnquiryStatus = (props) => {
+  const [fieldOptions, setFieldOptions] = useState({});
   const { location } = useOutletContext();
   const schema = yup.object().shape({
+    "Enquiry No.": yup.string().required(),
     "Customer Name": yup.string().required(),
     "Contact Number": yup
       .string()
@@ -134,12 +142,20 @@ const EnquiryStatus = (props) => {
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Customer Remarks": yup.string().required(),
+    "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
+
+  useEffect(() => {
+    const allInputOptionsEl = document.getElementById("all-input-options");
+    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
+    setFieldOptions(JSON.parse(allInputOptions));
+  }, []);
 
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
   }, {});
+  initialValues["Enquiry No."] = [];
 
   const submitHandler = (values, { setSubmitting }) => {
     console.log("Form Values", values);

@@ -38,7 +38,7 @@ const formFieldsMetadata = [
   {
     id: "Source of Enquiry",
     name: "Source of Enquiry",
-    type: "text",
+    type: "select",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
@@ -47,7 +47,7 @@ const formFieldsMetadata = [
   {
     id: "Model",
     name: "Model",
-    type: "text",
+    type: "select",
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
@@ -56,7 +56,7 @@ const formFieldsMetadata = [
   {
     id: "Sales Person Name",
     name: "Sales Person Name",
-    type: "text",
+    type: "select",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
@@ -106,7 +106,7 @@ const formFieldsMetadata = [
   {
     id: "Approved By",
     name: "Approved By",
-    type: "text",
+    type: "select",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",

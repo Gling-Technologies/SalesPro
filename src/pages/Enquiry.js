@@ -54,11 +54,11 @@ const EnquiryForm = (props) => {
     //   });
   }, [setFieldValue]);
 
-    useEffect(() => {
-      const allInputOptionsEl = document.getElementById("all-input-options");
-      let allInputOptions = allInputOptionsEl.dataset.inputOptions;
-      setFieldOptions(JSON.parse(allInputOptions));
-    }, []);
+  useEffect(() => {
+    const allInputOptionsEl = document.getElementById("all-input-options");
+    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
+    setFieldOptions(JSON.parse(allInputOptions));
+  }, []);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
@@ -86,7 +86,7 @@ const EnquiryForm = (props) => {
 
 
 const Enquiry = (props) => {
-  const { location } = useOutletContext();
+  const { location, config } = useOutletContext();
   const schema = yup.object().shape({
     "Customer Name": yup.string().required(),
     "Contact Number": yup
@@ -102,7 +102,6 @@ const Enquiry = (props) => {
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Customer Remarks": yup.string().required(),
-    "Visit Type": yup.string().oneOf([])
   });
 
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {
@@ -111,25 +110,25 @@ const Enquiry = (props) => {
   }, {})
 
   const submitHandler = (values, { setSubmitting }) => {
-    console.log("Form Values", values);
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
+    console.log("Form Payload", payload);
+
+    setSubmitting(true);
     window.google.script.run
-      .withSuccessHandler(result => {
-        console.log(result)
+      .withSuccessHandler((result) => {
+        console.log(result);
         setSubmitting(false);
       })
-      .withFailureHandler(err => {
+      .withFailureHandler((err) => {
         console.error(err);
+        setSubmitting(false);
       })
-      .insertData();
-  }
-
-  const validator = (values) => {
-    const errors = {};
-    errors["Customer Name"] = "This field is required!";
-    console.log("validating...")
-    return errors;
+      .insertData(
+        config.forms.enquiry.sheetName,
+        config.forms.enquiry.headerRow,
+        payload
+      );
   }
 
   return (

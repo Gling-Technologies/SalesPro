@@ -16,9 +16,9 @@ const SearchFormField = (props) => {
   ];
   const ref = React.createRef();
 
-  const changeHandler = (...args) => {
-    console.log(args);
-    setSingleSelections(...args);
+  const changeHandler = (value) => {
+    console.log(value);
+    setSingleSelections(value);
   }
 
   return (
@@ -33,10 +33,10 @@ const SearchFormField = (props) => {
           id={props.id}
           required={true}
           labelKey="name"
-          onChange={changeHandler}
+          onChange={props.onChange}
           options={options}
           placeholder={props.placeholder}
-          selected={singleSelections}
+          selected={props.value}
           paginate={true}
           ref={ref}
           renderMenuItemChildren={(option) => (
