@@ -54,28 +54,28 @@ const EnquiryForm = (props) => {
     //   });
   }, [setFieldValue]);
 
-  useEffect(() => {
-    window.google &&
-      window.google.script.url.getLocation(function (location) {
-        const fieldNames = [
-          "Enquiry No.",
-          "Customer Name",
-          "Contact Number",
-          "Email Address",
-          "Address",
-          "Source of Enquiry",
-          "Model",
-          "Sales Person Name",
-        ];
-        const newValues = {};
-        for (const fieldName of fieldNames) {
-          if (fieldName in location.parameters) {
-            newValues[fieldName] = location.parameters[fieldName][0];
-          }
-        }
-        setValues(newValues, false);
-      });
-  }, [setValues]);
+  // useEffect(() => {
+  //   window.google &&
+  //     window.google.script.url.getLocation(function (location) {
+  //       const fieldNames = [
+  //         "Enquiry No.",
+  //         "Customer Name",
+  //         "Contact Number",
+  //         "Email Address",
+  //         "Address",
+  //         "Source of Enquiry",
+  //         "Model",
+  //         "Sales Person Name",
+  //       ];
+  //       const newValues = {};
+  //       for (const fieldName of fieldNames) {
+  //         if (fieldName in location.parameters) {
+  //           newValues[fieldName] = location.parameters[fieldName][0];
+  //         }
+  //       }
+  //       setValues(newValues, false);
+  //     });
+  // }, [setValues]);
 
   useEffect(() => {
     const allInputOptionsEl = document.getElementById("all-input-options");
@@ -90,8 +90,8 @@ const EnquiryForm = (props) => {
           name="Enquiry No."
           id="Enquiry No."
           icon="person-fill"
-          value={values["Enquiry No."]}
-          onChange={handleChange}
+          // value={values["Enquiry No."]}
+          // onChange={handleChange}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
