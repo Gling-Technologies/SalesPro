@@ -6,14 +6,16 @@ import { Typeahead } from "react-bootstrap-typeahead";
 
 const SearchFormField = (props) => {
   const [selected, setSelected] = useState([]);
+  const [isInitialed, setIsInitialed] = useState(false);
 
-  let isInvalid;
-  if (selected.length) {
-    // isInvalid = selected[0].name === state.name ? false : true;
+  if (!isInitialed && !!props.value) {
+    setIsInitialed(true);
+    setSelected([{ [props.name]: props.value }]);
   }
 
   const changeHandler = (values) => {
     console.log(values);
+    setIsInitialed(true);
     setSelected(values);
     if(values.length > 0){
       props.handleChange(values[0].name, values[0]);
@@ -26,13 +28,13 @@ const SearchFormField = (props) => {
     <Col sm="12">
       <Form.Group className="mb-3">
         <Form.Label htmlFor={props.id}>
-          {props.name} (searchBy: {props.searchBy})
+          {props.name}
         </Form.Label>
         <Typeahead
           id={props.id}
           required={true}
-          isInvalid={isInvalid}
-          labelKey={props.searchBy}
+          isInvalid={props.touched && !!props.error}
+          labelKey={props.name}
           onChange={changeHandler}
           options={props.optionItems}
           placeholder={props.placeholder}
@@ -40,9 +42,9 @@ const SearchFormField = (props) => {
           paginate={true}
           renderMenuItemChildren={(option) => (
             <div>
-              {option[props.searchBy]}
+              {option[props.name]}
               <div>
-                <small>{Object.entries(option).map((x,y) => `${x} : ${y}`).join(" | ")}</small>
+                <small>{Object.entries(option).map(([x, y]) => `${x} : ${y}`).join(" | ")}</small>
               </div>
             </div>
           )}

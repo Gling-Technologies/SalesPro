@@ -13,16 +13,6 @@ import formFieldsMetadata from '../data/Enquiry';
 import * as yup from "yup";
 
 
-async function fetchData() {
-  const result = await new Promise((resolve, reject) => {
-    global.config.google.script.run
-      .withSuccessHandler(resolve)
-      .withFailureHandler(reject)
-      .getConfiguration();
-  });
-  return result;
-}
-
 const EnquiryForm = (props) => {
   const {
     values,
@@ -67,7 +57,7 @@ const EnquiryForm = (props) => {
 
 
 const Enquiry = (props) => {
-  const { location, config, inputOptions } = useOutletContext();
+  const { location, config, inputOptions, uriLocation } = useOutletContext();
   const schema = yup.object().shape({
     "Customer Name": yup.string().required(),
     "Contact Number": yup
@@ -92,6 +82,8 @@ const Enquiry = (props) => {
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));
+    const queryParams = new URLSearchParams(values);
+    payload["Enquiry Status Form"] = `${uriLocation}?${queryParams.toString()}`;
     payload["Location"] = location;
     console.log("Form Payload", payload);
 

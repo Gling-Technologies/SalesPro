@@ -9,7 +9,7 @@ import { useFormikContext } from "formik";
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata from "../data/TestDrive";
+import formFieldsMetadata, { searchFieldsMeta } from "../data/TestDrive";
 import * as yup from "yup";
 
 
@@ -53,8 +53,8 @@ const EnquiryForm = (props) => {
   const { config, appConfig, inputOptions } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
 
-  console.log(errors);
-  console.log(values);
+  console.log("TestDrive Form", errors);
+  console.log("TestDrive Form", values);
 
   useEffect(() => {
     // set the search values
@@ -71,13 +71,13 @@ const EnquiryForm = (props) => {
       });
   }, [appConfig]);
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionsItem) => {
+  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
     console.log(`${fieldName} is being set!`);
     setValues({ ...values, [fieldName]: fieldValue });
     const newValues = {};
     for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionsItem) {
-        newValues[fieldName] = optionsItem[fieldName];
+      if (fieldName in optionItem && !!optionItem[fieldName]) {
+        newValues[fieldName] = optionItem[fieldName];
       }
     }
     setValues({ ...values, ...newValues });
@@ -86,16 +86,20 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        <SearchFormField
-          name="Enquiry Number"
-          id="Enquiry Number"
-          icon="person-fill"
-          value={values["Enquiry Number"]}
-          handleChange={searchFieldChangeHandler.bind(null, "Enquiry Number")}
-          optionItems={searchFieldOptions}
-          searchBy="Enquiry Number"
-          error={errors["Enquiry Number"]}
-        />
+        {searchFieldsMeta.length &&
+          searchFieldsMeta.map((data) => (
+            <SearchFormField
+              key={data.id}
+              id={data.id}
+              name={data.name}
+              icon={data.icon}
+              handleChange={searchFieldChangeHandler.bind(null, data.name)}
+              optionItems={searchFieldOptions}
+              error={errors[data.name]}
+              value={values[data.name]}
+              touched={touched[data.name]}
+            />
+          ))}
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
             <FormField

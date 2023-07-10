@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
-import { inputOptions, appConfiguration } from '../../config';
+import { inputOptions, appConfiguration, uriLocation } from '../../config';
 
 async function fetchConfiguration() {
   const result = await new Promise((resolve, reject) => {
@@ -61,6 +61,7 @@ const Layout = () => {
           location,
           config,
           inputOptions,
+          uriLocation,
           appConfig: appConfiguration,
         }}
       ></Outlet>

@@ -1,23 +1,5 @@
 const formFieldsMetadata = [
   {
-    id: "Customer Name",
-    name: "Customer Name",
-    type: "text",
-    required: true,
-    icon: "person-fill",
-    placeholder: "Enter a value...",
-    disabled: true,
-  },
-  {
-    id: "Contact Number",
-    name: "Contact Number",
-    type: "tel",
-    required: true,
-    icon: "telephone-fill",
-    placeholder: "Enter a value...",
-    disabled: true,
-  },
-  {
     id: "Email Address",
     name: "Email Address",
     type: "email",
@@ -113,4 +95,29 @@ const formFieldsMetadata = [
   },
 ];
 
+const searchFieldsMeta = [
+  {
+    id: "Enquiry Number",
+    name: "Enquiry Number",
+    icon: "person-fill",
+    required: true,
+    placeholder: "Pick a number...",
+  },
+  {
+    id: "Customer Name",
+    name: "Customer Name",
+    required: true,
+    icon: "person-fill",
+    placeholder: "Enter a value...",
+  },
+  {
+    id: "Contact Number",
+    name: "Contact Number",
+    required: true,
+    icon: "telephone-fill",
+    placeholder: "Enter a value...",
+  },
+];
+
 export default formFieldsMetadata;
+export { searchFieldsMeta };
