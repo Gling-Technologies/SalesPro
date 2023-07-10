@@ -41,8 +41,10 @@ const Layout = () => {
     window.google &&
       window.google.script.url.getLocation(function (location) {
         if (
-          "formType" in location.parameter &&
-          location.parameter["formType"] in ["enquiry", "enquiry-status", "test-drive"]
+          "formType" in location.parameters &&
+          ["enquiry", "enquiry-status", "test-drive"].includes(
+            location.parameter["formType"]
+          )
         ) {
           navigate("/" + location.parameters["formType"][0]);
         }

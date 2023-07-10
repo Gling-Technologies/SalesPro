@@ -48,6 +48,8 @@ const EnquiryForm = (props) => {
   } = useFormikContext();
 
   const { inputOptions } = useOutletContext();
+  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
+
   console.log("EnquiryStatus Form", values);
 
   useEffect(() => {
@@ -64,29 +66,33 @@ const EnquiryForm = (props) => {
     //     console.error(err);
     //   });
 
-    window.google && window.google.script.url.getLocation(function (location) {
-      const fieldNames = [
-        "Customer Name",
-        "Contact Number",
-        "Email Address",
-        "Address",
-        "Source of Enquiry",
-        "Model",
-        "Sales Person Name",
-        "Customer Type",
-        "Visit Type",
-        "CRM ID",
-        "Priority",
-      ];
-      const newValues = {};
-      for (const fieldName of fieldNames) {
-        if (fieldName in location.parameters) {
-          newValues[fieldName] = location.parameters[fieldName][0];
-        }
-      }
-      // setValues(newValues, true);
-    });
-  }, [setValues]);
+    if(!searchParamsUsed){
+      window.google &&
+        window.google.script.url.getLocation(function (location) {
+          const fieldNames = [
+            "Customer Name",
+            "Contact Number",
+            "Email Address",
+            "Address",
+            "Source of Enquiry",
+            "Model",
+            "Sales Person Name",
+            "Customer Type",
+            "Visit Type",
+            "CRM ID",
+            "Priority",
+          ];
+          const newValues = {};
+          for (const fieldName of fieldNames) {
+            if (fieldName in location.parameters) {
+              newValues[fieldName] = location.parameters[fieldName][0];
+            }
+          }
+          setSearchParamsUsed(true);
+          setValues({ ...values, ...newValues });
+        });
+    }
+  }, [searchParamsUsed, values, setValues]);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>

@@ -40,12 +40,13 @@ const EnquiryForm = (props) => {
     setFieldValue,
     setValues,
     isSubmitting,
-    submitCount,
   } = useFormikContext();
 
   const { inputOptions } = useOutletContext();
+  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
 
   console.log(errors);
+  console.log(values);
 
   React.useEffect(() => {
     // set the input values
@@ -63,27 +64,30 @@ const EnquiryForm = (props) => {
   }, [setFieldValue]);
 
   useEffect(() => {
-    window.google &&
-      window.google.script.url.getLocation(function (location) {
-        const fieldNames = [
-          "Enquiry No.",
-          "Customer Name",
-          "Contact Number",
-          "Email Address",
-          "Address",
-          "Source of Enquiry",
-          "Model",
-          "Sales Person Name",
-        ];
-        const newValues = {};
-        for (const fieldName of fieldNames) {
-          if (fieldName in location.parameters) {
-            newValues[fieldName] = location.parameters[fieldName][0];
+    if (!searchParamsUsed){
+      window.google &&
+        window.google.script.url.getLocation(function (location) {
+          const fieldNames = [
+            "Enquiry No.",
+            "Customer Name",
+            "Contact Number",
+            "Email Address",
+            "Address",
+            "Source of Enquiry",
+            "Model",
+            "Sales Person Name",
+          ];
+          const newValues = {};
+          for (const fieldName of fieldNames) {
+            if (fieldName in location.parameters) {
+              newValues[fieldName] = location.parameters[fieldName][0];
+            }
           }
-        }
-        setValues(newValues, true);
-      });
-  }, [setValues]);
+          setSearchParamsUsed(true);
+          setValues({ ...values, ...newValues });
+        });
+    }
+  }, [searchParamsUsed, values, setValues]);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
