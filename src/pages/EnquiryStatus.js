@@ -14,12 +14,13 @@ import formFieldsMetadata from '../data/EnquiryStatus';
 import * as yup from "yup";
 
 
-async function fetchData() {
+async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
-    window.google && window.google.script.run
-      .withSuccessHandler(resolve)
-      .withFailureHandler(reject)
-      .getConfiguration();
+    window.google &&
+      window.google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(reject)
+        .getSearchData(sheetName, headerRow);
   });
   return result;
 }

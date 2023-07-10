@@ -42,9 +42,9 @@ const SearchFormField = (props) => {
           paginate={true}
           renderMenuItemChildren={(option) => (
             <div>
-              {option.name}
+              {option[props.searchBy]}
               <div>
-                <small>Customer Name: {JSON.stringify(option)}</small>
+                <small>{Object.entries(option).map((x,y) => `${x} : ${y}`).join(" | ")}</small>
               </div>
             </div>
           )}

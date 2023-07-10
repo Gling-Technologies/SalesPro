@@ -63,7 +63,7 @@ const EnquiryForm = (props) => {
       appConfig.forms.enquiryStatus.headerRow
     )
       .then((records) => {
-        // console.log(records);
+        console.log(records);
         setSearchFieldOptions(records);
       })
       .catch((err) => {
