@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useOutletContext } from "react-router-dom";
 
 import { Row } from 'react-bootstrap';
@@ -24,6 +24,7 @@ async function fetchData() {
 }
 
 const EnquiryForm = (props) => {
+  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -53,6 +54,12 @@ const EnquiryForm = (props) => {
     //   });
   }, [setFieldValue]);
 
+    useEffect(() => {
+      const allInputOptionsEl = document.getElementById("all-input-options");
+      let allInputOptions = allInputOptionsEl.dataset.inputOptions;
+      setFieldOptions(JSON.parse(allInputOptions));
+    }, []);
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -66,9 +73,10 @@ const EnquiryForm = (props) => {
               error={errors[data.name]}
               onChange={handleChange}
               onBlur={handleBlur}
+              optionItems={fieldOptions[data.name]}
             />
           ))}
-        <Button variant="primary" type="submit" className='mt-3'>
+        <Button variant="primary" type="submit" className="mt-3">
           Submit
         </Button>
       </Row>
@@ -94,6 +102,7 @@ const Enquiry = (props) => {
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Customer Remarks": yup.string().required(),
+    "Visit Type": yup.string().oneOf([])
   });
 
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {

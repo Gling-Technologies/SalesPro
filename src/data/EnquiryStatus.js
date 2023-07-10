@@ -56,7 +56,7 @@ const formFieldsMetadata = [
   {
     id: "Sales Person Name",
     name: "Sales Person Name",
-    type: "text",
+    type: "select",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
@@ -65,7 +65,15 @@ const formFieldsMetadata = [
   {
     id: "Customer Type",
     name: "Customer Type",
-    type: "text",
+    type: "select",
+    required: true,
+    icon: "patch-question",
+    placeholder: "Enter a value...",
+  },
+  {
+    id: "Visit Type",
+    name: "Visit Type",
+    type: "select",
     required: true,
     icon: "patch-question",
     placeholder: "Enter a value...",
@@ -79,8 +87,8 @@ const formFieldsMetadata = [
     placeholder: "Enter a value...",
   },
   {
-    id: "Status",
-    name: "Status",
+    id: "Enquiry Status",
+    name: "Enquiry Status",
     type: "select",
     required: true,
     icon: "sticky-fill",

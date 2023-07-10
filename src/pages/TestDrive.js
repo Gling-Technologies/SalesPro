@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
-import { Row } from 'react-bootstrap';
+import { Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useFormikContext } from "formik";
@@ -9,9 +9,8 @@ import { useFormikContext } from "formik";
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata from '../data/TestDrive';
+import formFieldsMetadata from "../data/TestDrive";
 import * as yup from "yup";
-
 
 async function fetchData() {
   const result = await new Promise((resolve, reject) => {
@@ -24,6 +23,7 @@ async function fetchData() {
 }
 
 const EnquiryForm = (props) => {
+  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -53,10 +53,20 @@ const EnquiryForm = (props) => {
     //   });
   }, [setFieldValue]);
 
+  useEffect(() => {
+    const allInputOptionsEl = document.getElementById("all-input-options");
+    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
+    setFieldOptions(JSON.parse(allInputOptions));
+  }, []);
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        <SearchFormField name="Enquiry No." id="Enquiry No." icon="person-fill" />
+        <SearchFormField
+          name="Enquiry No."
+          id="Enquiry No."
+          icon="person-fill"
+        />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
             <FormField
@@ -67,16 +77,16 @@ const EnquiryForm = (props) => {
               error={errors[data.name]}
               onChange={handleChange}
               onBlur={handleBlur}
+              optionItems={fieldOptions[data.name]}
             />
           ))}
-        <Button variant="primary" type="submit" className='mt-3'>
+        <Button variant="primary" type="submit" className="mt-3">
           Submit
         </Button>
       </Row>
     </Form>
   );
-}
-
+};
 
 const TestDrive = (props) => {
   const { location } = useOutletContext();

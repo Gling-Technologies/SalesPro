@@ -6,6 +6,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Contact Number",
@@ -14,6 +15,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "telephone-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Email Address",
@@ -22,6 +24,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "envelope-at-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Address",
@@ -30,6 +33,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "geo-alt-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Source of Enquiry",
@@ -38,6 +42,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Model",
@@ -46,6 +51,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Sales Person Name",
@@ -54,11 +60,20 @@ const formFieldsMetadata = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    disabled: true,
   },
   {
     id: "Test Drive Vehicle",
     name: "Test Drive Vehicle",
-    type: "text",
+    type: "select",
+    required: true,
+    icon: "car-front-fill",
+    placeholder: "Enter a value...",
+  },
+  {
+    id: "Test Drive Type",
+    name: "Test Drive Type",
+    type: "select",
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
@@ -72,21 +87,29 @@ const formFieldsMetadata = [
     placeholder: "Enter a value...",
   },
   {
+    id: "Odometer Reading",
+    name: "Odometer Reading",
+    type: "number",
+    required: true,
+    icon: "123",
+    placeholder: "Enter a value...",
+  },
+  {
+    id: "Customer Feedback",
+    name: "Customer Feedback",
+    type: "select",
+    required: true,
+    icon: "sticky-fill",
+    placeholder: "Enter a value...",
+    // as: "textarea",
+  },
+  {
     id: "Approved By",
     name: "Approved By",
     type: "text",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
-  },
-  {
-    id: "Complaint Remarks",
-    name: "Complaint Remarks",
-    type: "text",
-    required: true,
-    icon: "sticky-fill",
-    placeholder: "Enter a value...",
-    as: "textarea",
   },
 ];
 

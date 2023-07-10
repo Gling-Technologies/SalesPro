@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useOutletContext, useSearchParams } from "react-router-dom";
 
 import { Row } from 'react-bootstrap';
@@ -24,6 +24,7 @@ async function fetchData() {
 }
 
 const EnquiryForm = (props) => {
+  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -35,11 +36,10 @@ const EnquiryForm = (props) => {
     setValues,
     isSubmitting,
     submitCount,
-    ...rest
   } = useFormikContext();
   // const [searchParams, setSearchParams] = useSearchParams();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // set the input values
     // fetchData()
     //   .then((newData) => {
@@ -52,6 +52,7 @@ const EnquiryForm = (props) => {
     //   .catch((err) => {
     //     console.error(err);
     //   });
+
     window.google && window.google.script.url.getLocation(function (location) {
       const fieldNames = [
         "Customer Name",
@@ -76,6 +77,12 @@ const EnquiryForm = (props) => {
     });
   }, [setValues]);
 
+  useEffect(() => {
+    const allInputOptionsEl = document.getElementById("all-input-options");
+    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
+    setFieldOptions(JSON.parse(allInputOptions))
+  }, []);
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -89,16 +96,19 @@ const EnquiryForm = (props) => {
               error={errors[data.name]}
               onChange={handleChange}
               onBlur={handleBlur}
+              optionItems={fieldOptions[data.name]}
             />
           ))}
         <Button variant="primary" type="submit" className="mt-3">
-          {isSubmitting && (<Spinner
-            as="span"
-            animation="border"
-            size="sm"
-            role="status"
-            aria-hidden="true"
-          />)}
+          {isSubmitting && (
+            <Spinner
+              as="span"
+              animation="border"
+              size="sm"
+              role="status"
+              aria-hidden="true"
+            />
+          )}
           <span>{isSubmitting ? "Submiting" : "Submit"}</span>
         </Button>
       </Row>
