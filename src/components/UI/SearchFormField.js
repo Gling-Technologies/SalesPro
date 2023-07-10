@@ -2,54 +2,43 @@ import React, { useRef, useState } from 'react'
 import PropTypes from "prop-types";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 const SearchFormField = (props) => {
-  const [singleSelections, setSingleSelections] = useState([]);
-  const [hiddenInputVal, setHiddenInputVal] = useState("");
-  const hiddenInputRef = useRef();
+  const [selected, setSingleSelections] = useState([]);
 
-  const changeHandler = (values, ...args) => {
+  let isInvalid;
+  const options = [];
+  // const state = options[index];
+  if (selected.length) {
+    // isInvalid = selected[0].name === state.name ? false : true;
+  }
+
+  const changeHandler = (values) => {
     console.log(values);
     setSingleSelections(values);
     if(values.length > 0){
       props.handleChange(values[0].name);
-
-      // setHiddenInputVal(values[0].name);
     } else {
       props.handleChange("");
-
-      // setHiddenInputVal("");
     }
-
-    props.handleChange();
-
-    // setTimeout(() => {
-    //   var event = new Event("change");
-    //   console.log(hiddenInputRef.current);
-    //   hiddenInputRef.current.dispatchEvent(event);
-    // }, 1000);
   }
-
-  // const hiddenInputChangeHandler = (event) => {
-  //   console.log("hiddenInputChangeHandler triggered");
-  //   props.handleChange(event);
-  // }
 
   return (
     <Col sm="12">
       <Form.Group className="mb-3">
-        <Form.Label htmlFor={props.id}>{props.name}</Form.Label>
+        <Form.Label htmlFor={props.id}>
+          {props.name} (searchBy: {props.searchBy})
+        </Form.Label>
         <Typeahead
           id={props.id}
           required={true}
-          labelKey="name"
+          isInvalid={isInvalid}
+          labelKey={props.searchBy}
           onChange={changeHandler}
-          options={props.options}
+          options={props.optionItems}
           placeholder={props.placeholder}
-          selected={singleSelections}
+          selected={selected}
           paginate={true}
           renderMenuItemChildren={(option) => (
             <div>
@@ -60,13 +49,9 @@ const SearchFormField = (props) => {
             </div>
           )}
         />
-        {/* <Form.Control
-          type="hidden"
-          name={props.name}
-          onChange={hiddenInputChangeHandler}
-          value={hiddenInputVal}
-          ref={hiddenInputRef}
-        ></Form.Control> */}
+        <Form.Control.Feedback type="invalid">
+          {props.error}
+        </Form.Control.Feedback>
       </Form.Group>
     </Col>
   );

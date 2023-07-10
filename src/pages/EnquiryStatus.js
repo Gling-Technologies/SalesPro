@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useOutletContext, useSearchParams } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
 import { Row } from 'react-bootstrap';
 import Form from "react-bootstrap/Form";
@@ -24,14 +24,19 @@ async function fetchData() {
   return result;
 }
 
-
-const searchFieldOptions = [
-  { id: 1, name: "John" },
-  { id: 2, name: "Miles" },
-  { id: 3, name: "Charles" },
-  { id: 4, name: "Herbie" },
+const prefilledfieldNames = [
+  "Customer Name",
+  "Contact Number",
+  "Email Address",
+  "Address",
+  "Source of Enquiry",
+  "Model",
+  "Sales Person Name",
+  "Customer Type",
+  "Visit Type",
+  "CRM ID",
+  "Priority",
 ];
-
 
 const EnquiryForm = (props) => {
   const {
@@ -41,49 +46,37 @@ const EnquiryForm = (props) => {
     handleChange,
     handleBlur,
     handleSubmit,
-    setFieldValue,
     setValues,
     isSubmitting,
-    submitCount,
   } = useFormikContext();
 
-  const { inputOptions } = useOutletContext();
+  const { inputOptions, appConfig } = useOutletContext();
   const [searchParamsUsed, setSearchParamsUsed] = useState(false);
+  const [searchFieldOptions, setSearchFieldOptions] = useState([]);
 
   console.log("EnquiryStatus Form", values);
 
   useEffect(() => {
-    // set the input values
-    // fetchData()
-    //   .then((newData) => {
-    //     console.log(newData);
-    //     if (!newData) return;
-    //     for (const field in newData) {
-    //       setFieldValue(field, newData[field]);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
+    // set the search values
+    fetchData(
+      appConfig.forms.enquiry.sheetName,
+      appConfig.forms.enquiry.headerRow
+    )
+      .then((records) => {
+        // console.log(records);
+        setSearchFieldOptions(records);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [appConfig]);
 
+  useEffect(() => {
     if(!searchParamsUsed){
       window.google &&
         window.google.script.url.getLocation(function (location) {
-          const fieldNames = [
-            "Customer Name",
-            "Contact Number",
-            "Email Address",
-            "Address",
-            "Source of Enquiry",
-            "Model",
-            "Sales Person Name",
-            "Customer Type",
-            "Visit Type",
-            "CRM ID",
-            "Priority",
-          ];
           const newValues = {};
-          for (const fieldName of fieldNames) {
+          for (const fieldName of prefilledfieldNames) {
             if (fieldName in location.parameters) {
               newValues[fieldName] = location.parameters[fieldName][0];
             }
@@ -94,6 +87,18 @@ const EnquiryForm = (props) => {
     }
   }, [searchParamsUsed, values, setValues]);
 
+  const searchFieldChangeHandler = (fieldName, fieldValue, optionsItem) => {
+    console.log(`${fieldName} is being set!`);
+    setValues({ ...values, [fieldName]: fieldValue });
+    const newValues = {};
+    for (const fieldName of prefilledfieldNames) {
+      if (fieldName in optionsItem) {
+        newValues[fieldName] = optionsItem[fieldName];
+      }
+    }
+    setValues({ ...values, ...newValues });
+  };
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -101,12 +106,10 @@ const EnquiryForm = (props) => {
           name="Enquiry Number"
           id="Enquiry Number"
           icon="person-fill"
-          handleChange={(newValue) => {
-            console.log("Enquiry No is being set!");
-            setFieldValue("Enquiry Number", newValue);
-          }}
-          options={searchFieldOptions}
+          handleChange={searchFieldChangeHandler.bind(null, "Enquiry Number")}
+          optionItems={searchFieldOptions}
           searchBy="Enquiry Number"
+          error={errors["Enquiry Number"]}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
@@ -136,7 +139,7 @@ const EnquiryForm = (props) => {
               aria-hidden="true"
             />
           )}
-          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
+          <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>
@@ -145,8 +148,7 @@ const EnquiryForm = (props) => {
 
 
 const EnquiryStatus = (props) => {
-  const [fieldOptions, setFieldOptions] = useState({});
-  const { location, config } = useOutletContext();
+  const { location, config, appConfig } = useOutletContext();
   const schema = yup.object().shape({
     "Enquiry Number": yup.string().required(),
     "Customer Name": yup.string().required(),
@@ -172,12 +174,6 @@ const EnquiryStatus = (props) => {
     // "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
 
-  useEffect(() => {
-    const allInputOptionsEl = document.getElementById("all-input-options");
-    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
-    setFieldOptions(JSON.parse(allInputOptions));
-  }, []);
-
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
@@ -200,8 +196,8 @@ const EnquiryStatus = (props) => {
         setSubmitting(false);
       })
       .insertData(
-        config.forms.enquiryStatus.sheetName,
-        config.forms.enquiryStatus.headerRow,
+        appConfig.forms.enquiryStatus.sheetName,
+        appConfig.forms.enquiryStatus.headerRow,
         payload
       );
   };

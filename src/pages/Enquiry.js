@@ -35,8 +35,6 @@ const EnquiryForm = (props) => {
   } = useFormikContext();
 
   const { inputOptions } = useOutletContext();
-  console.log(errors);
-
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
@@ -60,7 +58,7 @@ const EnquiryForm = (props) => {
           className="mt-3"
           disabled={isSubmitting}
         >
-          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
+          <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>

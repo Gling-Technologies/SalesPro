@@ -12,21 +12,29 @@ import FormField from "../components/UI/FormField";
 import formFieldsMetadata from "../data/TestDrive";
 import * as yup from "yup";
 
-async function fetchData() {
+
+async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     global.config.google.script.run
       .withSuccessHandler(resolve)
       .withFailureHandler(reject)
-      .getConfiguration();
+      .getSearchData(sheetName, headerRow);
   });
   return result;
 }
 
-const searchFieldOptions = [
-  { id: 1, name: "John" },
-  { id: 2, name: "Miles" },
-  { id: 3, name: "Charles" },
-  { id: 4, name: "Herbie" },
+const prefilledfieldNames = [
+  "Customer Name",
+  "Contact Number",
+  "Email Address",
+  "Address",
+  "Source of Enquiry",
+  "Model",
+  "Sales Person Name",
+  "Customer Type",
+  "Visit Type",
+  "CRM ID",
+  "Priority",
 ];
 
 const EnquiryForm = (props) => {
@@ -37,68 +45,55 @@ const EnquiryForm = (props) => {
     handleChange,
     handleBlur,
     handleSubmit,
-    setFieldValue,
     setValues,
     isSubmitting,
   } = useFormikContext();
 
-  const { inputOptions } = useOutletContext();
-  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
+  const { config, appConfig, inputOptions } = useOutletContext();
+  const [searchFieldOptions, setSearchFieldOptions] = useState([]);
 
   console.log(errors);
   console.log(values);
 
-  React.useEffect(() => {
-    // set the input values
-    // fetchData()
-    //   .then((newData) => {
-    //     console.log(newData);
-    //     if (!newData) return;
-    //     for (const field in newData) {
-    //       setFieldValue(field, newData[field]);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-  }, [setFieldValue]);
-
   useEffect(() => {
-    if (!searchParamsUsed){
-      window.google &&
-        window.google.script.url.getLocation(function (location) {
-          const fieldNames = [
-            "Enquiry No.",
-            "Customer Name",
-            "Contact Number",
-            "Email Address",
-            "Address",
-            "Source of Enquiry",
-            "Model",
-            "Sales Person Name",
-          ];
-          const newValues = {};
-          for (const fieldName of fieldNames) {
-            if (fieldName in location.parameters) {
-              newValues[fieldName] = location.parameters[fieldName][0];
-            }
-          }
-          setSearchParamsUsed(true);
-          setValues({ ...values, ...newValues });
-        });
+    // set the search values
+    fetchData(
+      appConfig.forms.enquiryStatus.sheetName,
+      appConfig.forms.enquiryStatus.headerRow
+    )
+      .then((records) => {
+        // console.log(records);
+        setSearchFieldOptions(records);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [appConfig]);
+
+  const searchFieldChangeHandler = (fieldName, fieldValue, optionsItem) => {
+    console.log(`${fieldName} is being set!`);
+    setValues({ ...values, [fieldName]: fieldValue });
+    const newValues = {};
+    for (const fieldName of prefilledfieldNames) {
+      if (fieldName in optionsItem) {
+        newValues[fieldName] = optionsItem[fieldName];
+      }
     }
-  }, [searchParamsUsed, values, setValues]);
+    setValues({ ...values, ...newValues });
+  };
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
         <SearchFormField
-          name="Enquiry No."
-          id="Enquiry No."
+          name="Enquiry Number"
+          id="Enquiry Number"
           icon="person-fill"
-          // value={values["Enquiry No."]}
-          // onChange={handleChange}
-          options={searchFieldOptions}
+          value={values["Enquiry Number"]}
+          handleChange={searchFieldChangeHandler.bind(null, "Enquiry Number")}
+          optionItems={searchFieldOptions}
+          searchBy="Enquiry Number"
+          error={errors["Enquiry Number"]}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
@@ -119,7 +114,7 @@ const EnquiryForm = (props) => {
           className="mt-3"
           disabled={isSubmitting}
         >
-          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
+          <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>
@@ -127,9 +122,9 @@ const EnquiryForm = (props) => {
 };
 
 const TestDrive = (props) => {
-  const { location, config } = useOutletContext();
+  const { location, config, appConfig } = useOutletContext();
   const schema = yup.object().shape({
-    "Enquiry No.": yup.string().required(),
+    "Enquiry Number": yup.string().required(),
     "Customer Name": yup.string().required(),
     "Contact Number": yup
       .string()
@@ -155,7 +150,7 @@ const TestDrive = (props) => {
     obj[formField.name] = formField.value || "";
     return obj;
   }, {});
-  initialValues["Enquiry No."] = [];
+  initialValues["Enquiry Number"] = [];
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));
@@ -173,8 +168,8 @@ const TestDrive = (props) => {
         setSubmitting(false);
       })
       .insertData(
-        config.forms.testDrive.sheetName,
-        config.forms.testDrive.headerRow,
+        appConfig.forms.testDrive.sheetName,
+        appConfig.forms.testDrive.headerRow,
         payload
       );
   };

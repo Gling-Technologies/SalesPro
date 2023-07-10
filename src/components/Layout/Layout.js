@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
+import { inputOptions, appConfiguration } from '../../config';
 
 async function fetchConfiguration() {
   const result = await new Promise((resolve, reject) => {
@@ -51,13 +52,18 @@ const Layout = () => {
       });
   }, [navigate]);
 
-  const allInputOptionsEl = document.getElementById("all-input-options");
-  let allInputOptions = JSON.parse(allInputOptionsEl.dataset.inputOptions);
   console.log("Rendering Layout");
 
   return (
     <React.Fragment>
-      <Outlet context={{ location, config, inputOptions: allInputOptions }}></Outlet>
+      <Outlet
+        context={{
+          location,
+          config,
+          inputOptions,
+          appConfig: appConfiguration,
+        }}
+      ></Outlet>
     </React.Fragment>
   );
 };

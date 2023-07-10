@@ -11,11 +11,17 @@ const FormField = (props) => {
 
   if (props.type === "select"){
     return (
-      <Form.Group as={Col} sm="12" xs="12" md={cols} controlId={props.id}>
+      <Form.Group
+        as={Col}
+        sm="12"
+        xs="12"
+        md={cols}
+        controlId={props.id}
+        className="mb-3"
+      >
         {props.icon && <i className={`bi bi-${props.icon} prefix`}></i>}
         <Form.Label className="ms-2"> {props.name} </Form.Label>
         <Form.Select
-          className="mb-3"
           aria-label={props.name}
           value={props.value}
           readOnly={disabled}
@@ -33,6 +39,9 @@ const FormField = (props) => {
               </option>
             ))}
         </Form.Select>
+        <Form.Control.Feedback type="invalid">
+          {props.error}
+        </Form.Control.Feedback>
       </Form.Group>
     );
   }
@@ -62,7 +71,6 @@ const FormField = (props) => {
           {props.error}
         </Form.Control.Feedback>
       </InputGroup>
-      {`${props.touched} ${!!props.error} ${props.error}`}
     </Form.Group>
   );
 }
