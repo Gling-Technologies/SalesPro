@@ -24,8 +24,16 @@ async function fetchData() {
   return result;
 }
 
+
+const searchFieldOptions = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Miles" },
+  { id: 3, name: "Charles" },
+  { id: 4, name: "Herbie" },
+];
+
+
 const EnquiryForm = (props) => {
-  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -38,7 +46,9 @@ const EnquiryForm = (props) => {
     isSubmitting,
     submitCount,
   } = useFormikContext();
-  // const [searchParams, setSearchParams] = useSearchParams();
+
+  const { inputOptions } = useOutletContext();
+  console.log("EnquiryStatus Form", values);
 
   useEffect(() => {
     // set the input values
@@ -74,23 +84,23 @@ const EnquiryForm = (props) => {
           newValues[fieldName] = location.parameters[fieldName][0];
         }
       }
-      setValues(newValues, false);
+      setValues(newValues, true);
     });
   }, [setValues]);
-
-  useEffect(() => {
-    const allInputOptionsEl = document.getElementById("all-input-options");
-    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
-    setFieldOptions(JSON.parse(allInputOptions))
-  }, []);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
         <SearchFormField
-          name="Enquiry No."
-          id="Enquiry No."
+          name="Enquiry Number"
+          id="Enquiry Number"
           icon="person-fill"
+          handleChange={(newValue) => {
+            console.log("Enquiry No is being set!");
+            setFieldValue("Enquiry Number", newValue);
+          }}
+          options={searchFieldOptions}
+          searchBy="Enquiry Number"
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
@@ -100,12 +110,17 @@ const EnquiryForm = (props) => {
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}
-              onChange={handleChange}
+              handleChange={handleChange}
               onBlur={handleBlur}
-              optionItems={fieldOptions[data.name]}
+              optionItems={inputOptions[data.name]}
             />
           ))}
-        <Button variant="primary" type="submit" className="mt-3">
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-3"
+          disabled={isSubmitting}
+        >
           {isSubmitting && (
             <Spinner
               as="span"
@@ -115,7 +130,7 @@ const EnquiryForm = (props) => {
               aria-hidden="true"
             />
           )}
-          <span>{isSubmitting ? "Submiting" : "Submit"}</span>
+          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>
@@ -127,7 +142,7 @@ const EnquiryStatus = (props) => {
   const [fieldOptions, setFieldOptions] = useState({});
   const { location, config } = useOutletContext();
   const schema = yup.object().shape({
-    "Enquiry No.": yup.string().required(),
+    "Enquiry Number": yup.string().required(),
     "Customer Name": yup.string().required(),
     "Contact Number": yup
       .string()
@@ -161,7 +176,7 @@ const EnquiryStatus = (props) => {
     obj[formField.name] = formField.value || "";
     return obj;
   }, {});
-  initialValues["Enquiry No."] = [];
+  initialValues["Enquiry Number"] = "";
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));

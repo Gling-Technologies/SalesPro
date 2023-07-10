@@ -24,7 +24,6 @@ async function fetchData() {
 }
 
 const EnquiryForm = (props) => {
-  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -32,33 +31,12 @@ const EnquiryForm = (props) => {
     handleChange,
     handleBlur,
     handleSubmit,
-    setFieldValue,
     isSubmitting,
-    submitCount,
   } = useFormikContext();
 
+  const { inputOptions } = useOutletContext();
   console.log(errors);
 
-  React.useEffect(() => {
-    // set the input values
-    // fetchData()
-    //   .then((newData) => {
-    //     console.log(newData);
-    //     if (!newData) return;
-    //     for (const field in newData) {
-    //       setFieldValue(field, newData[field]);
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //   });
-  }, [setFieldValue]);
-
-  useEffect(() => {
-    const allInputOptionsEl = document.getElementById("all-input-options");
-    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
-    setFieldOptions(JSON.parse(allInputOptions));
-  }, []);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
@@ -71,13 +49,18 @@ const EnquiryForm = (props) => {
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}
-              onChange={handleChange}
+              handleChange={handleChange}
               onBlur={handleBlur}
-              optionItems={fieldOptions[data.name]}
+              optionItems={inputOptions[data.name]}
             />
           ))}
-        <Button variant="primary" type="submit" className="mt-3">
-          Submit
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-3"
+          disabled={isSubmitting}
+        >
+          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>
@@ -86,7 +69,7 @@ const EnquiryForm = (props) => {
 
 
 const Enquiry = (props) => {
-  const { location, config } = useOutletContext();
+  const { location, config, inputOptions } = useOutletContext();
   const schema = yup.object().shape({
     "Customer Name": yup.string().required(),
     "Contact Number": yup
@@ -136,7 +119,6 @@ const Enquiry = (props) => {
       initialValues={initialValues}
       title="Enquiry Form"
       submitHandler={submitHandler}
-      // validate={validator}
       validationSchema={schema}
     >
       <EnquiryForm />

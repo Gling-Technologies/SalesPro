@@ -31,21 +31,31 @@ const Layout = () => {
     } else {
       console.log("Not Available");
     }
+  }, []);
 
+  useEffect(() => {
     fetchConfiguration().then((conf) => {
       setConfig(conf);
     });
 
-    window.google && window.google.script.url.getLocation(function (location) {
-        if ("formType" in location.parameters) {
+    window.google &&
+      window.google.script.url.getLocation(function (location) {
+        if (
+          "formType" in location.parameter &&
+          location.parameter["formType"] in ["enquiry", "enquiry-status", "test-drive"]
+        ) {
           navigate("/" + location.parameters["formType"][0]);
         }
-    });
+      });
   }, [navigate]);
+
+  const allInputOptionsEl = document.getElementById("all-input-options");
+  let allInputOptions = JSON.parse(allInputOptionsEl.dataset.inputOptions);
+  console.log("Rendering Layout");
 
   return (
     <React.Fragment>
-      <Outlet context={{ location, config }}></Outlet>
+      <Outlet context={{ location, config, inputOptions: allInputOptions }}></Outlet>
     </React.Fragment>
   );
 };

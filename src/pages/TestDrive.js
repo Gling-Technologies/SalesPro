@@ -22,8 +22,14 @@ async function fetchData() {
   return result;
 }
 
+const searchFieldOptions = [
+  { id: 1, name: "John" },
+  { id: 2, name: "Miles" },
+  { id: 3, name: "Charles" },
+  { id: 4, name: "Herbie" },
+];
+
 const EnquiryForm = (props) => {
-  const [fieldOptions, setFieldOptions] = useState({});
   const {
     values,
     touched,
@@ -36,6 +42,8 @@ const EnquiryForm = (props) => {
     isSubmitting,
     submitCount,
   } = useFormikContext();
+
+  const { inputOptions } = useOutletContext();
 
   console.log(errors);
 
@@ -73,15 +81,9 @@ const EnquiryForm = (props) => {
             newValues[fieldName] = location.parameters[fieldName][0];
           }
         }
-        setValues(newValues, false);
+        setValues(newValues, true);
       });
   }, [setValues]);
-
-  useEffect(() => {
-    const allInputOptionsEl = document.getElementById("all-input-options");
-    let allInputOptions = allInputOptionsEl.dataset.inputOptions;
-    setFieldOptions(JSON.parse(allInputOptions));
-  }, []);
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
@@ -92,6 +94,7 @@ const EnquiryForm = (props) => {
           icon="person-fill"
           // value={values["Enquiry No."]}
           // onChange={handleChange}
+          options={searchFieldOptions}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
@@ -101,13 +104,18 @@ const EnquiryForm = (props) => {
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}
-              onChange={handleChange}
+              handleChange={handleChange}
               onBlur={handleBlur}
-              optionItems={fieldOptions[data.name]}
+              optionItems={inputOptions[data.name]}
             />
           ))}
-        <Button variant="primary" type="submit" className="mt-3">
-          Submit
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-3"
+          disabled={isSubmitting}
+        >
+          <span>{isSubmitting ? "Submiting..." : "Submit"}</span>
         </Button>
       </Row>
     </Form>
