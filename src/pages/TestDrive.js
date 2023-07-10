@@ -181,6 +181,7 @@ const TestDrive = (props) => {
       title="Test Drive Form"
       submitHandler={submitHandler}
       validationSchema={schema}
+      enableReinitialize
     >
       <EnquiryForm />
     </FormCard>
