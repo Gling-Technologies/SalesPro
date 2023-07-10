@@ -142,7 +142,13 @@ const EnquiryStatus = (props) => {
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Customer Remarks": yup.string().required(),
-    "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
+    "Customer Type": yup.string().required(),
+    "Visit Type": yup.string().required(),
+    "CRM ID": yup.string().required(),
+    "Enquiry Status": yup.string().required(),
+    "Next Follow Up Date": yup.string().required(),
+    Priority: yup.string().required(),
+    // "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
 
   useEffect(() => {

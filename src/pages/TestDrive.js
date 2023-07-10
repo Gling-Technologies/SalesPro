@@ -117,6 +117,7 @@ const EnquiryForm = (props) => {
 const TestDrive = (props) => {
   const { location } = useOutletContext();
   const schema = yup.object().shape({
+    "Enquiry No.": yup.string().required(),
     "Customer Name": yup.string().required(),
     "Contact Number": yup
       .string()
@@ -130,7 +131,12 @@ const TestDrive = (props) => {
     "Source of Enquiry": yup.string().required(),
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
-    "Customer Remarks": yup.string().required(),
+    "Test Drive Vehicle": yup.string().required(),
+    "Test Drive Type": yup.string().required(),
+    "DL Number": yup.string().required(),
+    "Odometer Reading": yup.string().required(),
+    "Customer Feedback": yup.string().required(),
+    "Approved By": yup.string().required(),
   });
 
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {
