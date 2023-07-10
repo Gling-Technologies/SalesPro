@@ -5,22 +5,20 @@ import Form from "react-bootstrap/Form";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 const SearchFormField = (props) => {
-  const [selected, setSingleSelections] = useState([]);
+  const [selected, setSelected] = useState([]);
 
   let isInvalid;
-  const options = [];
-  // const state = options[index];
   if (selected.length) {
     // isInvalid = selected[0].name === state.name ? false : true;
   }
 
   const changeHandler = (values) => {
     console.log(values);
-    setSingleSelections(values);
+    setSelected(values);
     if(values.length > 0){
-      props.handleChange(values[0].name);
+      props.handleChange(values[0].name, values[0]);
     } else {
-      props.handleChange("");
+      props.handleChange("", {});
     }
   }
 

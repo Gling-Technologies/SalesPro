@@ -88,13 +88,13 @@ const EnquiryForm = (props) => {
     }
   }, [searchParamsUsed, values, setValues]);
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionsItem) => {
+  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
     console.log(`${fieldName} is being set!`);
     setValues({ ...values, [fieldName]: fieldValue });
     const newValues = {};
     for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionsItem) {
-        newValues[fieldName] = optionsItem[fieldName];
+      if (fieldName in optionItem && !!optionItem[fieldName]) {
+        newValues[fieldName] = optionItem[fieldName];
       }
     }
     setValues({ ...values, ...newValues });
@@ -111,6 +111,8 @@ const EnquiryForm = (props) => {
           optionItems={searchFieldOptions}
           searchBy="Enquiry Number"
           error={errors["Enquiry Number"]}
+          value={values["Enquiry Number"]}
+          touched={touched["Enquiry Number"]}
         />
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
