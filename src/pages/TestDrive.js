@@ -15,10 +15,11 @@ import * as yup from "yup";
 
 async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
-    global.config.google.script.run
-      .withSuccessHandler(resolve)
-      .withFailureHandler(reject)
-      .getSearchData(sheetName, headerRow);
+    window.google &&
+      window.google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(reject)
+        .getSearchData(sheetName, headerRow);
   });
   return result;
 }

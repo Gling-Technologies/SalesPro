@@ -16,7 +16,7 @@ import * as yup from "yup";
 
 async function fetchData() {
   const result = await new Promise((resolve, reject) => {
-    global.config.google.script.run
+    window.google && window.google.script.run
       .withSuccessHandler(resolve)
       .withFailureHandler(reject)
       .getConfiguration();
