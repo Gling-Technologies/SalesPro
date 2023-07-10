@@ -13,7 +13,7 @@ const router = createMemoryRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <Error />,
+    errorElement: <Home />,
     children: [
       {
         path: "/",

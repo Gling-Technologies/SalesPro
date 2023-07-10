@@ -104,7 +104,6 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        REACT_APP_ENVIRONMEMT === {process.env.REACT_APP_ENVIRONMEMT}
         {searchFieldsMeta.length &&
           searchFieldsMeta.map((data) => (
             <SearchFormField
