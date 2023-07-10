@@ -125,7 +125,7 @@ const EnquiryForm = (props) => {
 
 const EnquiryStatus = (props) => {
   const [fieldOptions, setFieldOptions] = useState({});
-  const { location } = useOutletContext();
+  const { location, config } = useOutletContext();
   const schema = yup.object().shape({
     "Enquiry No.": yup.string().required(),
     "Customer Name": yup.string().required(),
@@ -164,9 +164,11 @@ const EnquiryStatus = (props) => {
   initialValues["Enquiry No."] = [];
 
   const submitHandler = (values, { setSubmitting }) => {
-    console.log("Form Values", values);
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
+    console.log("Form Payload", payload);
+
+    setSubmitting(true);
     window.google.script.run
       .withSuccessHandler((result) => {
         console.log(result);
@@ -174,8 +176,13 @@ const EnquiryStatus = (props) => {
       })
       .withFailureHandler((err) => {
         console.error(err);
+        setSubmitting(false);
       })
-      .insertData();
+      .insertData(
+        config.forms.enquiryStatus.sheetName,
+        config.forms.enquiryStatus.headerRow,
+        payload
+      );
   };
 
   return (

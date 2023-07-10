@@ -115,7 +115,7 @@ const EnquiryForm = (props) => {
 };
 
 const TestDrive = (props) => {
-  const { location } = useOutletContext();
+  const { location, config } = useOutletContext();
   const schema = yup.object().shape({
     "Enquiry No.": yup.string().required(),
     "Customer Name": yup.string().required(),
@@ -146,9 +146,11 @@ const TestDrive = (props) => {
   initialValues["Enquiry No."] = [];
 
   const submitHandler = (values, { setSubmitting }) => {
-    console.log("Form Values", values);
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
+    console.log("Form Payload", payload);
+
+    setSubmitting(true);
     window.google.script.run
       .withSuccessHandler((result) => {
         console.log(result);
@@ -156,8 +158,13 @@ const TestDrive = (props) => {
       })
       .withFailureHandler((err) => {
         console.error(err);
+        setSubmitting(false);
       })
-      .insertData();
+      .insertData(
+        config.forms.testDrive.sheetName,
+        config.forms.testDrive.headerRow,
+        payload
+      );
   };
 
   return (
