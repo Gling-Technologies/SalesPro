@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 
-import classes from "./Layout.module.css";
 
+async function fetchConfiguration() {
+  const result = await new Promise((resolve, reject) => {
+    window.google && window.google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+      .getConfiguration();
+  });
+  return result;
+}
 
 const Layout = () => {
   const [location, setLocation] = useState("");
-
+  const [config, setConfig] = useState({});
 
   useEffect(() => {
       if ("geolocation" in navigator) {
@@ -23,13 +31,15 @@ const Layout = () => {
         console.log("Not Available");
       }
 
+      fetchConfiguration().then(conf => {
+        setConfig(conf);
+      })
+
   }, []);
-
-
 
   return (
     <React.Fragment>
-      <Outlet context={{location}}></Outlet>
+      <Outlet context={{ location, config }}></Outlet>
     </React.Fragment>
   );
 };

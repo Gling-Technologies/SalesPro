@@ -1,9 +1,161 @@
 import React from 'react'
+import { useOutletContext, useSearchParams } from "react-router-dom";
 
-const EnquiryStatus = () => {
-  return (
-    <div>EnquiryStatus</div>
-  )
+import { Row } from 'react-bootstrap';
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+import { useFormikContext } from "formik";
+
+import FormCard from "../components/UI/FormCard";
+import FormField from "../components/UI/FormField";
+import formFieldsMetadata from '../data/EnquiryStatus';
+import * as yup from "yup";
+
+
+async function fetchData() {
+  const result = await new Promise((resolve, reject) => {
+    global.config.google.script.run
+      .withSuccessHandler(resolve)
+      .withFailureHandler(reject)
+      .getConfiguration();
+  });
+  return result;
 }
 
-export default EnquiryStatus
+const EnquiryForm = (props) => {
+  const {
+    values,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+    setValues,
+    isSubmitting,
+    submitCount,
+    ...rest
+  } = useFormikContext();
+  // const [searchParams, setSearchParams] = useSearchParams();
+
+  React.useEffect(() => {
+    // set the input values
+    // fetchData()
+    //   .then((newData) => {
+    //     console.log(newData);
+    //     if (!newData) return;
+    //     for (const field in newData) {
+    //       setFieldValue(field, newData[field]);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //   });
+    window.google && window.google.script.url.getLocation(function (location) {
+      const fieldNames = [
+        "Customer Name",
+        "Contact Number",
+        "Email Address",
+        "Address",
+        "Source of Enquiry",
+        "Model",
+        "Sales Person Name",
+        "Customer Type",
+        "Visit Type",
+        "CRM ID",
+        "Priority",
+      ];
+      const newValues = {};
+      for (const fieldName of fieldNames) {
+        if (fieldName in location.parameters) {
+          newValues[fieldName] = location.parameters[fieldName][0];
+        }
+      }
+      setValues(newValues, false);
+    });
+  }, [setValues]);
+
+  return (
+    <Form noValidate onSubmit={handleSubmit}>
+      <Row>
+        {formFieldsMetadata.length &&
+          formFieldsMetadata.map((data) => (
+            <FormField
+              key={data.id}
+              {...data}
+              value={values[data.name]}
+              touched={touched[data.name]}
+              error={errors[data.name]}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          ))}
+        <Button variant="primary" type="submit" className="mt-3">
+          {isSubmitting && (<Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />)}
+          <span>{isSubmitting ? "Submiting" : "Submit"}</span>
+        </Button>
+      </Row>
+    </Form>
+  );
+}
+
+
+const EnquiryStatus = (props) => {
+  const { location } = useOutletContext();
+  const schema = yup.object().shape({
+    "Customer Name": yup.string().required(),
+    "Contact Number": yup
+      .string()
+      .required()
+      .matches(
+        /^[0-9]{10}$/,
+        "Mobile number is not valid! Enter 10 digits number."
+      ),
+    "Email Address": yup.string().required().email(),
+    Address: yup.string().required(),
+    "Source of Enquiry": yup.string().required(),
+    Model: yup.string().required(),
+    "Sales Person Name": yup.string().required(),
+    "Customer Remarks": yup.string().required(),
+  });
+
+  const initialValues = formFieldsMetadata.reduce((obj, formField) => {
+    obj[formField.name] = formField.value || "";
+    return obj;
+  }, {});
+
+  const submitHandler = (values, { setSubmitting }) => {
+    console.log("Form Values", values);
+    const payload = JSON.parse(JSON.stringify(values));
+    payload["Location"] = location;
+    window.google.script.run
+      .withSuccessHandler((result) => {
+        console.log(result);
+        setSubmitting(false);
+      })
+      .withFailureHandler((err) => {
+        console.error(err);
+      })
+      .insertData();
+  };
+
+  return (
+    <FormCard
+      initialValues={initialValues}
+      title="Enquiry Status Form"
+      submitHandler={submitHandler}
+      validationSchema={schema}
+    >
+      <EnquiryForm />
+    </FormCard>
+  );
+};
+
+export default EnquiryStatus;

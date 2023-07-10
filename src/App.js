@@ -7,6 +7,7 @@ import Error from "./pages/Error";
 import Enquiry from "./pages/Enquiry";
 import TestDrive from "./pages/TestDrive";
 import EnquiryStatus from "./pages/EnquiryStatus";
+import Demo from "./pages/Demo";
 
 const router = createMemoryRouter([
   {
@@ -34,6 +35,11 @@ const router = createMemoryRouter([
         element: <TestDrive />,
         children: [],
       },
+      {
+        path: "/demo",
+        element: <Demo />,
+        children: [],
+      },
     ],
   },
   {},
@@ -42,11 +48,7 @@ const router = createMemoryRouter([
 function App() {
 
   return (
-    <div className="container">
-      <RouterProvider router={router}></RouterProvider>
-      {/* <PanelList />
-      <TreeGraph /> */}
-    </div>
+    <RouterProvider router={router}></RouterProvider>
   );
 }
 

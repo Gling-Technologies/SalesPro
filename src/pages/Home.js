@@ -5,7 +5,7 @@ import "./Home.module.css";
 
 const Home = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center flex-wrap">
+    <div className="d-flex justify-content-center align-items-center flex-wrap" style={{backgroundColor: "green"}}>
       <NavLink to="/enquiry">
         <div className="d-flex justify-content-center align-items-center">
           Enquiry
@@ -21,6 +21,11 @@ const Home = () => {
           Test Drive
         </div>
       </NavLink>
+      {/* <NavLink to="/demo">
+        <div className="d-flex justify-content-center align-items-center">
+          Demo
+        </div>
+      </NavLink> */}
     </div>
   );
 }
