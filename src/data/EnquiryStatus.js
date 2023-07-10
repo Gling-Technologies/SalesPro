@@ -1,23 +1,5 @@
 const formFieldsMetadata = [
   {
-    id: "Customer Name",
-    name: "Customer Name",
-    type: "text",
-    required: true,
-    icon: "person-fill",
-    placeholder: "Enter a value...",
-    disabled: true,
-  },
-  {
-    id: "Contact Number",
-    name: "Contact Number",
-    type: "tel",
-    required: true,
-    icon: "telephone-fill",
-    placeholder: "Enter a value...",
-    disabled: true,
-  },
-  {
     id: "Email Address",
     name: "Email Address",
     type: "email",

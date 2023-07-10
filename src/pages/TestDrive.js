@@ -158,7 +158,7 @@ const TestDrive = (props) => {
   initialValues = searchFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
-  }, {});
+  }, initialValues);
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));

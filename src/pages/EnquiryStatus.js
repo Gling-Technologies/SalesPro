@@ -91,7 +91,6 @@ const EnquiryForm = (props) => {
 
   const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
     console.log(`${fieldName} is being set!`);
-    setValues({ ...values, [fieldName]: fieldValue });
     const newValues = {};
     for (const fieldName of prefilledfieldNames) {
       if (fieldName in optionItem && !!optionItem[fieldName]) {
@@ -188,7 +187,7 @@ const EnquiryStatus = (props) => {
   initialValues = searchFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
-  }, {});
+  }, initialValues);
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));
