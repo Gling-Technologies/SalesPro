@@ -181,11 +181,14 @@ const EnquiryStatus = (props) => {
     // "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
 
-  const initialValues = formFieldsMetadata.reduce((obj, formField) => {
+  let initialValues = formFieldsMetadata.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
   }, {});
-  initialValues["Enquiry Number"] = "";
+  initialValues = searchFieldsMeta.reduce((obj, formField) => {
+    obj[formField.name] = formField.value || "";
+    return obj;
+  }, {});
 
   const submitHandler = (values, { setSubmitting }) => {
     const payload = JSON.parse(JSON.stringify(values));
