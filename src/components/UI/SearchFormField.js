@@ -18,7 +18,7 @@ const SearchFormField = (props) => {
     setSelected(values);
     if(values.length > 0){
       setFieldValue(values[0][props.name]);
-      props.handleChange(values[0][props.name], values[0][props.name]);
+      props.handleChange(values[0][props.name], values[0]);
     } else {
       props.handleChange("", {});
     }
