@@ -84,7 +84,7 @@ const EnquiryForm = (props) => {
           newValues[fieldName] = location.parameters[fieldName][0];
         }
       }
-      setValues(newValues, true);
+      // setValues(newValues, true);
     });
   }, [setValues]);
 

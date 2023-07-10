@@ -18,7 +18,7 @@ const FormField = (props) => {
           className="mb-3"
           aria-label={props.name}
           value={props.value}
-          disabled={disabled}
+          readOnly={disabled}
           onChange={props.handleChange}
           isInvalid={props.touched && !!props.error}
           // onBlur={props.onBlur}
@@ -62,6 +62,7 @@ const FormField = (props) => {
           {props.error}
         </Form.Control.Feedback>
       </InputGroup>
+      {`${props.touched} ${!!props.error} ${props.error}`}
     </Form.Group>
   );
 }
