@@ -12,14 +12,13 @@ const FormField = (props) => {
   if (props.type === "select"){
     return (
       <Form.Group as={Col} sm="12" xs="12" md={cols} controlId={props.id}>
-        {props.icon && (
-            <i className={`bi bi-${props.icon} prefix`}></i>
-        )}
+        {props.icon && <i className={`bi bi-${props.icon} prefix`}></i>}
         <Form.Label className="ms-2"> {props.name} </Form.Label>
         <Form.Select
           className="mb-3"
           aria-label={props.name}
           value={props.value}
+          disabled={disabled}
           onChange={props.onChange}
           isInvalid={props.touched && !!props.error}
           // onBlur={props.onBlur}
