@@ -4,13 +4,14 @@ import { useOutletContext } from "react-router-dom";
 import { Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
 import { useFormikContext } from "formik";
+import * as yup from "yup";
 
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import formFieldsMetadata, { searchFieldsMeta } from "../data/TestDrive";
-import * as yup from "yup";
 
 
 async function fetchData(sheetName, headerRow) {
@@ -120,7 +121,10 @@ const EnquiryForm = (props) => {
           className="mt-3"
           disabled={isSubmitting}
         >
-          <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
+          {isSubmitting && (
+            <Spinner as="span" animation="border" aria-hidden="true" />
+          )}
+          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
       </Row>
     </Form>
@@ -128,7 +132,7 @@ const EnquiryForm = (props) => {
 };
 
 const TestDrive = (props) => {
-  const { location, config, appConfig } = useOutletContext();
+  const { location, appConfig } = useOutletContext();
   const schema = yup.object().shape({
     "Enquiry Number": yup.string().required(),
     "Customer Name": yup.string().required(),
@@ -140,13 +144,13 @@ const TestDrive = (props) => {
         "Mobile number is not valid! Enter 10 digits number."
       ),
     "Email Address": yup.string().required().email(),
-    Address: yup.string().required(),
+    Address: yup.string(),
     "Source of Enquiry": yup.string().required(),
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Test Drive Vehicle": yup.string().required(),
     "Test Drive Type": yup.string().required(),
-    "DL Number": yup.string().required(),
+    "DL Number": yup.string(),
     "Odometer Reading": yup.string().required(),
     "Customer Feedback": yup.string().required(),
     "Approved By": yup.string().required(),
@@ -161,7 +165,7 @@ const TestDrive = (props) => {
     return obj;
   }, initialValues);
 
-  const submitHandler = (values, { setSubmitting }) => {
+  const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
     console.log("Form Payload", payload);
@@ -170,6 +174,7 @@ const TestDrive = (props) => {
     window.google.script.run
       .withSuccessHandler((result) => {
         console.log(result);
+        resetForm();
         setSubmitting(false);
       })
       .withFailureHandler((err) => {

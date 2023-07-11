@@ -138,15 +138,9 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner
-              as="span"
-              animation="border"
-              size="sm"
-              role="status"
-              aria-hidden="true"
-            />
+            <Spinner as="span" animation="border" aria-hidden="true" />
           )}
-          <span>{isSubmitting ? "Submitting..." : "Submit"}</span>
+          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
       </Row>
     </Form>
@@ -167,17 +161,17 @@ const EnquiryStatus = (props) => {
         "Mobile number is not valid! Enter 10 digits number."
       ),
     "Email Address": yup.string().required().email(),
-    Address: yup.string().required(),
+    Address: yup.string(),
     "Source of Enquiry": yup.string().required(),
     Model: yup.string().required(),
     "Sales Person Name": yup.string().required(),
     "Customer Remarks": yup.string().required(),
-    "Customer Type": yup.string().required(),
-    "Visit Type": yup.string().required(),
+    "Customer Type": yup.string(),
+    "Visit Type": yup.string(),
     "CRM ID": yup.string().required(),
     "Enquiry Status": yup.string().required(),
     "Next Follow Up Date": yup.string().required(),
-    Priority: yup.string().required(),
+    Priority: yup.string(),
     // "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
 
@@ -190,7 +184,7 @@ const EnquiryStatus = (props) => {
     return obj;
   }, initialValues);
 
-  const submitHandler = (values, { setSubmitting }) => {
+  const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
     console.log("Form Payload", payload);
@@ -199,6 +193,7 @@ const EnquiryStatus = (props) => {
     window.google.script.run
       .withSuccessHandler((result) => {
         console.log(result);
+        resetForm();
         setSubmitting(false);
       })
       .withFailureHandler((err) => {
