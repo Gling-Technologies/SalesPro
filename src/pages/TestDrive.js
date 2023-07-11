@@ -52,7 +52,7 @@ const EnquiryForm = (props) => {
     isSubmitting,
   } = useFormikContext();
 
-  const { config, appConfig, inputOptions } = useOutletContext();
+  const { appConfig, inputOptions } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
 
   console.log("TestDrive Form", errors);
@@ -152,7 +152,7 @@ const TestDrive = (props) => {
     "Test Drive Type": yup.string().required(),
     "DL Number": yup.string(),
     "Odometer Reading": yup.string().required(),
-    "Customer Feedback": yup.string().required(),
+    "Customer Feedback": yup.string(),
     "Approved By": yup.string().required(),
   });
 

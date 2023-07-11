@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useOutletContext } from "react-router-dom";
 
 import { Row } from 'react-bootstrap';
@@ -61,7 +61,7 @@ const EnquiryForm = (props) => {
 
 
 const Enquiry = (props) => {
-  const { location, appConfig, inputOptions, uriLocation } = useOutletContext();
+  const { location, appConfig, uriLocation } = useOutletContext();
   const schema = yup.object().shape({
     "Customer Name": yup.string().required(),
     "Contact Number": yup

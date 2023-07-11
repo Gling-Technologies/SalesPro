@@ -170,8 +170,8 @@ const EnquiryStatus = (props) => {
     "Visit Type": yup.string(),
     "CRM ID": yup.string().required(),
     "Enquiry Status": yup.string().required(),
-    "Next Follow Up Date": yup.string().required(),
-    Priority: yup.string(),
+    "Next Follow Up Date": yup.string(),
+    Priority: yup.string().required(),
     // "Visit Type": yup.string().oneOf(fieldOptions["Visit Type"]),
   });
 

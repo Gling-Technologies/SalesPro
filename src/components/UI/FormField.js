@@ -25,7 +25,7 @@ const FormField = (props) => {
           aria-label={props.name}
           required={props.required || false}
           value={props.value}
-          readOnly={disabled}
+          disabled={disabled}
           onChange={props.handleChange}
           isInvalid={props.touched && !!props.error}
           // onBlur={props.onBlur}
@@ -46,6 +46,19 @@ const FormField = (props) => {
       </Form.Group>
     );
   }
+
+  // let [datalist, datalistId] = [null,""];
+  // if (props.type === "text" && props.optionItems) {
+  //   datalist = (
+  //     <datalist id=''>
+  //       {props.optionItems.map((optionItem) => (
+  //         <option key={optionItem} value={optionItem}>
+  //           {optionItem}
+  //         </option>
+  //       ))}
+  //     </datalist>
+  //   );
+  // }
 
   return (
     <Form.Group as={Col} sm="12" xs="12" md={cols} controlId={props.id}>

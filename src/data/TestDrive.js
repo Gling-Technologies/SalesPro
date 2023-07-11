@@ -33,7 +33,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
-    disabled: true,
+    disabled: false,
   },
   {
     id: "Sales Person Name",
@@ -80,7 +80,7 @@ const formFieldsMetadata = [
     id: "Customer Feedback",
     name: "Customer Feedback",
     type: "select",
-    required: true,
+    required: false,
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     // as: "textarea",

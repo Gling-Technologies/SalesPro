@@ -1,11 +1,14 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import "./Home.module.css";
 
 const Home = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center flex-wrap" style={{backgroundColor: "green"}}>
+    <div
+      className="d-flex justify-content-center align-items-center flex-wrap"
+      style={{ backgroundColor: "green" }}
+    >
       <NavLink to="/enquiry">
         <div className="d-flex justify-content-center align-items-center">
           Enquiry
@@ -21,11 +24,16 @@ const Home = () => {
           Test Drive
         </div>
       </NavLink>
-      {/* <NavLink to="/demo">
+      <a href="https://forms.gle/Vfwn2dZd2YPzZGFL7" target="_blank" rel="noreferrer">
         <div className="d-flex justify-content-center align-items-center">
-          Demo
+          Booking
         </div>
-      </NavLink> */}
+      </a>
+      <a href="https://forms.gle/DuKQwAY7VpGxWNFZ9" target="_blank" rel="noreferrer">
+        <div className="d-flex justify-content-center align-items-center">
+          Delivery
+        </div>
+      </a>
     </div>
   );
 }
