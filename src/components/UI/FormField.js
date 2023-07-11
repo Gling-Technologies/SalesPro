@@ -23,6 +23,7 @@ const FormField = (props) => {
         <Form.Label className="ms-2"> {props.name} </Form.Label>
         <Form.Select
           aria-label={props.name}
+          required={props.required || false}
           value={props.value}
           readOnly={disabled}
           onChange={props.handleChange}

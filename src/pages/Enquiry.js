@@ -50,7 +50,7 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner as="span" animation="border" aria-hidden="true" />
+            <Spinner as="span" size="sm" animation="border" aria-hidden="true" />
           )}
           <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
@@ -88,7 +88,8 @@ const Enquiry = (props) => {
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
-    const queryParams = new URLSearchParams(values);
+    const queryParams = new URLSearchParams({ ...values, formType: "enquiry-status" });
+
     payload["Enquiry Status Form"] = `${uriLocation}?${queryParams.toString()}`;
     payload["Location"] = location;
     console.log("Form Payload", payload);

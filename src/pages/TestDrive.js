@@ -122,7 +122,7 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner as="span" animation="border" aria-hidden="true" />
+            <Spinner as="span" size="sm" animation="border" aria-hidden="true" />
           )}
           <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
