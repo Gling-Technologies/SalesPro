@@ -66,8 +66,11 @@ const EnquiryForm = (props) => {
       appConfig.forms.enquiry.headerRow
     )
       .then((records) => {
-        // console.log(records);
-        setSearchFieldOptions(records);
+        const filteredRecords = records.filter(
+          (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
+        );
+        // console.log(filteredRecords);
+        setSearchFieldOptions(filteredRecords);
       })
       .catch((err) => {
         console.error(err);
