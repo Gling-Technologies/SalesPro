@@ -1,9 +1,11 @@
 import React from 'react'
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, useOutletContext } from 'react-router-dom';
 
 import "./Home.module.css";
 
 const Home = () => {
+  const { appConfig } = useOutletContext();
+
   return (
     <div
       className="d-flex justify-content-center align-items-center flex-wrap"
@@ -24,12 +26,12 @@ const Home = () => {
           Test Drive
         </div>
       </NavLink>
-      <a href="https://forms.gle/Vfwn2dZd2YPzZGFL7" target="_blank" rel="noreferrer">
+      <a href={appConfig.forms.booking.link} target="_blank" rel="noreferrer">
         <div className="d-flex justify-content-center align-items-center">
           Booking
         </div>
       </a>
-      <a href="https://forms.gle/DuKQwAY7VpGxWNFZ9" target="_blank" rel="noreferrer">
+      <a href={appConfig.forms.delivery.link} target="_blank" rel="noreferrer">
         <div className="d-flex justify-content-center align-items-center">
           Delivery
         </div>

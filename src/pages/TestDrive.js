@@ -61,8 +61,8 @@ const EnquiryForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.enquiryStatus.sheetName,
-      appConfig.forms.enquiryStatus.headerRow
+      appConfig.forms.testDrive.search.sheetName,
+      appConfig.forms.testDrive.search.headerRow
     )
       .then((records) => {
        const filteredRecords = records.filter(
