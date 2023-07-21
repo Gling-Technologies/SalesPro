@@ -2,19 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
 import Accordion from "react-bootstrap/Accordion";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 import Spinner from "react-bootstrap/Spinner";
-
-import { useFormikContext } from "formik";
-import * as yup from "yup";
+import { Typeahead } from "react-bootstrap-typeahead";
 
 import FormCard from "../components/UI/FormCard";
-import SearchFormField from "../components/UI/SearchFormField";
-import FormField from "../components/UI/FormField";
-import formFieldsMetadata, { searchFieldsMeta } from "../data/Delivery";
-import createSchemaObject from "../utils";
+import searchData from "../data/Search";
+
 
 async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
@@ -23,43 +20,38 @@ async function fetchData(sheetName, headerRow) {
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
         .getSearchData(sheetName, headerRow);
+
+    !window.google && resolve(searchData);
   });
   return result;
 }
 
-const prefilledfieldNames = [
-  "Enquiry Number",
-  "Customer Name",
-  "Contact Number",
-  "Email Address",
-  "Model",
-  "Sales Person Name",
-];
+async function fetchCustomerInfo(customerInfo, sourceInfo) {
+  const result = await new Promise((resolve, reject) => {
+    window.google &&
+      window.google.script.run
+        .withSuccessHandler(resolve)
+        .withFailureHandler(reject)
+        .getCustomerInfo(customerInfo, sourceInfo);
 
-const DeliveryForm = (props) => {
-  const {
-    values,
-    touched,
-    errors,
-    handleChange,
-    handleBlur,
-    handleSubmit,
-    setValues,
-    isSubmitting,
-  } = useFormikContext();
+    !window.google && resolve({});
+  });
+  return result;
+}
 
-  const { inputOptions, appConfig } = useOutletContext();
-  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
+
+const CustomerInfo = (props) => {
+  const { appConfig } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
-
-  console.log("EnquiryStatus Form", values);
-  console.log("EnquiryStatus Form", errors);
+  const [selected, setSelected] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [customerData, setCustomerData] = useState({});
 
   useEffect(() => {
     // set the search values
     fetchData(
-      undefined && appConfig.forms.delivery.search.sheetName,
-      undefined && appConfig.forms.delivery.search.headerRow
+      appConfig.forms.customerInfo.search.sheetName,
+      appConfig.forms.customerInfo.search.headerRow
     )
       .then((records) => {
         const filteredRecords = records.filter(
@@ -73,150 +65,158 @@ const DeliveryForm = (props) => {
       });
   }, [appConfig]);
 
-  useEffect(() => {
-    if (!searchParamsUsed) {
-      window.google &&
-        window.google.script.url.getLocation(function (location) {
-          const newValues = {};
-          for (const fieldName of prefilledfieldNames) {
-            if (fieldName in location.parameters) {
-              newValues[fieldName] = location.parameters[fieldName][0];
-            }
-          }
-          setSearchParamsUsed(true);
-          setValues({ ...values, ...newValues });
-        });
-    }
-  }, [searchParamsUsed, values, setValues]);
+  const optionRenderer = (option) => {
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
-    console.log(`${fieldName} is being set!`);
-    const newValues = {};
-    for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionItem && !!optionItem[fieldName]) {
-        newValues[fieldName] = optionItem[fieldName];
-      }
+    if (!option["Enquiry Number"] ){
+      return "";
     }
-    setValues({ ...values, ...newValues });
+    return `${option["Enquiry Number"]} | ${option["Customer Name"]} | ${option["Contact Number"]}`;
   };
 
-  return (
-    <Form noValidate onSubmit={handleSubmit}>
-      <Row>
-        {searchFieldsMeta.length &&
-          searchFieldsMeta.map((data) => (
-            <SearchFormField
-              key={data.name}
-              id={data.name}
-              name={data.name}
-              icon={data.icon}
-              handleChange={searchFieldChangeHandler.bind(null, data.name)}
-              optionItems={searchFieldOptions}
-              error={errors[data.name]}
-              value={values[data.name]}
-              touched={touched[data.name]}
-            />
-          ))}
-        {formFieldsMetadata.length &&
-          formFieldsMetadata.map((data) => (
-            <FormField
-              key={data.name}
-              {...data}
-              value={values[data.name]}
-              touched={touched[data.name]}
-              error={errors[data.name]}
-              handleChange={handleChange}
-              onBlur={handleBlur}
-              optionItems={inputOptions[data.name]}
-            />
-          ))}
-        <Button
-          variant="primary"
-          type="submit"
-          className="mt-3"
-          disabled={isSubmitting}
-        >
-          {isSubmitting && (
-            <Spinner
-              as="span"
-              size="sm"
-              animation="border"
-              aria-hidden="true"
-            />
-          )}
-          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
-        </Button>
-      </Row>
-    </Form>
-  );
-};
+  const submitHandler = async () => {
+    if (selected.length === 0) return;
 
-const CustomerInfo = (props) => {
-  const { appConfig, inputOptions } = useOutletContext();
-  const [searchFieldOptions, setSearchFieldOptions] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
-    console.log(`${fieldName} is being set!`);
-    const newValues = {};
-    for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionItem && !!optionItem[fieldName]) {
-        newValues[fieldName] = optionItem[fieldName];
+    setIsSubmitting(true);
+    try {
+      const response = await fetchCustomerInfo(
+        selected,
+        appConfig.forms.customerInfo
+      );
+      if(response.success === true){
+        setCustomerData(response);
       }
+      setIsSubmitting(false);
+
+    } catch (err) {
+      console.error(err);
+      setIsSubmitting(false);
     }
   };
+
+  const filterByFields = ["Enquiry Number", "Customer Name", "Contact Number"];
+  const filterByCallback = (option, props) => {
+    return (
+      option["Enquiry Number"]
+        .toLowerCase()
+        .indexOf(props.text.toLowerCase()) !== -1 ||
+      option["Customer Name"]
+        .toLowerCase()
+        .indexOf(props.text.toLowerCase()) !== -1 ||
+      option["Contact Number"]
+        .toLowerCase()
+        .indexOf(props.text.toLowerCase()) !== -1
+    );
+  }
 
   return (
     <FormCard
       initialValues={{}}
-      title="Customer Information"
+      title="Customer Info"
       submitHandler={console.log}
       //   validationSchema={schema}
     >
       <Form noValidate className="mb-5">
-        <SearchFormField
-          id="Search"
-          name="Search"
-          handleChange={searchFieldChangeHandler}
-          optionItems={searchFieldOptions}
-          value={searchValue}
-        />
-        <Button variant="success" className="mt-3 text-center" sm="12" disabled={isSubmitting}>
-          {isSubmitting && (
-            <Spinner
-              as="span"
-              size="sm"
-              animation="border"
-              aria-hidden="true"
+        <Col sm="12">
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="customer-search">Search</Form.Label>
+            <Typeahead
+              id="customer-search"
+              minLength={3}
+              // filterBy={filterByFields}
+              labelKey={optionRenderer}
+              onChange={setSelected}
+              options={searchFieldOptions}
+              placeholder={"Type here..."}
+              selected={selected}
+              paginate={true}
+              onSearch={console.log}
+              // renderMenuItemChildren={optionRenderer}
             />
-          )}
-          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
+            <Form.Control.Feedback type="invalid">
+              {props.error}
+            </Form.Control.Feedback>
+          </Form.Group>
+        </Col>
+        <Button
+          variant="success"
+          className="mt-3"
+          sm="12"
+          disabled={isSubmitting}
+          onClick={submitHandler}
+        >
+          {isSubmitting && <Spinner as="span" size="sm" animation="border" />}
+          <span> {isSubmitting ? "Searching..." : "Submit"} </span>
         </Button>
       </Form>
       <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
-        <Accordion.Item eventKey="0">
+        <Accordion.Item eventKey="0" className="mb-3">
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Enquiry
           </Accordion.Header>
-          <Accordion.Body></Accordion.Body>
+          <Accordion.Body>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  {appConfig.forms.customerInfo.enquiry.headers &&
+                    appConfig.forms.customerInfo.enquiry.headers.map(
+                      (header) => <th>{header}</th>
+                    )}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  {customerData.enquiry &&
+                    customerData.enquiry.rows.map((row) => (
+                      <tr>
+                        {row.map((cellValue) => <div>{cellValue}</div>)}
+                      </tr>
+                    ))}
+                </tr>
+              </tbody>
+            </Table>
+            {!customerData.enquiry && (
+              <p className="text-center text-info">No information available!</p>
+            )}
+          </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="1">
+        <Accordion.Item eventKey="1" className="mb-3">
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Booking
           </Accordion.Header>
-          <Accordion.Body></Accordion.Body>
+          <Accordion.Body>
+            {customerData.booking &&
+              customerData.booking.headers.map((header) => <div>{header}</div>)}
+            {customerData.booking &&
+              customerData.booking.rows.map((row) =>
+                row.map((cellValue) => <div>{cellValue}</div>)
+              )}
+            {!customerData.booking && (
+              <p className="text-center text-info">No information available!</p>
+            )}
+          </Accordion.Body>
         </Accordion.Item>
-        <Accordion.Item eventKey="2">
+        <Accordion.Item eventKey="2" className="mb-3">
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Delivery
           </Accordion.Header>
-          <Accordion.Body></Accordion.Body>
+          <Accordion.Body>
+            {customerData.delivery &&
+              customerData.delivery.headers.map((header) => (
+                <div>{header}</div>
+              ))}
+            {customerData.delivery &&
+              customerData.delivery.rows.map((row) =>
+                row.map((cellValue) => <div>{cellValue}</div>)
+              )}
+            {!customerData.delivery && (
+              <p className="text-center text-info">No information available!</p>
+            )}
+          </Accordion.Body>
         </Accordion.Item>
       </Accordion>
     </FormCard>
   );
 };
 
-export default CustomerInfo;
+export default React.memo(CustomerInfo);
 

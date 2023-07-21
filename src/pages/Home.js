@@ -52,7 +52,7 @@ const Home = () => {
       </NavLink>
       <NavLink to="/customer-info">
         <div className="d-flex justify-content-center align-items-center">
-          Customer Information
+          Customer Info
         </div>
       </NavLink>
     </div>

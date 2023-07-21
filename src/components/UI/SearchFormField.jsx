@@ -27,12 +27,13 @@ const SearchFormField = (props) => {
   return (
     <Col sm="12">
       <Form.Group className="mb-3">
-        <Form.Label htmlFor={props.id}>
-          {props.name}
+        <Form.Label htmlFor={props.name}>
+          {props.name} {props.required && <span style={{color: "red"}}>*</span>}
         </Form.Label>
         <Typeahead
-          id={props.id}
-          required={true}
+          id={props.name}
+          required={props.required || false}
+          minLength={3}
           isInvalid={props.touched && !!props.error}
           labelKey={props.name}
           onChange={changeHandler}

@@ -30,7 +30,7 @@ const EnquiryForm = (props) => {
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
         {formFieldsMetadata.length &&
-          formFieldsMetadata.map(({ data }) => (
+          formFieldsMetadata.map((data) => (
             <FormField
               key={data.id}
               {...data}
