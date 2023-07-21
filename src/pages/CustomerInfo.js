@@ -79,10 +79,11 @@ const CustomerInfo = (props) => {
     setIsSubmitting(true);
     try {
       const response = await fetchCustomerInfo(
-        selected,
+        selected[0],
         appConfig.forms.customerInfo
       );
       if(response.success === true){
+        console.log(response);
         setCustomerData(response);
       }
       setIsSubmitting(false);
@@ -153,7 +154,7 @@ const CustomerInfo = (props) => {
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Enquiry
           </Accordion.Header>
-          <Accordion.Body>
+          <Accordion.Body style={{overflow: "scroll"}}>
             <Table striped bordered hover>
               <thead>
                 <tr>
