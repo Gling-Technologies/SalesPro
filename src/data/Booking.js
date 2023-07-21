@@ -4,10 +4,12 @@ import moment from "moment";
 
 addMethod(date, "format", function format(formats, parseStrict) {
   return this.transform((value, originalValue, ctx) => {
-    if (ctx.isType(value)) return value;
+    console.log(value, originalValue, ctx);
+    // return originalValue.split("-").reverse().join("/");
+
+    if (!parseStrict && ctx.isType(value)) return value;
 
     value = moment(originalValue, formats, parseStrict);
-
     return value.isValid() ? value.toDate() : new Date("");
   });
 });
@@ -302,8 +304,8 @@ const sectionsMeta = [
         type: "date",
         required: true,
         placeholder: "",
-        // validation: string().transform((dateString) => dateString.split("-").reverse().join("/")),
-        validation: string().format("dd/mm/yy"),
+        validation: string().transform((dateString) => dateString.split("-").reverse().join("/")),
+        // validation: date().format("yyyy-mm-dd", true),
       },
       {
         name: "Sales Person Name",
