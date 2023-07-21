@@ -47,17 +47,16 @@ const DeliveryForm = (props) => {
   } = useFormikContext();
 
   const { inputOptions, appConfig } = useOutletContext();
-  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
 
-  console.log("EnquiryStatus Form", values);
-  console.log("EnquiryStatus Form", errors);
+  console.log("Delivery Form", values);
+  console.log("Delivery Form", errors);
 
   useEffect(() => {
     // set the search values
     fetchData(
-      undefined && appConfig.forms.delivery.search.sheetName,
-      undefined && appConfig.forms.delivery.search.headerRow
+      appConfig.forms.delivery.search.sheetName,
+      appConfig.forms.delivery.search.headerRow
     )
       .then((records) => {
         const filteredRecords = records.filter(
@@ -70,22 +69,6 @@ const DeliveryForm = (props) => {
         console.error(err);
       });
   }, [appConfig]);
-
-  useEffect(() => {
-    if (!searchParamsUsed) {
-      window.google &&
-        window.google.script.url.getLocation(function (location) {
-          const newValues = {};
-          for (const fieldName of prefilledfieldNames) {
-            if (fieldName in location.parameters) {
-              newValues[fieldName] = location.parameters[fieldName][0];
-            }
-          }
-          setSearchParamsUsed(true);
-          setValues({ ...values, ...newValues });
-        });
-    }
-  }, [searchParamsUsed, values, setValues]);
 
   const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
     console.log(`${fieldName} is being set!`);
@@ -154,7 +137,7 @@ const Delivery = (props) => {
   const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
   const schemaObject = createSchemaObject(
     formFieldsMeta,
-    appConfig.mandatoriness.enquiryStatusForm,
+    appConfig.mandatoriness.deliveryForm,
     inputOptions
   );
   const schema = yup.object().shape(schemaObject);

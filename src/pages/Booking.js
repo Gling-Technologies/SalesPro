@@ -70,8 +70,8 @@ const BookingForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
-      undefined && appConfig.forms.booking.search.sheetName,
-      undefined && appConfig.forms.booking.search.headerRow
+      appConfig.forms.booking.search.sheetName,
+      appConfig.forms.booking.search.headerRow
     )
       .then((records) => {
         const filteredRecords = records.filter(
