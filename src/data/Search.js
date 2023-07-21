@@ -1,4 +1,4 @@
-const dummyData = [
+const dummySearchData = [
   {
     "Contact Number": "7703916454",
     Address: "Meerut ",
@@ -136,4 +136,65 @@ const dummyData = [
   },
 ];
 
-export default dummyData;
+const dummyCustomerInfo = {
+  delivery: [
+    [
+      "ashish Garg ",
+      "9997747930",
+      "ashishgarg635@gmail.com",
+      "",
+      "Tata Nexon EV Prime",
+      "HariOm",
+    ],
+  ],
+  booking: [
+    [
+      "ashish Garg ",
+      "9997747930",
+      "ashishgarg635@gmail.com",
+      "Ghaziabad ",
+      "Tata Nexon EV Prime",
+      "HariOm",
+    ],
+    [
+      "ashish Garg ",
+      "9997747930",
+      "ashishgarg635@gmail.com",
+      "Ghaziabad ",
+      "Tata Nexon EV Prime",
+      "HariOm",
+    ],
+  ],
+  enquiry: [
+    [
+      "ashish Garg ",
+      "9997747930",
+      "ashishgarg635@gmail.com",
+      "Ghaziabad ",
+      "ABC",
+      "Tata Nexon EV Prime",
+      "HariOm",
+    ],
+    [
+      "ashish Garg ",
+      "9997747930",
+      "ashishgarg635@gmail.com",
+      "Ghaziabad ",
+      "ABC",
+      "Tata Nexon EV Prime",
+      "HariOm",
+    ],
+    [
+      "Ashish Garg",
+      "9997747930",
+      "ashish.garg@linux.com",
+      "House ",
+      "ABC",
+      "Tata Punch",
+      "Ashish Garg",
+    ],
+  ],
+  success: true,
+};
+
+export { dummyCustomerInfo, dummySearchData, dummySearchData as default };

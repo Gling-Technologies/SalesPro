@@ -10,7 +10,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 import FormCard from "../components/UI/FormCard";
-import searchData from "../data/Search";
+import { dummyCustomerInfo, dummySearchData } from "../data/Search";
 
 
 async function fetchData(sheetName, headerRow) {
@@ -21,7 +21,7 @@ async function fetchData(sheetName, headerRow) {
         .withFailureHandler(reject)
         .getSearchData(sheetName, headerRow);
 
-    !window.google && resolve(searchData);
+    !window.google && resolve(dummySearchData);
   });
   return result;
 }
@@ -34,7 +34,7 @@ async function fetchCustomerInfo(customerInfo, sourceInfo) {
         .withFailureHandler(reject)
         .getCustomerInfo(customerInfo, sourceInfo);
 
-    !window.google && resolve({});
+    !window.google && resolve(dummyCustomerInfo);
   });
   return result;
 }
@@ -130,7 +130,6 @@ const CustomerInfo = (props) => {
               placeholder={"Type here..."}
               selected={selected}
               paginate={true}
-              onSearch={console.log}
               // renderMenuItemChildren={optionRenderer}
             />
             <Form.Control.Feedback type="invalid">
@@ -154,25 +153,25 @@ const CustomerInfo = (props) => {
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Enquiry
           </Accordion.Header>
-          <Accordion.Body style={{overflow: "scroll"}}>
+          <Accordion.Body style={{ overflow: "scroll" }}>
             <Table striped bordered hover>
               <thead>
                 <tr>
                   {appConfig.forms.customerInfo.enquiry.headers &&
                     appConfig.forms.customerInfo.enquiry.headers.map(
-                      (header) => <th>{header}</th>
+                      (header, idx) => <th key={idx}>{header}</th>
                     )}
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  {customerData.enquiry &&
-                    customerData.enquiry.rows.map((row) => (
-                      <tr>
-                        {row.map((cellValue) => <div>{cellValue}</div>)}
-                      </tr>
-                    ))}
-                </tr>
+                {customerData.enquiry &&
+                  customerData.enquiry.map((row, rowIdx) => (
+                    <tr key={rowIdx}>
+                      {row.map((cellValue, cellIdx) => (
+                        <td key={cellIdx}>{cellValue}</td>
+                      ))}
+                    </tr>
+                  ))}
               </tbody>
             </Table>
             {!customerData.enquiry && (
@@ -184,13 +183,27 @@ const CustomerInfo = (props) => {
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Booking
           </Accordion.Header>
-          <Accordion.Body>
-            {customerData.booking &&
-              customerData.booking.headers.map((header) => <div>{header}</div>)}
-            {customerData.booking &&
-              customerData.booking.rows.map((row) =>
-                row.map((cellValue) => <div>{cellValue}</div>)
-              )}
+          <Accordion.Body style={{ overflow: "scroll" }}>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  {appConfig.forms.customerInfo.booking.headers &&
+                    appConfig.forms.customerInfo.booking.headers.map(
+                      (header, idx) => <th key={idx}>{header}</th>
+                    )}
+                </tr>
+              </thead>
+              <tbody>
+                {customerData.booking &&
+                  customerData.booking.map((row, rowIdx) => (
+                    <tr key={rowIdx}>
+                      {row.map((cellValue, cellIdx) => (
+                        <td key={cellIdx}>{cellValue}</td>
+                      ))}
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
             {!customerData.booking && (
               <p className="text-center text-info">No information available!</p>
             )}
@@ -200,15 +213,27 @@ const CustomerInfo = (props) => {
           <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
             Delivery
           </Accordion.Header>
-          <Accordion.Body>
-            {customerData.delivery &&
-              customerData.delivery.headers.map((header) => (
-                <div>{header}</div>
-              ))}
-            {customerData.delivery &&
-              customerData.delivery.rows.map((row) =>
-                row.map((cellValue) => <div>{cellValue}</div>)
-              )}
+          <Accordion.Body style={{ overflow: "scroll" }}>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  {appConfig.forms.customerInfo.delivery.headers &&
+                    appConfig.forms.customerInfo.delivery.headers.map(
+                      (header, idx) => <th key={idx}>{header}</th>
+                    )}
+                </tr>
+              </thead>
+              <tbody>
+                {customerData.delivery &&
+                  customerData.delivery.map((row, rowIdx) => (
+                    <tr key={rowIdx}>
+                      {row.map((cellValue, cellIdx) => (
+                        <td key={cellIdx}>{cellValue}</td>
+                      ))}
+                    </tr>
+                  ))}
+              </tbody>
+            </Table>
             {!customerData.delivery && (
               <p className="text-center text-info">No information available!</p>
             )}
