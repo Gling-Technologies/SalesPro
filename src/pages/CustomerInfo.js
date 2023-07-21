@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from "react";
 import { useOutletContext } from "react-router-dom";
 
-import { Row } from 'react-bootstrap';
+import Accordion from "react-bootstrap/Accordion";
+import { Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
+
 import { useFormikContext } from "formik";
-import * as yup from 'yup';
+import * as yup from "yup";
 
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata, { searchFieldsMeta } from "../data/EnquiryStatus";
-import createSchemaObject from '../utils';
-
+import formFieldsMetadata, { searchFieldsMeta } from "../data/Delivery";
+import createSchemaObject from "../utils";
 
 async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
@@ -31,17 +32,11 @@ const prefilledfieldNames = [
   "Customer Name",
   "Contact Number",
   "Email Address",
-  "Address",
-  "Source of Enquiry",
   "Model",
   "Sales Person Name",
-  "Customer Type",
-  "Visit Type",
-  "CRM ID",
-  "Priority",
 ];
 
-const EnquiryForm = (props) => {
+const DeliveryForm = (props) => {
   const {
     values,
     touched,
@@ -63,8 +58,8 @@ const EnquiryForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.enquiryStatus.search.sheetName,
-      appConfig.forms.enquiryStatus.search.headerRow
+      undefined && appConfig.forms.delivery.search.sheetName,
+      undefined && appConfig.forms.delivery.search.headerRow
     )
       .then((records) => {
         const filteredRecords = records.filter(
@@ -79,7 +74,7 @@ const EnquiryForm = (props) => {
   }, [appConfig]);
 
   useEffect(() => {
-    if(!searchParamsUsed){
+    if (!searchParamsUsed) {
       window.google &&
         window.google.script.url.getLocation(function (location) {
           const newValues = {};
@@ -111,8 +106,8 @@ const EnquiryForm = (props) => {
         {searchFieldsMeta.length &&
           searchFieldsMeta.map((data) => (
             <SearchFormField
-              key={data.id}
-              id={data.id}
+              key={data.name}
+              id={data.name}
               name={data.name}
               icon={data.icon}
               handleChange={searchFieldChangeHandler.bind(null, data.name)}
@@ -125,7 +120,7 @@ const EnquiryForm = (props) => {
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
             <FormField
-              key={data.id}
+              key={data.name}
               {...data}
               value={values[data.name]}
               touched={touched[data.name]}
@@ -142,70 +137,86 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner as="span" size="sm" animation="border" aria-hidden="true" />
+            <Spinner
+              as="span"
+              size="sm"
+              animation="border"
+              aria-hidden="true"
+            />
           )}
           <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
       </Row>
     </Form>
   );
-}
+};
 
+const CustomerInfo = (props) => {
+  const { appConfig, inputOptions } = useOutletContext();
+  const [searchFieldOptions, setSearchFieldOptions] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-const EnquiryStatus = (props) => {
-  const { location, appConfig, inputOptions } = useOutletContext();
-  const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
-  const schemaObject = createSchemaObject(
-    formFieldsMeta,
-    appConfig.mandatoriness.enquiryStatusForm,
-    inputOptions
-  );
-  const schema = yup.object().shape(schemaObject);
-
-  const initialValues = formFieldsMeta.reduce((obj, formField) => {
-    obj[formField.name] = formField.value || "";
-    return obj;
-  }, {});
-
-  const submitHandler = (values, { setSubmitting, resetForm }) => {
-    const payload = JSON.parse(JSON.stringify(values));
-    payload["Location"] = location;
-    console.log("Form Payload", payload);
-    submitData(
-      appConfig.forms.enquiryStatus.sheetName,
-      appConfig.forms.enquiryStatus.headerRow,
-      payload,
-      setSubmitting,
-      resetForm
-    );
+  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
+    console.log(`${fieldName} is being set!`);
+    const newValues = {};
+    for (const fieldName of prefilledfieldNames) {
+      if (fieldName in optionItem && !!optionItem[fieldName]) {
+        newValues[fieldName] = optionItem[fieldName];
+      }
+    }
   };
 
   return (
     <FormCard
-      initialValues={initialValues}
-      title="Enquiry Status Form"
-      submitHandler={submitHandler}
-      validationSchema={schema}
+      initialValues={{}}
+      title="Customer Information"
+      submitHandler={console.log}
+      //   validationSchema={schema}
     >
-      <EnquiryForm />
+      <Form noValidate className="mb-5">
+        <SearchFormField
+          id="Search"
+          name="Search"
+          handleChange={searchFieldChangeHandler}
+          optionItems={searchFieldOptions}
+          value={searchValue}
+        />
+        <Button variant="success" className="mt-3 text-center" sm="12" disabled={isSubmitting}>
+          {isSubmitting && (
+            <Spinner
+              as="span"
+              size="sm"
+              animation="border"
+              aria-hidden="true"
+            />
+          )}
+          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
+        </Button>
+      </Form>
+      <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
+        <Accordion.Item eventKey="0">
+          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+            Enquiry
+          </Accordion.Header>
+          <Accordion.Body></Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="1">
+          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+            Booking
+          </Accordion.Header>
+          <Accordion.Body></Accordion.Body>
+        </Accordion.Item>
+        <Accordion.Item eventKey="2">
+          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+            Delivery
+          </Accordion.Header>
+          <Accordion.Body></Accordion.Body>
+        </Accordion.Item>
+      </Accordion>
     </FormCard>
   );
 };
 
-export default EnquiryStatus;
+export default CustomerInfo;
 
-
-const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => {
-  setSubmitting(true);
-  window.google.script.run
-    .withSuccessHandler((result) => {
-      console.log(result);
-      resetForm();
-      setSubmitting(false);
-    })
-    .withFailureHandler((err) => {
-      console.error(err);
-      setSubmitting(false);
-    })
-    .insertData(sheetName, headerRow, payload);
-};

@@ -5,9 +5,12 @@ import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
 import Error from "./pages/Error";
 import Enquiry from "./pages/Enquiry";
-import TestDrive from "./pages/TestDrive";
 import EnquiryStatus from "./pages/EnquiryStatus";
+import TestDrive from "./pages/TestDrive";
+import Booking from "./pages/Booking";
+import Delivery from "./pages/Delivery";
 import Demo from "./pages/Demo";
+import CustomerInfo from "./pages/CustomerInfo";
 
 const router = createMemoryRouter([
   {
@@ -36,8 +39,17 @@ const router = createMemoryRouter([
         children: [],
       },
       {
-        path: "/demo",
-        element: <Demo />,
+        path: "/booking",
+        element: <Booking />,
+        children: [],
+      },
+      {
+        path: "/delivery",
+        element: <Delivery />,
+      },
+      {
+        path: "/customer-info",
+        element: <CustomerInfo />,
         children: [],
       },
     ],

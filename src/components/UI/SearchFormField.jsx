@@ -43,9 +43,9 @@ const SearchFormField = (props) => {
           renderMenuItemChildren={(option) => (
             <div>
               {option[props.name]}
-              <div>
+              {/* <div>
                 <small>{Object.entries(option).map(([x, y]) => `${x} : ${y}`).join(" | ")}</small>
-              </div>
+              </div> */}
             </div>
           )}
         />

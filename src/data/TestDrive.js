@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 const formFieldsMetadata = [
   {
     id: "Email Address",
@@ -7,6 +9,7 @@ const formFieldsMetadata = [
     icon: "envelope-at-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string().email(),
   },
   {
     id: "Address",
@@ -16,6 +19,7 @@ const formFieldsMetadata = [
     icon: "geo-alt-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Source of Enquiry",
@@ -25,6 +29,7 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Model",
@@ -34,6 +39,7 @@ const formFieldsMetadata = [
     icon: "car-front-fill",
     placeholder: "Enter a value...",
     disabled: false,
+    validation: yup.string(),
   },
   {
     id: "Sales Person Name",
@@ -43,6 +49,7 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Test Drive Vehicle",
@@ -51,6 +58,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Test Drive Type",
@@ -59,6 +67,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "DL Number",
@@ -67,6 +76,7 @@ const formFieldsMetadata = [
     required: false,
     icon: "123",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Odometer Reading",
@@ -75,6 +85,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "123",
     placeholder: "Enter a value...",
+    validation: yup.number(),
   },
   {
     id: "Customer Feedback",
@@ -84,6 +95,7 @@ const formFieldsMetadata = [
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     // as: "textarea",
+    validation: yup.string(),
   },
   {
     id: "Approved By",
@@ -92,6 +104,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
 ];
 
@@ -102,6 +115,7 @@ const searchFieldsMeta = [
     icon: "person-fill",
     required: true,
     placeholder: "Pick a number...",
+    validation: yup.string(),
   },
   {
     id: "Customer Name",
@@ -109,6 +123,7 @@ const searchFieldsMeta = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Contact Number",
@@ -116,6 +131,9 @@ const searchFieldsMeta = [
     required: true,
     icon: "telephone-fill",
     placeholder: "Enter a value...",
+    minLength: 10,
+    maxLength: 10,
+    validation: yup.string(),
   },
 ];
 

@@ -6,13 +6,13 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useFormikContext } from "formik";
-import * as yup from 'yup'
+import * as yup from "yup";
 
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata, { searchFieldsMeta } from "../data/TestDrive";
-import createSchemaObject from '../utils';
+import formFieldsMetadata, { searchFieldsMeta } from "../data/Delivery";
+import createSchemaObject from "../utils";
 
 async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
@@ -30,17 +30,11 @@ const prefilledfieldNames = [
   "Customer Name",
   "Contact Number",
   "Email Address",
-  "Address",
-  "Source of Enquiry",
   "Model",
   "Sales Person Name",
-  "Customer Type",
-  "Visit Type",
-  "CRM ID",
-  "Priority",
 ];
 
-const EnquiryForm = (props) => {
+const DeliveryForm = (props) => {
   const {
     values,
     touched,
@@ -52,20 +46,24 @@ const EnquiryForm = (props) => {
     isSubmitting,
   } = useFormikContext();
 
-  const { appConfig, inputOptions } = useOutletContext();
+  const { inputOptions, appConfig } = useOutletContext();
+  const [searchParamsUsed, setSearchParamsUsed] = useState(false);
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
+
+  console.log("EnquiryStatus Form", values);
+  console.log("EnquiryStatus Form", errors);
 
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.testDrive.search.sheetName,
-      appConfig.forms.testDrive.search.headerRow
+      undefined && appConfig.forms.delivery.search.sheetName,
+      undefined && appConfig.forms.delivery.search.headerRow
     )
       .then((records) => {
-       const filteredRecords = records.filter(
-         (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
-       );
-        console.log(filteredRecords);
+        const filteredRecords = records.filter(
+          (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
+        );
+        // console.log(filteredRecords);
         setSearchFieldOptions(filteredRecords);
       })
       .catch((err) => {
@@ -73,9 +71,24 @@ const EnquiryForm = (props) => {
       });
   }, [appConfig]);
 
+  useEffect(() => {
+    if (!searchParamsUsed) {
+      window.google &&
+        window.google.script.url.getLocation(function (location) {
+          const newValues = {};
+          for (const fieldName of prefilledfieldNames) {
+            if (fieldName in location.parameters) {
+              newValues[fieldName] = location.parameters[fieldName][0];
+            }
+          }
+          setSearchParamsUsed(true);
+          setValues({ ...values, ...newValues });
+        });
+    }
+  }, [searchParamsUsed, values, setValues]);
+
   const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
     console.log(`${fieldName} is being set!`);
-    setValues({ ...values, [fieldName]: fieldValue });
     const newValues = {};
     for (const fieldName of prefilledfieldNames) {
       if (fieldName in optionItem && !!optionItem[fieldName]) {
@@ -91,8 +104,8 @@ const EnquiryForm = (props) => {
         {searchFieldsMeta.length &&
           searchFieldsMeta.map((data) => (
             <SearchFormField
-              key={data.id}
-              id={data.id}
+              key={data.name}
+              id={data.name}
               name={data.name}
               icon={data.icon}
               handleChange={searchFieldChangeHandler.bind(null, data.name)}
@@ -105,7 +118,7 @@ const EnquiryForm = (props) => {
         {formFieldsMetadata.length &&
           formFieldsMetadata.map((data) => (
             <FormField
-              key={data.id}
+              key={data.name}
               {...data}
               value={values[data.name]}
               touched={touched[data.name]}
@@ -122,7 +135,12 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner as="span" size="sm" animation="border" aria-hidden="true" />
+            <Spinner
+              as="span"
+              size="sm"
+              animation="border"
+              aria-hidden="true"
+            />
           )}
           <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
@@ -131,12 +149,12 @@ const EnquiryForm = (props) => {
   );
 };
 
-const TestDrive = (props) => {
+const Delivery = (props) => {
   const { location, appConfig, inputOptions } = useOutletContext();
   const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
   const schemaObject = createSchemaObject(
     formFieldsMeta,
-    appConfig.mandatoriness.testDriveForm,
+    appConfig.mandatoriness.enquiryStatusForm,
     inputOptions
   );
   const schema = yup.object().shape(schemaObject);
@@ -150,36 +168,46 @@ const TestDrive = (props) => {
     const payload = JSON.parse(JSON.stringify(values));
     payload["Location"] = location;
     console.log("Form Payload", payload);
-
-    setSubmitting(true);
-    window.google.script.run
-      .withSuccessHandler((result) => {
-        console.log(result);
-        resetForm();
-        setSubmitting(false);
-      })
-      .withFailureHandler((err) => {
-        console.error(err);
-        setSubmitting(false);
-      })
-      .insertData(
-        appConfig.forms.testDrive.sheetName,
-        appConfig.forms.testDrive.headerRow,
-        payload
-      );
+    submitData(
+      appConfig.forms.delivery.sheetName,
+      appConfig.forms.delivery.headerRow,
+      payload,
+      setSubmitting,
+      resetForm
+    );
   };
 
   return (
     <FormCard
       initialValues={initialValues}
-      title="Test Drive Form"
+      title="Delivery Form"
       submitHandler={submitHandler}
       validationSchema={schema}
-      enableReinitialize
     >
-      <EnquiryForm />
+      <DeliveryForm />
     </FormCard>
   );
 };
 
-export default TestDrive;
+export default Delivery;
+
+const submitData = (
+  sheetName,
+  headerRow,
+  payload,
+  setSubmitting,
+  resetForm
+) => {
+  setSubmitting(true);
+  window.google.script.run
+    .withSuccessHandler((result) => {
+      console.log(result);
+      resetForm();
+      setSubmitting(false);
+    })
+    .withFailureHandler((err) => {
+      console.error(err);
+      setSubmitting(false);
+    })
+    .insertData(sheetName, headerRow, payload);
+};

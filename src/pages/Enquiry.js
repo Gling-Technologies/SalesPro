@@ -1,18 +1,17 @@
-import React from 'react'
+import React from "react";
 import { useOutletContext } from "react-router-dom";
 
-import { Row } from 'react-bootstrap';
+import { Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useFormikContext } from "formik";
 import * as yup from "yup";
 
-
 import FormCard from "../components/UI/FormCard";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata from '../data/Enquiry';
-
+import formFieldsMetadata from "../data/Enquiry";
+import createSchemaObject from "../utils";
 
 const EnquiryForm = (props) => {
   const {
@@ -50,45 +49,40 @@ const EnquiryForm = (props) => {
           disabled={isSubmitting}
         >
           {isSubmitting && (
-            <Spinner as="span" size="sm" animation="border" aria-hidden="true" />
+            <Spinner
+              as="span"
+              size="sm"
+              animation="border"
+              aria-hidden="true"
+            />
           )}
           <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
         </Button>
       </Row>
     </Form>
   );
-}
-
+};
 
 const Enquiry = (props) => {
-  const { location, appConfig, uriLocation } = useOutletContext();
-  const schema = yup.object().shape({
-    "Customer Name": yup.string().required(),
-    "Contact Number": yup
-      .string()
-      .required()
-      .matches(
-        /^[0-9]{10}$/,
-        "Mobile number is not valid! Enter 10 digits number."
-      ),
-    "Email Address": appConfig.mandatoriness.enquiryForm.EmailAddress
-      ? yup.string().required().email()
-      : yup.string().email(),
-    Address: yup.string().required(),
-    "Source of Enquiry": yup.string().required(),
-    Model: yup.string().required(),
-    "Sales Person Name": yup.string().required(),
-    "Customer Remarks": yup.string().required(),
-  });
+  const { location, appConfig, uriLocation, inputOptions } = useOutletContext();
+  const schemaObject = createSchemaObject(
+    formFieldsMetadata,
+    appConfig.mandatoriness.enquiryForm,
+    inputOptions
+  );
+  const schema = yup.object().shape(schemaObject);
 
   const initialValues = formFieldsMetadata.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
     return obj;
-  }, {})
+  }, {});
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
-    const queryParams = new URLSearchParams({ ...values, formType: "enquiry-status" });
+    const queryParams = new URLSearchParams({
+      ...values,
+      formType: "enquiry-status",
+    });
 
     payload["Enquiry Status Form"] = `${uriLocation}?${queryParams.toString()}`;
     payload["Location"] = location;
@@ -110,7 +104,7 @@ const Enquiry = (props) => {
         appConfig.forms.enquiry.headerRow,
         payload
       );
-  }
+  };
 
   return (
     <FormCard
@@ -122,6 +116,6 @@ const Enquiry = (props) => {
       <EnquiryForm />
     </FormCard>
   );
-}
+};
 
 export default Enquiry;

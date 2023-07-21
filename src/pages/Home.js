@@ -1,14 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavLink, useOutletContext } from 'react-router-dom';
 
 import "./Home.module.css";
 
 const Home = () => {
-  const { appConfig } = useOutletContext();
+  const { appConfig, uriLocation } = useOutletContext();
+
+  // useEffect(() => {
+  //   fetch(uriLocation, {
+  //     method: "POST",
+  //     mode: "no-cors",
+  //     redirect: "follow",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ message: "Life is awesome. And so am I." }),
+  //   }).then((res) => {
+  //     console.log("Response", res.ok);
+  //   });
+  // }, [uriLocation]);
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center flex-wrap"
+      className="d-flex justify-content-center align-content-center flex-wrap"
       style={{ backgroundColor: "green" }}
     >
       <NavLink to="/enquiry">
@@ -26,16 +40,21 @@ const Home = () => {
           Test Drive
         </div>
       </NavLink>
-      <a href={appConfig.forms.booking.link} target="_blank" rel="noreferrer">
+      <NavLink to="/booking">
         <div className="d-flex justify-content-center align-items-center">
           Booking
         </div>
-      </a>
-      <a href={appConfig.forms.delivery.link} target="_blank" rel="noreferrer">
+      </NavLink>
+      <NavLink to="/delivery">
         <div className="d-flex justify-content-center align-items-center">
           Delivery
         </div>
-      </a>
+      </NavLink>
+      <NavLink to="/customer-info">
+        <div className="d-flex justify-content-center align-items-center">
+          Customer Information
+        </div>
+      </NavLink>
     </div>
   );
 }

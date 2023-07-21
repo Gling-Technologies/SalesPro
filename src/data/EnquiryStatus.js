@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 const formFieldsMetadata = [
   {
     id: "Email Address",
@@ -7,6 +9,7 @@ const formFieldsMetadata = [
     icon: "envelope-at-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string().email(),
   },
   {
     id: "Address",
@@ -16,6 +19,7 @@ const formFieldsMetadata = [
     icon: "geo-alt-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Source of Enquiry",
@@ -25,6 +29,7 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Model",
@@ -34,6 +39,7 @@ const formFieldsMetadata = [
     icon: "car-front-fill",
     placeholder: "Enter a value...",
     disabled: false,
+    validation: yup.string(),
   },
   {
     id: "Sales Person Name",
@@ -43,6 +49,7 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     disabled: true,
+    validation: yup.string(),
   },
   {
     id: "Customer Type",
@@ -51,6 +58,7 @@ const formFieldsMetadata = [
     required: false,
     icon: "patch-question",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Visit Type",
@@ -59,6 +67,7 @@ const formFieldsMetadata = [
     required: false,
     icon: "patch-question",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "CRM ID",
@@ -67,6 +76,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "hash",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Enquiry Status",
@@ -75,6 +85,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "sticky-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Next Follow Up Date",
@@ -83,6 +94,7 @@ const formFieldsMetadata = [
     required: false,
     icon: "sticky-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Priority",
@@ -91,6 +103,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "sticky-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Customer Remarks",
@@ -100,6 +113,7 @@ const formFieldsMetadata = [
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     as: "textarea",
+    validation: yup.string(),
   },
 ];
 
@@ -110,6 +124,7 @@ const searchFieldsMeta = [
     icon: "person-fill",
     required: true,
     placeholder: "Pick a number...",
+    validation: yup.string(),
   },
   {
     id: "Customer Name",
@@ -117,6 +132,7 @@ const searchFieldsMeta = [
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
+    validation: yup.string(),
   },
   {
     id: "Contact Number",
@@ -124,6 +140,7 @@ const searchFieldsMeta = [
     required: true,
     icon: "telephone-fill",
     placeholder: "Enter a value...",
+    validation: yup.string().matches(/^[0-9]{10}$/, "Mobile Number is not valid!"),
   },
 ];
 

@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Button } from 'react-bootstrap';
 import Enquiry from './Enquiry';
 
 const Demo = () => {
+
   return (
     <section class="bg-gradient height-70 o-hidden">
       <div class="w-100 position-absolute demo-pages">
