@@ -24,16 +24,17 @@ const EnquiryForm = (props) => {
     isSubmitting,
   } = useFormikContext();
 
-  const { inputOptions } = useOutletContext();
+  const { inputOptions, appConfig } = useOutletContext();
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
         {formFieldsMetadata.length &&
-          formFieldsMetadata.map((data) => (
+          formFieldsMetadata.map(({ data }) => (
             <FormField
               key={data.id}
               {...data}
+              required={appConfig.mandatoriness.enquiryForm[data.name] || false}
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}

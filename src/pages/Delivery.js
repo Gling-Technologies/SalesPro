@@ -103,6 +103,7 @@ const DeliveryForm = (props) => {
             <FormField
               key={data.name}
               {...data}
+              required={appConfig.mandatoriness.deliveryForm[data.name] || false}
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}
