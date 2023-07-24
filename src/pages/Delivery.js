@@ -12,7 +12,8 @@ import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import formFieldsMetadata, { searchFieldsMeta } from "../data/Delivery";
-import createSchemaObject from "../utils";
+import { createSchemaObject, applyData } from "../utils";
+import { dummySearchData } from "../data/Search";
 
 async function fetchData(sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
@@ -21,18 +22,11 @@ async function fetchData(sheetName, headerRow) {
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
         .getSearchData(sheetName, headerRow);
+
+    !window.google && resolve(dummySearchData);
   });
   return result;
 }
-
-const prefilledfieldNames = [
-  "Enquiry Number",
-  "Customer Name",
-  "Contact Number",
-  "Email Address",
-  "Model",
-  "Sales Person Name",
-];
 
 const DeliveryForm = (props) => {
   const {
@@ -48,9 +42,6 @@ const DeliveryForm = (props) => {
 
   const { inputOptions, appConfig } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
-
-  console.log("Delivery Form", values);
-  console.log("Delivery Form", errors);
 
   useEffect(() => {
     // set the search values
@@ -70,17 +61,6 @@ const DeliveryForm = (props) => {
       });
   }, [appConfig]);
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
-    console.log(`${fieldName} is being set!`);
-    const newValues = {};
-    for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionItem && !!optionItem[fieldName]) {
-        newValues[fieldName] = optionItem[fieldName];
-      }
-    }
-    setValues({ ...values, ...newValues });
-  };
-
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -91,7 +71,7 @@ const DeliveryForm = (props) => {
               id={data.name}
               name={data.name}
               icon={data.icon}
-              handleChange={searchFieldChangeHandler.bind(null, data.name)}
+              handleChange={applyData.bind(null, setValues)}
               optionItems={searchFieldOptions}
               error={errors[data.name]}
               value={values[data.name]}
@@ -103,7 +83,9 @@ const DeliveryForm = (props) => {
             <FormField
               key={data.name}
               {...data}
-              required={appConfig.mandatoriness.deliveryForm[data.name] || false}
+              required={
+                appConfig.mandatoriness.deliveryForm[data.name] || false
+              }
               value={values[data.name]}
               touched={touched[data.name]}
               error={errors[data.name]}

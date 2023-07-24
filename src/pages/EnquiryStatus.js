@@ -12,7 +12,8 @@ import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import formFieldsMetadata, { searchFieldsMeta } from "../data/EnquiryStatus";
-import createSchemaObject from '../utils';
+import { applyData, createSchemaObject} from '../utils';
+import { dummySearchData } from '../data/Search'
 
 
 async function fetchData(sheetName, headerRow) {
@@ -22,6 +23,8 @@ async function fetchData(sheetName, headerRow) {
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
         .getSearchData(sheetName, headerRow);
+
+    !window.google && resolve(dummySearchData);
   });
   return result;
 }
@@ -94,17 +97,6 @@ const EnquiryForm = (props) => {
     }
   }, [searchParamsUsed, values, setValues]);
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
-    console.log(`${fieldName} is being set!`);
-    const newValues = {};
-    for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionItem && !!optionItem[fieldName]) {
-        newValues[fieldName] = optionItem[fieldName];
-      }
-    }
-    setValues({ ...values, ...newValues });
-  };
-
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -115,7 +107,8 @@ const EnquiryForm = (props) => {
               id={data.id}
               name={data.name}
               icon={data.icon}
-              handleChange={searchFieldChangeHandler.bind(null, data.name)}
+              required={appConfig.mandatoriness.enquiryStatusForm[data.name] || false}
+              handleChange={applyData.bind(null, setValues)}
               optionItems={searchFieldOptions}
               error={errors[data.name]}
               value={values[data.name]}
@@ -175,6 +168,10 @@ const EnquiryStatus = (props) => {
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
+    const followUpDate = payload["Next Follow Up Date"];
+    if (followUpDate && /^[\d]{4}-[\d]{2}-[\d]{2}$/.test(followUpDate)) {
+      payload["Next Follow Up Date"] = followUpDate.split("-").reverse().join("/");
+    }
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(

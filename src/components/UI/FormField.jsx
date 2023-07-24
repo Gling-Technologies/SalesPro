@@ -57,7 +57,7 @@ const FormField = (props) => {
 
   if (datalist && datalistId) inputProps.list = datalistId;
 
-  const cols = props.as && props.as === "textarea" ? 12 : 6;
+  const cols = props.size ? props.size : 6;
 
   return (
     <Form.Group as={Col} sm="12" xs="12" md={cols} controlId={props.name + "__controlId"}>

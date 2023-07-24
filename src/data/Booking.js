@@ -1,18 +1,5 @@
-import { string, number, date, addMethod } from "yup";
-import moment from "moment";
+import { string, number } from "yup";
 
-
-addMethod(date, "format", function format(formats, parseStrict) {
-  return this.transform((value, originalValue, ctx) => {
-    console.log(value, originalValue, ctx);
-    // return originalValue.split("-").reverse().join("/");
-
-    if (!parseStrict && ctx.isType(value)) return value;
-
-    value = moment(originalValue, formats, parseStrict);
-    return value.isValid() ? value.toDate() : new Date("");
-  });
-});
 
 const sectionsMeta = [
   {
@@ -150,12 +137,14 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        size: 12,
+        defaultValue: "0",
         validation: number(),
       },
       {
         name: "Registration Type",
         icon: "hash",
-        type: "radio",
+        type: "select",
         required: true,
         placeholder: "",
         validation: string(),
@@ -166,6 +155,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -182,12 +172,13 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
         name: "Extended Warranty",
         icon: "hash",
-        type: "radio",
+        type: "select",
         required: true,
         placeholder: "",
         validation: string(),
@@ -198,6 +189,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -214,6 +206,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -222,6 +215,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -230,6 +224,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -238,6 +233,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
     ],
@@ -251,6 +247,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -259,6 +256,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -267,6 +265,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
       {
@@ -275,6 +274,7 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
+        defaultValue: "0",
         validation: number(),
       },
     ],
@@ -304,8 +304,9 @@ const sectionsMeta = [
         type: "date",
         required: true,
         placeholder: "",
-        validation: string().transform((dateString) => dateString.split("-").reverse().join("/")),
-        // validation: date().format("yyyy-mm-dd", true),
+        validation: string().transform((dateString) =>
+          dateString.split("-").reverse().join("/")
+        ),
       },
       {
         name: "Sales Person Name",
@@ -322,7 +323,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         validation: string(),
-        default: "Yes",
+        defaultValue: "Yes",
       },
     ],
   },
@@ -381,6 +382,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         as: "textarea",
+        size: 12,
         validation: string(),
       },
     ],

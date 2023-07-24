@@ -116,130 +116,138 @@ const CustomerInfo = (props) => {
       submitHandler={console.log}
       //   validationSchema={schema}
     >
-      <Form noValidate className="mb-5">
-        <Col sm="12">
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="customer-search">Search</Form.Label>
-            <Typeahead
-              id="customer-search"
-              minLength={3}
-              // filterBy={filterByFields}
-              labelKey={optionRenderer}
-              onChange={setSelected}
-              options={searchFieldOptions}
-              placeholder={"Type here..."}
-              selected={selected}
-              paginate={true}
-              // renderMenuItemChildren={optionRenderer}
-            />
-            <Form.Control.Feedback type="invalid">
-              {props.error}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Col>
-        <Button
-          variant="success"
-          className="mt-3"
-          sm="12"
-          disabled={isSubmitting}
-          onClick={submitHandler}
-        >
-          {isSubmitting && <Spinner as="span" size="sm" animation="border" />}
-          <span> {isSubmitting ? "Searching..." : "Submit"} </span>
-        </Button>
-      </Form>
-      <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
-        <Accordion.Item eventKey="0" className="mb-3">
-          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
-            Enquiry
-          </Accordion.Header>
-          <Accordion.Body style={{ overflow: "scroll" }}>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  {appConfig.forms.customerInfo.enquiry.headers &&
-                    appConfig.forms.customerInfo.enquiry.headers.map(
-                      (header, idx) => <th key={idx}>{header}</th>
-                    )}
-                </tr>
-              </thead>
-              <tbody>
-                {customerData.enquiry &&
-                  customerData.enquiry.map((row, rowIdx) => (
-                    <tr key={rowIdx}>
-                      {row.map((cellValue, cellIdx) => (
-                        <td key={cellIdx}>{cellValue}</td>
-                      ))}
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
-            {!customerData.enquiry && (
-              <p className="text-center text-info">No information available!</p>
-            )}
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="1" className="mb-3">
-          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
-            Booking
-          </Accordion.Header>
-          <Accordion.Body style={{ overflow: "scroll" }}>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  {appConfig.forms.customerInfo.booking.headers &&
-                    appConfig.forms.customerInfo.booking.headers.map(
-                      (header, idx) => <th key={idx}>{header}</th>
-                    )}
-                </tr>
-              </thead>
-              <tbody>
-                {customerData.booking &&
-                  customerData.booking.map((row, rowIdx) => (
-                    <tr key={rowIdx}>
-                      {row.map((cellValue, cellIdx) => (
-                        <td key={cellIdx}>{cellValue}</td>
-                      ))}
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
-            {!customerData.booking && (
-              <p className="text-center text-info">No information available!</p>
-            )}
-          </Accordion.Body>
-        </Accordion.Item>
-        <Accordion.Item eventKey="2" className="mb-3">
-          <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
-            Delivery
-          </Accordion.Header>
-          <Accordion.Body style={{ overflow: "scroll" }}>
-            <Table striped bordered hover>
-              <thead>
-                <tr>
-                  {appConfig.forms.customerInfo.delivery.headers &&
-                    appConfig.forms.customerInfo.delivery.headers.map(
-                      (header, idx) => <th key={idx}>{header}</th>
-                    )}
-                </tr>
-              </thead>
-              <tbody>
-                {customerData.delivery &&
-                  customerData.delivery.map((row, rowIdx) => (
-                    <tr key={rowIdx}>
-                      {row.map((cellValue, cellIdx) => (
-                        <td key={cellIdx}>{cellValue}</td>
-                      ))}
-                    </tr>
-                  ))}
-              </tbody>
-            </Table>
-            {!customerData.delivery && (
-              <p className="text-center text-info">No information available!</p>
-            )}
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
+      <>
+        <Form noValidate className="mb-5">
+          <Col sm="12">
+            <Form.Group className="mb-3">
+              <Form.Label htmlFor="customer-search">Search</Form.Label>
+              <Typeahead
+                id="customer-search"
+                minLength={3}
+                // filterBy={filterByFields}
+                labelKey={optionRenderer}
+                onChange={setSelected}
+                options={searchFieldOptions}
+                placeholder={"Type here..."}
+                selected={selected}
+                paginate={true}
+                // renderMenuItemChildren={optionRenderer}
+              />
+              <Form.Control.Feedback type="invalid">
+                {props.error}
+              </Form.Control.Feedback>
+            </Form.Group>
+          </Col>
+          <Button
+            variant="success"
+            className="mt-3"
+            sm="12"
+            disabled={isSubmitting}
+            onClick={submitHandler}
+          >
+            {isSubmitting && <Spinner as="span" size="sm" animation="border" />}
+            <span> {isSubmitting ? "Searching..." : "Submit"} </span>
+          </Button>
+        </Form>
+        <Accordion defaultActiveKey={["0", "1", "2"]} alwaysOpen>
+          <Accordion.Item eventKey="0" className="mb-3">
+            <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+              Enquiry
+            </Accordion.Header>
+            <Accordion.Body style={{ overflow: "scroll" }}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    {appConfig.forms.customerInfo.enquiry.headers &&
+                      appConfig.forms.customerInfo.enquiry.headers.map(
+                        (header, idx) => <th key={idx}>{header}</th>
+                      )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {customerData.enquiry &&
+                    customerData.enquiry.map((row, rowIdx) => (
+                      <tr key={rowIdx}>
+                        {row.map((cellValue, cellIdx) => (
+                          <td key={cellIdx}>{cellValue}</td>
+                        ))}
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+              {!customerData.enquiry && (
+                <p className="text-center text-info">
+                  No information available!
+                </p>
+              )}
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="1" className="mb-3">
+            <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+              Booking
+            </Accordion.Header>
+            <Accordion.Body style={{ overflow: "scroll" }}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    {appConfig.forms.customerInfo.booking.headers &&
+                      appConfig.forms.customerInfo.booking.headers.map(
+                        (header, idx) => <th key={idx}>{header}</th>
+                      )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {customerData.booking &&
+                    customerData.booking.map((row, rowIdx) => (
+                      <tr key={rowIdx}>
+                        {row.map((cellValue, cellIdx) => (
+                          <td key={cellIdx}>{cellValue}</td>
+                        ))}
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+              {!customerData.booking && (
+                <p className="text-center text-info">
+                  No information available!
+                </p>
+              )}
+            </Accordion.Body>
+          </Accordion.Item>
+          <Accordion.Item eventKey="2" className="mb-3">
+            <Accordion.Header style={{ backgroundColor: "#031633 !important" }}>
+              Delivery
+            </Accordion.Header>
+            <Accordion.Body style={{ overflow: "scroll" }}>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    {appConfig.forms.customerInfo.delivery.headers &&
+                      appConfig.forms.customerInfo.delivery.headers.map(
+                        (header, idx) => <th key={idx}>{header}</th>
+                      )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {customerData.delivery &&
+                    customerData.delivery.map((row, rowIdx) => (
+                      <tr key={rowIdx}>
+                        {row.map((cellValue, cellIdx) => (
+                          <td key={cellIdx}>{cellValue}</td>
+                        ))}
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+              {!customerData.delivery && (
+                <p className="text-center text-info">
+                  No information available!
+                </p>
+              )}
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
+      </>
     </FormCard>
   );
 };

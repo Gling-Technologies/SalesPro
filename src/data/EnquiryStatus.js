@@ -113,6 +113,7 @@ const formFieldsMetadata = [
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     as: "textarea",
+    size: 12,
     validation: yup.string(),
   },
 ];

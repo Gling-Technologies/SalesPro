@@ -14,9 +14,10 @@ import * as yup from 'yup';
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import sectionsMeta from "../data/Booking";
-import createSchemaObject from '../utils';
 import FormSection from '../components/UI/FormSection';
+import sectionsMeta from "../data/Booking";
+import { createSchemaObject, applyData } from '../utils';
+import { dummySearchData } from "../data/Search";
 
 
 async function fetchData(sheetName, headerRow) {
@@ -26,6 +27,8 @@ async function fetchData(sheetName, headerRow) {
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
         .getSearchData(sheetName, headerRow);
+
+    !window.google && resolve(dummySearchData);
   });
   return result;
 }
@@ -44,13 +47,6 @@ const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => 
     })
     .insertData(sheetName, headerRow, payload);
 };
-
-const prefilledfieldNames = [
-  "Enquiry Number",
-  "Customer Name",
-  "Contact Number",
-  "Email Address",
-];
 
 const BookingForm = (props) => {
   const {
@@ -85,21 +81,6 @@ const BookingForm = (props) => {
       });
   }, [appConfig]);
 
-  const searchFieldChangeHandler = (fieldName, fieldValue, optionItem) => {
-    console.log(`${fieldName} is being set!`);
-    const newValues = {};
-    for (const fieldName of prefilledfieldNames) {
-      if (fieldName in optionItem && !!optionItem[fieldName]) {
-        newValues[fieldName] = optionItem[fieldName];
-      }
-    }
-    setValues({ ...values, ...newValues });
-  };
-
-  console.log(values);
-  // if(errors)
-  // const accordionActiveKey =  errors[""] || 0
-
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
@@ -116,11 +97,12 @@ const BookingForm = (props) => {
                           key={data.id}
                           id={data.id}
                           name={data.name}
+                          required={
+                            appConfig.mandatoriness.bookingForm[data.name] ||
+                            false
+                          }
                           icon={data.icon}
-                          handleChange={searchFieldChangeHandler.bind(
-                            null,
-                            data.name
-                          )}
+                          handleChange={applyData.bind(null, setValues)}
                           optionItems={searchFieldOptions}
                           error={errors[data.name]}
                           value={values[data.name]}
@@ -182,12 +164,16 @@ const Booking = (props) => {
   const schema = yup.object().shape(schemaObject);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
-    obj[formField.name] = formField.value || "";
+    obj[formField.name] = formField.defaultValue || "";
     return obj;
   }, {});
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
+    const deliveryDate = payload["Expected Delivery Date"];
+    if (deliveryDate && /^[\d]{4}-[\d]{2}-[\d]{2}$/.test(deliveryDate)) {
+      payload["Expected Delivery Date"] = deliveryDate.split("-").reverse().join("/");
+    }
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
