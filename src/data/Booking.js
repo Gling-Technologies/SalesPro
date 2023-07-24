@@ -132,12 +132,20 @@ const sectionsMeta = [
     title: "Billing Section",
     fields: [
       {
+        name: "Finance Type",
+        icon: "hash",
+        type: "select",
+        required: true,
+        placeholder: "",
+        validation: string(),
+      },
+      {
         name: "Ex-Showroom Price",
         icon: "hash",
         type: "number",
         required: true,
         placeholder: "",
-        size: 12,
+        // size: 12,
         defaultValue: "0",
         validation: number(),
       },

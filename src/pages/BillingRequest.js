@@ -115,7 +115,7 @@ const DeliveryForm = (props) => {
   );
 };
 
-const Delivery = (props) => {
+const BillingRequest = (props) => {
   const { location, appConfig, inputOptions } = useOutletContext();
   const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
   const schemaObject = createSchemaObject(
@@ -132,6 +132,10 @@ const Delivery = (props) => {
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
+    const deliveryDate = payload['Delivery Date'];
+    if (deliveryDate && /^[\d]{4}-[\d]{2}-[\d]{2}$/.test(deliveryDate)) {
+      payload["Delivery Date"] = deliveryDate.split("-").reverse().join("/");
+    }
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
@@ -146,7 +150,7 @@ const Delivery = (props) => {
   return (
     <FormCard
       initialValues={initialValues}
-      title="Delivery Form"
+      title="Billing Request Form"
       submitHandler={submitHandler}
       validationSchema={schema}
     >
@@ -155,7 +159,7 @@ const Delivery = (props) => {
   );
 };
 
-export default Delivery;
+export default BillingRequest;
 
 const submitData = (
   sheetName,

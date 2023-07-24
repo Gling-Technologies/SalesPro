@@ -9,7 +9,7 @@ const formFieldsMetadata = [
     icon: "car-front-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    size: 12,
+    // size: 12,
     defaultValue: "Exit",
   },
   {
@@ -126,13 +126,6 @@ const formFieldsMetadata = [
     placeholder: "Enter a value...",
     dependent: true,
     validation: yup.number(),
-    conditions: [
-      {
-        field: "Test Drive Type",
-        operator: "===",
-        value: "Exit",
-      },
-    ],
   },
   {
     id: "Customer Feedback",
@@ -160,6 +153,13 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
+    conditions: [
+      {
+        field: "Test Drive Type",
+        operator: "===",
+        value: "Exit",
+      },
+    ],
   },
 ];
 

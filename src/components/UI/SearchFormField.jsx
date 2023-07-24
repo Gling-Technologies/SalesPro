@@ -25,10 +25,12 @@ const SearchFormField = (props) => {
   }
 
   return (
-    <Col sm="12">
+    <Col sm="6">
       <Form.Group className="mb-3">
         <Form.Label htmlFor={props.name}>
-          {props.name} {props.required && <span style={{color: "red"}}>*</span>}
+          <i className={`bi bi-search prefix`}></i>
+          {" "} {props.name} {" "}
+          {props.required && <span style={{ color: "red" }}>*</span>}
         </Form.Label>
         <Typeahead
           id={props.name}

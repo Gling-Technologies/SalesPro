@@ -29,12 +29,14 @@ const SelectInput = (props) => {
       </option>
     ));
 
+  const cols = props.size ? props.size : 6;
+
   return (
     <Form.Group
       as={Col}
       sm="12"
       xs="12"
-      md={6}
+      md={cols}
       controlId={props.name + "__controlId"}
     >
       <Form.Label> {props.name} </Form.Label>

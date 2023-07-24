@@ -8,7 +8,7 @@ import Enquiry from "./pages/Enquiry";
 import EnquiryStatus from "./pages/EnquiryStatus";
 import TestDrive from "./pages/TestDrive";
 import Booking from "./pages/Booking";
-import Delivery from "./pages/Delivery";
+import BillingRequest from "./pages/BillingRequest";
 import Demo from "./pages/Demo";
 import CustomerInfo from "./pages/CustomerInfo";
 
@@ -44,8 +44,8 @@ const router = createMemoryRouter([
         children: [],
       },
       {
-        path: "/delivery",
-        element: <Delivery />,
+        path: "/billing-request",
+        element: <BillingRequest />,
       },
       {
         path: "/customer-info",

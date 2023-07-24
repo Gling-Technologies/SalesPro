@@ -92,36 +92,43 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        {searchFieldsMeta.length &&
-          searchFieldsMeta.map((data) => (
-            <SearchFormField
-              key={data.id}
-              id={data.id}
-              name={data.name}
-              icon={data.icon}
-              required={appConfig.mandatoriness.testDriveForm[data.name] || false}
-              handleChange={applyData.bind(null, setValues)}
-              optionItems={searchFieldOptions.filter((option) => true)}
-              error={errors[data.name]}
-              value={values[data.name]}
-              touched={touched[data.name]}
-            />
-          ))}
         {formFieldsMetadata.length &&
-          formFieldsMetadata.filter(data => checkConditions(data.conditions, values))
-                            .map((data) => (
-              <FormField
-                key={data.id}
-                {...data}
-                required={appConfig.mandatoriness.testDriveForm[data.name] || false}
-                value={values[data.name]}
-                touched={touched[data.name]}
-                error={errors[data.name]}
-                handleChange={handleChange}
-                onBlur={handleBlur}
-                optionItems={inputOptions[data.name]}
-              />
-          ))}
+          formFieldsMetadata
+            .filter((data) => checkConditions(data.conditions, values))
+            .map(
+              (data) =>
+                (!!data.searchable && (
+                  <SearchFormField
+                    key={data.id}
+                    id={data.id}
+                    name={data.name}
+                    icon={data.icon}
+                    required={
+                      appConfig.mandatoriness.testDriveForm[data.name] || false
+                    }
+                    handleChange={applyData.bind(null, setValues)}
+                    optionItems={searchFieldOptions.filter((option) => true)}
+                    error={errors[data.name]}
+                    value={values[data.name]}
+                    touched={touched[data.name]}
+                  />
+                )) ||
+                (!data.searchable && (
+                  <FormField
+                    key={data.id}
+                    {...data}
+                    required={
+                      appConfig.mandatoriness.testDriveForm[data.name] || false
+                    }
+                    value={values[data.name]}
+                    touched={touched[data.name]}
+                    error={errors[data.name]}
+                    handleChange={handleChange}
+                    onBlur={handleBlur}
+                    optionItems={inputOptions[data.name]}
+                  />
+                ))
+            )}
         <Button
           variant="primary"
           type="submit"
@@ -165,7 +172,7 @@ const TestDrive = (props) => {
       payload["Customer Feedback"] = "";
     } else if (driveType === "Entry") {
       payload["DL Number"] = "";
-      payload["Odometer Reading"] = "";
+      payload["Approved By"] = "";
     }
     payload["Location"] = location;
     console.log("Form Payload", payload);

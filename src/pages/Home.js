@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <div
-      className="d-flex justify-content-center align-content-center flex-wrap"
+      className="d-flex justify-content-center align-items-center flex-wrap"
       style={{ backgroundColor: "green" }}
     >
       <NavLink to="/enquiry">
@@ -45,9 +45,9 @@ const Home = () => {
           Booking
         </div>
       </NavLink>
-      <NavLink to="/delivery">
+      <NavLink to="/billing-request">
         <div className="d-flex justify-content-center align-items-center">
-          Delivery
+          Billing Request
         </div>
       </NavLink>
       <NavLink to="/customer-info">

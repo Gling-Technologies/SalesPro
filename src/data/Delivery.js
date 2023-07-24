@@ -86,7 +86,15 @@ const formFieldsMetadata = [
   },
   {
     name: "Delivery Photograph",
-    icon: "hash",
+    icon: "upload_file",
+    type: "file",
+    required: true,
+    placeholder: "Pick a number...",
+    validation: yup.string(),
+  },
+  {
+    name: "Delivery Order",
+    icon: "upload_file",
     type: "file",
     required: true,
     placeholder: "Pick a number...",
