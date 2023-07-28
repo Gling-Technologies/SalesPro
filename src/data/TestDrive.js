@@ -1,17 +1,137 @@
 import * as yup from "yup";
 
-const formFieldsMetadata = [
+const entryFormFieldsMetadata = [
+  // {
+  //   id: "Test Drive Type",
+  //   name: "Test Drive Type",
+  //   type: "select",
+  //   required: true,
+  //   icon: "car-front-fill",
+  //   placeholder: "Enter a value...",
+  //   validation: yup.string(),
+  //   // size: 12,
+  //   defaultValue: "Exit",
+  // },
   {
-    id: "Test Drive Type",
-    name: "Test Drive Type",
+    id: "Enquiry Number",
+    name: "Enquiry Number",
+    icon: "person-fill",
+    required: true,
+    placeholder: "Enter a value...",
+    validation: yup.string(),
+    searchable: true,
+  },
+  {
+    id: "Customer Name",
+    name: "Customer Name",
+    required: true,
+    icon: "person-fill",
+    placeholder: "Enter a value...",
+    validation: yup.string(),
+    searchable: true,
+  },
+  {
+    id: "Contact Number",
+    name: "Contact Number",
+    required: true,
+    icon: "telephone-fill",
+    placeholder: "Enter a value...",
+    minLength: 10,
+    maxLength: 10,
+    validation: yup.string(),
+    searchable: true,
+  },
+  {
+    id: "Email Address",
+    name: "Email Address",
+    type: "email",
+    required: true,
+    icon: "envelope-at-fill",
+    placeholder: "Enter a value...",
+    disabled: true,
+    validation: yup.string().email(),
+  },
+  {
+    id: "Address",
+    name: "Address",
+    type: "text",
+    required: false,
+    icon: "geo-alt-fill",
+    placeholder: "Enter a value...",
+    disabled: true,
+    validation: yup.string(),
+  },
+  {
+    id: "Source of Enquiry",
+    name: "Source of Enquiry",
+    type: "select",
+    required: true,
+    icon: "person-fill",
+    placeholder: "Enter a value...",
+    disabled: true,
+    validation: yup.string(),
+  },
+  {
+    id: "Model",
+    name: "Model",
+    type: "select",
+    required: true,
+    icon: "car-front-fill",
+    placeholder: "Enter a value...",
+    disabled: false,
+    validation: yup.string(),
+  },
+  {
+    id: "Sales Person Name",
+    name: "Sales Person Name",
+    type: "select",
+    required: true,
+    icon: "person-fill",
+    placeholder: "Enter a value...",
+    disabled: true,
+    validation: yup.string(),
+  },
+  {
+    id: "Test Drive Vehicle",
+    name: "Test Drive Vehicle",
     type: "select",
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    // size: 12,
-    defaultValue: "Exit",
   },
+  {
+    id: "Odometer Reading",
+    name: "Odometer Reading",
+    type: "number",
+    required: true,
+    icon: "123",
+    placeholder: "Enter a value...",
+    validation: yup.number(),
+  },
+  {
+    id: "Customer Feedback",
+    name: "Customer Feedback",
+    type: "select",
+    required: false,
+    icon: "sticky-fill",
+    placeholder: "Enter a value...",
+    // as: "textarea",
+    validation: yup.string(),
+  },
+];
+
+const exitFormFieldsMetadata = [
+  // {
+  //   id: "Test Drive Type",
+  //   name: "Test Drive Type",
+  //   type: "select",
+  //   required: true,
+  //   icon: "car-front-fill",
+  //   placeholder: "Enter a value...",
+  //   validation: yup.string(),
+  //   defaultValue: "Exit",
+  // },
   {
     id: "Enquiry Number",
     name: "Enquiry Number",
@@ -108,14 +228,6 @@ const formFieldsMetadata = [
     icon: "123",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    dependent: true,
-    conditions: [
-      {
-        field: "Test Drive Type",
-        operator: "===",
-        value: "Exit",
-      },
-    ],
   },
   {
     id: "Odometer Reading",
@@ -124,26 +236,7 @@ const formFieldsMetadata = [
     required: true,
     icon: "123",
     placeholder: "Enter a value...",
-    dependent: true,
     validation: yup.number(),
-  },
-  {
-    id: "Customer Feedback",
-    name: "Customer Feedback",
-    type: "select",
-    required: false,
-    icon: "sticky-fill",
-    placeholder: "Enter a value...",
-    dependent: true,
-    // as: "textarea",
-    validation: yup.string(),
-    conditions: [
-      {
-        field: "Test Drive Type",
-        operator: "===",
-        value: "Entry",
-      },
-    ],
   },
   {
     id: "Approved By",
@@ -153,18 +246,7 @@ const formFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    conditions: [
-      {
-        field: "Test Drive Type",
-        operator: "===",
-        value: "Exit",
-      },
-    ],
   },
-];
-
-const searchFieldsMeta = [
-
 ];
 
 /**
@@ -193,5 +275,11 @@ const schemaModifier = (values, schema) => {
   return newSchema;
 };
 
-export default formFieldsMetadata;
-export { searchFieldsMeta, schemaModifier };
+const testDrive = {
+  entryFormFieldsMetadata,
+  exitFormFieldsMetadata,
+  schemaModifier,
+};
+
+export default testDrive;
+export { entryFormFieldsMetadata, exitFormFieldsMetadata, schemaModifier };

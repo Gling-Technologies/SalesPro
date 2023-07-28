@@ -32,11 +32,15 @@ const checkConditions = (conditions, values) => {
   return true;
 };
 
-const applyData = (setter, data) => {
+const applyData = (setter, data, excludes) => {
+  const dataCopy = JSON.parse(JSON.stringify(data));
   setter((prevValues) => {
     const newValues = Object.keys(prevValues).reduce((values, fieldName) => {
-      if (fieldName in data && !!data[fieldName]) {
-        values[fieldName] = data[fieldName];
+      if(excludes && excludes.includes(fieldName)){
+        return values;
+      }
+      if (fieldName in dataCopy && !!dataCopy[fieldName]) {
+        values[fieldName] = dataCopy[fieldName];
       }
       return values;
     }, {});

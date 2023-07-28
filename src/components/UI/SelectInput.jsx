@@ -39,7 +39,10 @@ const SelectInput = (props) => {
       md={cols}
       controlId={props.name + "__controlId"}
     >
-      <Form.Label> {props.name} </Form.Label>
+      <Form.Label>
+        {" "} {props.name} {" "}
+        {props.required && <span style={{ color: "red" }}>*</span>}
+      </Form.Label>
       <InputGroup className="mb-3" hasValidation>
         {iconElement}
         <Form.Select {...inputProps}>

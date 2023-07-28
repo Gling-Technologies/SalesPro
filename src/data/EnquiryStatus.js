@@ -88,15 +88,6 @@ const formFieldsMetadata = [
     validation: yup.string(),
   },
   {
-    id: "Next Follow Up Date",
-    name: "Next Follow Up Date",
-    type: "date",
-    required: false,
-    icon: "sticky-fill",
-    placeholder: "Enter a value...",
-    validation: yup.string(),
-  },
-  {
     id: "Priority",
     name: "Priority",
     type: "select",
@@ -104,6 +95,23 @@ const formFieldsMetadata = [
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
+  },
+  {
+    id: "Next Follow Up Date",
+    name: "Next Follow Up Date",
+    type: "date",
+    required: false,
+    icon: "sticky-fill",
+    placeholder: "Enter a value...",
+    validation: yup.string(),
+    dependent: true,
+    conditions: [
+      {
+        field: "Enquiry Status",
+        operator: "===",
+        value: "In Process",
+      },
+    ],
   },
   {
     id: "Customer Remarks",
@@ -147,5 +155,16 @@ const searchFieldsMeta = [
   },
 ];
 
+const schemaModifier = (values, schema) => {
+  const { "Enquiry Status": enquiryStatus } = values[0];
+  let newSchema = schema;
+  if (enquiryStatus === "In Process") {
+    newSchema = schema.shape({
+      "Next Follow Up Date": yup.string().required(),
+    });
+  }
+  return newSchema;
+};
+
 export default formFieldsMetadata;
-export { searchFieldsMeta };
+export { searchFieldsMeta, schemaModifier };

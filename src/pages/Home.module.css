@@ -1,4 +1,4 @@
-:global(.d-flex) {
+:global(.d-flex).home {
     height: 100vh;
 }
 :global(.d-flex) a {

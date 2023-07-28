@@ -11,8 +11,11 @@ import * as yup from 'yup';
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata, { searchFieldsMeta } from "../data/EnquiryStatus";
-import { applyData, createSchemaObject} from '../utils';
+import formFieldsMetadata, {
+  searchFieldsMeta,
+  schemaModifier,
+} from "../data/EnquiryStatus";
+import { applyData, checkConditions, createSchemaObject} from '../utils';
 import { dummySearchData } from '../data/Search'
 
 
@@ -43,6 +46,13 @@ const prefilledfieldNames = [
   "CRM ID",
   "Priority",
 ];
+
+const excludedFields = [
+  "Enquiry Status",
+  "Next Follow Up Date",
+  "Customer Remarks",
+];
+
 
 const EnquiryForm = (props) => {
   const {
@@ -109,7 +119,7 @@ const EnquiryForm = (props) => {
               name={data.name}
               icon={data.icon}
               required={appConfig.mandatoriness.enquiryStatusForm[data.name] || false}
-              handleChange={applyData.bind(null, setValues)}
+              handleChange={(x) => applyData(setValues, x, excludedFields)}
               optionItems={searchFieldOptions}
               error={errors[data.name]}
               value={values[data.name]}
@@ -117,7 +127,7 @@ const EnquiryForm = (props) => {
             />
           ))}
         {formFieldsMetadata.length &&
-          formFieldsMetadata.map((data) => (
+          formFieldsMetadata.filter((data) => checkConditions(data.conditions, values)).map((data) => (
             <FormField
               key={data.id}
               {...data}
@@ -160,7 +170,7 @@ const EnquiryStatus = (props) => {
     appConfig.mandatoriness.enquiryStatusForm,
     inputOptions
   );
-  const schema = yup.object().shape(schemaObject);
+  const schema = yup.object().shape(schemaObject).when(schemaModifier);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";

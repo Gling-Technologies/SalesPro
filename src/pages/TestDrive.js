@@ -11,9 +11,9 @@ import * as yup from 'yup'
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata, {
-  searchFieldsMeta,
-  schemaModifier,
+import {
+  entryFormFieldsMetadata,
+  exitFormFieldsMetadata,
 } from "../data/TestDrive";
 import { createSchemaObject, checkConditions, applyData } from '../utils';
 import { dummySearchData } from "../data/Search";
@@ -46,7 +46,7 @@ const prefilledfieldNames = [
   "Priority",
 ];
 
-const EnquiryForm = (props) => {
+const EntryForm = (props) => {
 
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
   const { appConfig, inputOptions } = useOutletContext();
@@ -62,21 +62,12 @@ const EnquiryForm = (props) => {
     isSubmitting,
   } = useFormikContext();
 
-  // const driveType = values["Test Drive Type"];
-  // useEffect(() => {
-  //   if (driveType === "Exit") {
-  //     setValues((v) => ({...v, "Customer Feedback": ""}));
-  //   } else if (driveType === "Entry") {
-  //     setValues((v) => ({ ...v, "DL Number": "",  "Odometer Reading": ""}));
-  //   }
-  // }, [driveType, setValues]);
-
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.testDrive.search.spreadsheetUrl,
-      appConfig.forms.testDrive.search.sheetName,
-      appConfig.forms.testDrive.search.headerRow
+      appConfig.forms.testDriveEntry.search.spreadsheetUrl,
+      appConfig.forms.testDriveEntry.search.sheetName,
+      appConfig.forms.testDriveEntry.search.headerRow
     )
       .then((records) => {
         const filteredRecords = records.filter(
@@ -93,19 +84,20 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        {formFieldsMetadata.length &&
-          formFieldsMetadata
+        {entryFormFieldsMetadata.length &&
+          entryFormFieldsMetadata
             .filter((data) => checkConditions(data.conditions, values))
             .map(
               (data) =>
                 (!!data.searchable && (
                   <SearchFormField
-                    key={data.id}
-                    id={data.id}
+                    key={data.name}
+                    id={data.name}
                     name={data.name}
                     icon={data.icon}
                     required={
-                      appConfig.mandatoriness.testDriveForm[data.name] || false
+                      appConfig.mandatoriness.testDriveEntryForm[data.name] ||
+                      false
                     }
                     handleChange={applyData.bind(null, setValues)}
                     optionItems={searchFieldOptions.filter((option) => true)}
@@ -119,7 +111,8 @@ const EnquiryForm = (props) => {
                     key={data.id}
                     {...data}
                     required={
-                      appConfig.mandatoriness.testDriveForm[data.name] || false
+                      appConfig.mandatoriness.testDriveEntryForm[data.name] ||
+                      false
                     }
                     value={values[data.name]}
                     touched={touched[data.name]}
@@ -151,15 +144,117 @@ const EnquiryForm = (props) => {
   );
 };
 
+
+const ExitForm = (props) => {
+  const [searchFieldOptions, setSearchFieldOptions] = useState([]);
+  const { appConfig, inputOptions } = useOutletContext();
+
+  const {
+    values,
+    touched,
+    errors,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setValues,
+    isSubmitting,
+  } = useFormikContext();
+
+  useEffect(() => {
+    // set the search values
+    fetchData(
+      appConfig.forms.testDriveExit.search.spreadsheetUrl,
+      appConfig.forms.testDriveExit.search.sheetName,
+      appConfig.forms.testDriveExit.search.headerRow
+    )
+      .then((records) => {
+        const filteredRecords = records.filter(
+          (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
+        );
+        console.log(filteredRecords);
+        setSearchFieldOptions(filteredRecords);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [appConfig]);
+
+  return (
+    <Form noValidate onSubmit={handleSubmit}>
+      <Row>
+        {exitFormFieldsMetadata.length &&
+          exitFormFieldsMetadata
+            .filter((data) => checkConditions(data.conditions, values))
+            .map(
+              (data) =>
+                (!!data.searchable && (
+                  <SearchFormField
+                    key={data.name}
+                    id={data.name}
+                    name={data.name}
+                    icon={data.icon}
+                    required={
+                      appConfig.mandatoriness.testDriveExitForm[data.name] ||
+                      false
+                    }
+                    handleChange={applyData.bind(null, setValues)}
+                    optionItems={searchFieldOptions.filter((option) => true)}
+                    error={errors[data.name]}
+                    value={values[data.name]}
+                    touched={touched[data.name]}
+                  />
+                )) ||
+                (!data.searchable && (
+                  <FormField
+                    key={data.id}
+                    {...data}
+                    required={
+                      appConfig.mandatoriness.testDriveExitForm[data.name] ||
+                      false
+                    }
+                    value={values[data.name]}
+                    touched={touched[data.name]}
+                    error={errors[data.name]}
+                    handleChange={handleChange}
+                    onBlur={handleBlur}
+                    optionItems={inputOptions[data.name]}
+                  />
+                ))
+            )}
+        <Button
+          variant="primary"
+          type="submit"
+          className="mt-3"
+          disabled={isSubmitting}
+        >
+          {isSubmitting && (
+            <Spinner
+              as="span"
+              size="sm"
+              animation="border"
+              aria-hidden="true"
+            />
+          )}
+          <span> {isSubmitting ? "Submitting..." : "Submit"} </span>
+        </Button>
+      </Row>
+    </Form>
+  );
+};
+
+
 const TestDrive = (props) => {
+  const [isEntering, setIsEntering] = useState(false)
   const { location, appConfig, inputOptions } = useOutletContext();
-  const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
+  const formFieldsMeta = isEntering ? entryFormFieldsMetadata: exitFormFieldsMetadata;
   const schemaObject = createSchemaObject(
     formFieldsMeta,
-    appConfig.mandatoriness.testDriveForm,
+    isEntering
+      ? appConfig.mandatoriness.testDriveEntryForm
+      : appConfig.mandatoriness.testDriveExitForm,
     inputOptions
   );
-  const schema = yup.object().shape(schemaObject).when(schemaModifier);
+  const schema = yup.object().shape(schemaObject);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.defaultValue || "";
@@ -168,19 +263,19 @@ const TestDrive = (props) => {
 
   const submitHandler = (values, { setSubmitting, resetForm }) => {
     const payload = JSON.parse(JSON.stringify(values));
-    const driveType = payload["Test Drive Type"];
-    if (driveType === "Exit") {
-      payload["Customer Feedback"] = "";
-    } else if (driveType === "Entry") {
-      payload["DL Number"] = "";
-      payload["Approved By"] = "";
-    }
+    payload["Test Drive Type"] = isEntering ? "Entry" : "Exit";
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
-      appConfig.forms.testDrive.spreadsheetUrl,
-      appConfig.forms.testDrive.sheetName,
-      appConfig.forms.testDrive.headerRow,
+      isEntering
+        ? appConfig.forms.testDriveEntry.spreadsheetUrl
+        : appConfig.forms.testDriveExit.spreadsheetUrl,
+      isEntering
+        ? appConfig.forms.testDriveEntry.sheetName
+        : appConfig.forms.testDriveExit.sheetName,
+      isEntering
+        ? appConfig.forms.testDriveEntry.headerRow
+        : appConfig.forms.testDriveExit.headerRow,
       payload,
       setSubmitting,
       resetForm
@@ -196,7 +291,17 @@ const TestDrive = (props) => {
       validationSchema={schema}
       enableReinitialize
     >
-      <EnquiryForm />
+      <>
+        <div className="d-flex justify-content-between mb-4">
+          <Button className="px-5" variant={isEntering ? "primary" : "secondary"} onClick={() => setIsEntering(true)}>
+            Entry
+          </Button>
+          <Button className="px-5" variant={!isEntering ? "primary" : "secondary"} onClick={() => setIsEntering(false)}>
+            Exit
+          </Button>
+        </div>
+        {isEntering ? <EntryForm /> : <ExitForm />}
+      </>
     </FormCard>
   );
 };
@@ -214,7 +319,7 @@ const submitData = (
   setSubmitting(true);
   window.google.script.run
     .withSuccessHandler((result) => {
-      console.log(result);
+      console.log("insertData", result);
       resetForm();
       setSubmitting(false);
     })

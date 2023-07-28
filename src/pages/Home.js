@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <div
-      className="d-flex justify-content-center align-items-center flex-wrap"
+      className="d-flex home justify-content-center align-items-center flex-wrap"
       style={{ backgroundColor: "green" }}
     >
       <NavLink to="/enquiry">
