@@ -101,7 +101,7 @@ const Enquiry = (props) => {
         setSubmitting(false);
       })
       .insertData(
-        appConfig.forms.enquiry.spreadSheetUrl,
+        appConfig.forms.enquiry.spreadsheetUrl,
         appConfig.forms.enquiry.sheetName,
         appConfig.forms.enquiry.headerRow,
         payload

@@ -19,13 +19,13 @@ import sectionsMeta, {
 import { createSchemaObject, applyData, checkConditions } from "../utils";
 import { dummySearchData } from "../data/Search";
 
-async function fetchData(spreadSheetUrl, sheetName, headerRow) {
+async function fetchData(spreadsheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(spreadSheetUrl, sheetName, headerRow);
+        .getSearchData(spreadsheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -183,7 +183,7 @@ const BillingRequest = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
-      appConfig.forms.delivery.spreadSheetUrl,
+      appConfig.forms.delivery.spreadsheetUrl,
       appConfig.forms.delivery.sheetName,
       appConfig.forms.delivery.headerRow,
       payload,
@@ -207,7 +207,7 @@ const BillingRequest = (props) => {
 export default BillingRequest;
 
 const submitData = (
-  spreadSheetUrl,
+  spreadsheetUrl,
   sheetName,
   headerRow,
   payload,
@@ -225,5 +225,5 @@ const submitData = (
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
+    .insertData(spreadsheetUrl, sheetName, headerRow, payload);
 };

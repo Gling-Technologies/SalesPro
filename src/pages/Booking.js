@@ -20,13 +20,13 @@ import { createSchemaObject, applyData } from '../utils';
 import { dummySearchData } from "../data/Search";
 
 
-async function fetchData(spreadSheetUrl, sheetName, headerRow) {
+async function fetchData(spreadsheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(spreadSheetUrl, sheetName, headerRow);
+        .getSearchData(spreadsheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -34,7 +34,7 @@ async function fetchData(spreadSheetUrl, sheetName, headerRow) {
 }
 
 const submitData = (
-  spreadSheetUrl,
+  spreadsheetUrl,
   sheetName,
   headerRow,
   payload,
@@ -52,7 +52,7 @@ const submitData = (
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
+    .insertData(spreadsheetUrl, sheetName, headerRow, payload);
 };
 
 const BookingForm = (props) => {
@@ -76,7 +76,7 @@ const BookingForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.booking.search.spreadSheetUrl,
+      appConfig.forms.booking.search.spreadsheetUrl,
       appConfig.forms.booking.search.sheetName,
       appConfig.forms.booking.search.headerRow
     )
@@ -204,7 +204,7 @@ const Booking = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
-      appConfig.forms.booking.spreadSheetUrl,
+      appConfig.forms.booking.spreadsheetUrl,
       appConfig.forms.booking.sheetName,
       appConfig.forms.booking.headerRow,
       payload,
