@@ -15,8 +15,8 @@ import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import FormSection from '../components/UI/FormSection';
-import sectionsMeta, { fieldSectionIndexMap } from "../data/Booking";
-import { createSchemaObject, applyData } from '../utils';
+import sectionsMeta, { fieldSectionIndexMap, schemaModifier } from "../data/Booking";
+import { createSchemaObject, applyData, checkConditions } from '../utils';
 import { dummySearchData } from "../data/Search";
 
 
@@ -115,48 +115,53 @@ const BookingForm = (props) => {
           onSelect={(eventKey, event) => setActiveSection(eventKey)}
         >
           {sectionsMeta.length &&
-            sectionsMeta.map((sectionMeta, idx) => (
-              <FormSection key={idx} id={idx} title={sectionMeta.title}>
-                <Row>
-                  {sectionMeta.fields.map(
-                    (data) =>
-                      (!!data.searchable && (
-                        <SearchFormField
-                          key={data.name}
-                          id={data.name}
-                          name={data.name}
-                          required={
-                            appConfig.mandatoriness.bookingForm[data.name] ||
-                            false
-                          }
-                          icon={data.icon}
-                          handleChange={applyData.bind(null, setValues)}
-                          optionItems={searchFieldOptions}
-                          error={errors[data.name]}
-                          value={values[data.name]}
-                          touched={touched[data.name]}
-                        />
-                      )) ||
-                      (!data.searchable && (
-                        <FormField
-                          key={data.name}
-                          {...data}
-                          required={
-                            appConfig.mandatoriness.bookingForm[data.name] ||
-                            false
-                          }
-                          value={values[data.name]}
-                          touched={touched[data.name]}
-                          error={errors[data.name]}
-                          handleChange={handleChange}
-                          onBlur={handleBlur}
-                          optionItems={inputOptions[data.name]}
-                        />
-                      ))
-                  )}
-                </Row>
-              </FormSection>
-            ))}
+            sectionsMeta.map(
+              (sectionMeta, idx) =>
+                checkConditions(sectionMeta.conditions, values) && (
+                  <FormSection key={idx} id={idx} title={sectionMeta.title}>
+                    <Row>
+                      {sectionMeta.fields.map(
+                        (data) =>
+                          (!!data.searchable && (
+                            <SearchFormField
+                              key={data.name}
+                              id={data.name}
+                              name={data.name}
+                              required={
+                                appConfig.mandatoriness.bookingForm[
+                                  data.name
+                                ] || false
+                              }
+                              icon={data.icon}
+                              handleChange={applyData.bind(null, setValues)}
+                              optionItems={searchFieldOptions}
+                              error={errors[data.name]}
+                              value={values[data.name]}
+                              touched={touched[data.name]}
+                            />
+                          )) ||
+                          (!data.searchable && (
+                            <FormField
+                              key={data.name}
+                              {...data}
+                              required={
+                                appConfig.mandatoriness.bookingForm[
+                                  data.name
+                                ] || false
+                              }
+                              value={values[data.name]}
+                              touched={touched[data.name]}
+                              error={errors[data.name]}
+                              handleChange={handleChange}
+                              onBlur={handleBlur}
+                              optionItems={inputOptions[data.name]}
+                            />
+                          ))
+                      )}
+                    </Row>
+                  </FormSection>
+                )
+            )}
         </Accordion>
         <Button
           variant="primary"
@@ -188,7 +193,7 @@ const Booking = (props) => {
     appConfig.mandatoriness.bookingForm || {},
     inputOptions
   );
-  const schema = yup.object().shape(schemaObject);
+  const schema = yup.object().shape(schemaObject).when(schemaModifier);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.defaultValue || "";

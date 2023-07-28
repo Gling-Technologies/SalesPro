@@ -10,7 +10,7 @@ const sectionsMeta = [
         name: "Enquiry Number",
         icon: "person-fill",
         required: true,
-        placeholder: "Pick a number...",
+        placeholder: "Enter a value...",
         searchable: true,
         validation: string(),
       },
@@ -61,7 +61,7 @@ const sectionsMeta = [
         icon: "123",
         type: "text",
         required: true,
-        placeholder: "Pick a number...",
+        placeholder: "Enter a value...",
         maxLength: 10,
         validation: string().min(10).max(10),
       },
@@ -70,7 +70,7 @@ const sectionsMeta = [
         icon: "hash",
         type: "text",
         required: true,
-        placeholder: "Pick a number...",
+        placeholder: "Enter a value...",
         validation: string().length(12),
       },
       {
@@ -78,7 +78,7 @@ const sectionsMeta = [
         icon: "hash",
         type: "text",
         required: true,
-        placeholder: "Pick a number...",
+        placeholder: "Enter a value...",
         validation: string(),
       },
     ],
@@ -89,7 +89,7 @@ const sectionsMeta = [
       {
         name: "Model Variant",
         icon: "hash",
-        type: "select",
+        type: "text",
         required: true,
         placeholder: "Select a variant...",
         validation: string(),
@@ -105,7 +105,7 @@ const sectionsMeta = [
       {
         name: "Vehicle Colour",
         icon: "hash",
-        type: "select",
+        type: "text",
         required: true,
         placeholder: "Select a variant...",
         validation: string(),
@@ -132,18 +132,17 @@ const sectionsMeta = [
     title: "Billing Section",
     fields: [
       {
-        name: "Case Type",
+        name: "Finance Type",
         icon: "hash",
         type: "select",
         placeholder: "",
-        validation: number(),
+        validation: string(),
       },
       {
         name: "Ex-Showroom Price",
-        icon: "hash",
+        icon: "123",
         type: "number",
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
@@ -156,11 +155,10 @@ const sectionsMeta = [
       },
       {
         name: "Registration Charges",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
@@ -173,11 +171,11 @@ const sectionsMeta = [
       },
       {
         name: "Insurance Amount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
+
         validation: number(),
       },
       {
@@ -190,11 +188,10 @@ const sectionsMeta = [
       },
       {
         name: "Extended Warranty Charges",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
@@ -207,38 +204,34 @@ const sectionsMeta = [
       },
       {
         name: "RSA Charges",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
         name: "Basic Kit Amount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
         name: "Accessories Amount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
       {
         name: "Any Other Charges",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
         validation: number(),
       },
     ],
@@ -248,38 +241,47 @@ const sectionsMeta = [
     fields: [
       {
         name: "Corporate Discount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
+
         validation: number(),
       },
       {
         name: "Loyalty Discount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
+
         validation: number(),
       },
       {
         name: "Exchange Discount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
+
         validation: number(),
       },
       {
         name: "Retail Discount",
-        icon: "hash",
+        icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-        defaultValue: "0",
+
+        validation: number(),
+      },
+      {
+        name: "Any Other Discount",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
+
         validation: number(),
       },
     ],
@@ -316,8 +318,7 @@ const sectionsMeta = [
       {
         name: "Sales Person Name",
         icon: "hash",
-        type: "select",
-        required: true,
+        type: "text",
         placeholder: "",
         validation: string(),
       },
@@ -334,6 +335,14 @@ const sectionsMeta = [
   },
   {
     title: "Exchange Section",
+    dependent: true,
+    conditions: [
+      {
+        field: "Exchange Type",
+        operator: "===",
+        value: "Yes",
+      },
+    ],
     fields: [
       {
         name: "Registration Number",
@@ -370,9 +379,11 @@ const sectionsMeta = [
       {
         name: "Exchange Checklist",
         icon: "hash",
-        type: "checklist",
+        type: "text",
         required: true,
         placeholder: "",
+        as: "textarea",
+        size: 12,
         validation: string(),
       },
     ],
@@ -394,6 +405,21 @@ const sectionsMeta = [
   },
 ];
 
+const schemaModifier = (values, schema) => {
+  const { "Any Change in Discount?": anyDiscount } = values[0];
+  let newSchema = schema;
+  if (anyDiscount === "Yes") {
+    newSchema = schema.shape({
+      "Registration Number": string(),
+      "Model Description": string(),
+      "MFG Year": number(),
+      "Exchange Value Approved by Tata OK": number(),
+      "Exchange Checklist": string(),
+    });
+  }
+  return newSchema;
+};
+
 const fieldSectionIndexMap = sectionsMeta.reduce((map, section, idx) => {
   const fieldsMap = section.fields.reduce((fieldMap, fieldMeta) => {
     fieldMap[fieldMeta.name] = idx;
@@ -405,4 +431,4 @@ const fieldSectionIndexMap = sectionsMeta.reduce((map, section, idx) => {
 console.log(fieldSectionIndexMap);
 
 export default sectionsMeta;
-export { fieldSectionIndexMap };
+export { fieldSectionIndexMap, schemaModifier };

@@ -52,7 +52,7 @@ const DeliveryForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
-      appConfig.forms.delivery.search.spreadSheetUrl,
+      appConfig.forms.delivery.search.spreadsheetUrl,
       appConfig.forms.delivery.search.sheetName,
       appConfig.forms.delivery.search.headerRow
     )

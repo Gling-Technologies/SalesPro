@@ -8,7 +8,7 @@ const sectionsMeta = [
         id: "Booking Number",
         name: "Booking Number",
         icon: "person-fill",
-        placeholder: "Pick a number...",
+        placeholder: "Enter a value...",
         validation: yup.string(),
         searchable: true,
       },
@@ -33,7 +33,7 @@ const sectionsMeta = [
       {
         name: "Model Variant",
         icon: "car-front-fill",
-        type: "select",
+        type: "text",
         placeholder: "Select a variant...",
         validation: yup.string(),
       },
@@ -95,9 +95,13 @@ const sectionsMeta = [
       {
         name: "Financier Contact Number",
         icon: "telephone-fill",
-        type: "tel",
+        type: "text",
         placeholder: "Enter a value...",
-        validation: yup.string(),
+        validation: yup
+          .string()
+          .matches(/^[0-9]{10}$/, "Mobile Number is not valid!"),
+        minLength: 10,
+        maxLength: 10,
         dependent: true,
       },
       {
@@ -198,7 +202,7 @@ const schemaModifier = (values, schema) => {
     newSchema = schema.shape({
       "Finance Type": yup.string(),
       "Financier Name": yup.string(),
-      "Financier Contact Number": yup.number(),
+      "Financier Contact Number": yup.string().matches(/^[0-9]{10}$/, "Mobile Number is not valid!"),
       "Finance Amount": yup.number(),
       "DO Upload": yup.string().url(),
     });

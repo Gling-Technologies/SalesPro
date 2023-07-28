@@ -17,7 +17,7 @@ const formFieldsMetadata = [
     name: "Enquiry Number",
     icon: "person-fill",
     required: true,
-    placeholder: "Pick a number...",
+    placeholder: "Enter a value...",
     validation: yup.string(),
     searchable: true,
   },
@@ -179,8 +179,8 @@ const schemaModifier = (values, schema) => {
   let newSchema = schema;
   if (driveType === "Exit") {
     newSchema = schema.shape({
-      "DL Number": yup.string(),
-      "Approved By": yup.number(),
+      "DL Number": yup.string().required(),
+      "Approved By": yup.string().required(),
       // "Customer Feedback": yup.mixed((input) => true),
     });
   } else if (driveType === "Entry") {

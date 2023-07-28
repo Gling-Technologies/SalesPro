@@ -44,7 +44,7 @@ const formFieldsMetadata = [
   {
     id: "Sales Person Name",
     name: "Sales Person Name",
-    type: "select",
+    type: "text",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
@@ -124,7 +124,7 @@ const searchFieldsMeta = [
     name: "Enquiry Number",
     icon: "person-fill",
     required: true,
-    placeholder: "Pick a number...",
+    placeholder: "Enter a value...",
     validation: yup.string(),
   },
   {
@@ -141,7 +141,9 @@ const searchFieldsMeta = [
     required: true,
     icon: "telephone-fill",
     placeholder: "Enter a value...",
-    validation: yup.string().matches(/^[0-9]{10}$/, "Mobile Number is not valid!"),
+    validation: yup
+      .string()
+      .matches(/^[0-9]{10}$/, "Mobile Number is not valid!"),
   },
 ];
 
