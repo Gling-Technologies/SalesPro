@@ -16,13 +16,13 @@ import { applyData, createSchemaObject} from '../utils';
 import { dummySearchData } from '../data/Search'
 
 
-async function fetchData(sheetName, headerRow) {
+async function fetchData(spreadSheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(sheetName, headerRow);
+        .getSearchData(spreadSheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -66,6 +66,7 @@ const EnquiryForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
+      appConfig.forms.enquiryStatus.search.spreadSheetUrl,
       appConfig.forms.enquiryStatus.search.sheetName,
       appConfig.forms.enquiryStatus.search.headerRow
     )
@@ -175,6 +176,7 @@ const EnquiryStatus = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
+      appConfig.forms.enquiryStatus.spreadSheetUrl,
       appConfig.forms.enquiryStatus.sheetName,
       appConfig.forms.enquiryStatus.headerRow,
       payload,
@@ -198,7 +200,14 @@ const EnquiryStatus = (props) => {
 export default EnquiryStatus;
 
 
-const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => {
+const submitData = (
+  spreadSheetUrl,
+  sheetName,
+  headerRow,
+  payload,
+  setSubmitting,
+  resetForm
+) => {
   setSubmitting(true);
   window.google.script.run
     .withSuccessHandler((result) => {
@@ -210,5 +219,5 @@ const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => 
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(sheetName, headerRow, payload);
+    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
 };

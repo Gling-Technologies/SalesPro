@@ -15,25 +15,32 @@ import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
 import FormSection from '../components/UI/FormSection';
-import sectionsMeta from "../data/Booking";
+import sectionsMeta, { fieldSectionIndexMap } from "../data/Booking";
 import { createSchemaObject, applyData } from '../utils';
 import { dummySearchData } from "../data/Search";
 
 
-async function fetchData(sheetName, headerRow) {
+async function fetchData(spreadSheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(sheetName, headerRow);
+        .getSearchData(spreadSheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
   return result;
 }
 
-const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => {
+const submitData = (
+  spreadSheetUrl,
+  sheetName,
+  headerRow,
+  payload,
+  setSubmitting,
+  resetForm
+) => {
   setSubmitting(true);
   window.google.script.run
     .withSuccessHandler((result) => {
@@ -45,7 +52,7 @@ const submitData = (sheetName, headerRow, payload, setSubmitting, resetForm) => 
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(sheetName, headerRow, payload);
+    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
 };
 
 const BookingForm = (props) => {
@@ -58,14 +65,18 @@ const BookingForm = (props) => {
     handleSubmit,
     setValues,
     isSubmitting,
+    setSubmitting
   } = useFormikContext();
 
   const { inputOptions, appConfig } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
+  const [activeSection, setActiveSection] = useState(0);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false)
 
   useEffect(() => {
     // set the search values
     fetchData(
+      appConfig.forms.booking.search.spreadSheetUrl,
       appConfig.forms.booking.search.sheetName,
       appConfig.forms.booking.search.headerRow
     )
@@ -73,7 +84,6 @@ const BookingForm = (props) => {
         const filteredRecords = records.filter(
           (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
         );
-        // console.log(filteredRecords);
         setSearchFieldOptions(filteredRecords);
       })
       .catch((err) => {
@@ -81,11 +91,29 @@ const BookingForm = (props) => {
       });
   }, [appConfig]);
 
+  useEffect(() => {
+    if(isFormSubmitted === true){
+      const errorFields = Object.keys(errors);
+      if(errorFields.length > 0) {
+        const sectionIndex = fieldSectionIndexMap[errorFields[0]];
+        setActiveSection(sectionIndex);
+      }
+      setIsFormSubmitted(false);
+    }
+  }, [isFormSubmitted, errors]);
+
+  const submitHandler = (...rest) => {
+    handleSubmit(...rest);
+    setIsFormSubmitted(true);
+  }
+
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={submitHandler}>
       <Row>
-        <Accordion defaultActiveKey={0}>
-          {/* <Tabs defaultActiveKey={0} activeKey={key} onSelect={(k) => setKey(k)} fill> */}
+        <Accordion
+          activeKey={activeSection}
+          onSelect={(eventKey, event) => setActiveSection(eventKey)}
+        >
           {sectionsMeta.length &&
             sectionsMeta.map((sectionMeta, idx) => (
               <FormSection key={idx} id={idx} title={sectionMeta.title}>
@@ -94,8 +122,8 @@ const BookingForm = (props) => {
                     (data) =>
                       (!!data.searchable && (
                         <SearchFormField
-                          key={data.id}
-                          id={data.id}
+                          key={data.name}
+                          id={data.name}
                           name={data.name}
                           required={
                             appConfig.mandatoriness.bookingForm[data.name] ||
@@ -130,7 +158,6 @@ const BookingForm = (props) => {
               </FormSection>
             ))}
         </Accordion>
-        {/* </Tabs> */}
         <Button
           variant="primary"
           type="submit"
@@ -177,6 +204,7 @@ const Booking = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
+      appConfig.forms.booking.spreadSheetUrl,
       appConfig.forms.booking.sheetName,
       appConfig.forms.booking.headerRow,
       payload,

@@ -68,7 +68,7 @@ const sectionsMeta = [
       {
         name: "Aadhaar Number",
         icon: "hash",
-        type: "file",
+        type: "text",
         required: true,
         placeholder: "Pick a number...",
         validation: string().length(12),
@@ -132,12 +132,14 @@ const sectionsMeta = [
     title: "Billing Section",
     fields: [
       {
-        name: "Finance Type",
+        name: "Case Type",
         icon: "hash",
-        type: "select",
+        type: "number",
         required: true,
         placeholder: "",
-        validation: string(),
+        size: 12,
+        defaultValue: "0",
+        validation: number(),
       },
       {
         name: "Ex-Showroom Price",
@@ -145,7 +147,6 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
-        // size: 12,
         defaultValue: "0",
         validation: number(),
       },
@@ -304,7 +305,7 @@ const sectionsMeta = [
         type: "select",
         required: true,
         placeholder: "",
-        validation: number(),
+        validation: string(),
       },
       {
         name: "Expected Delivery Date",
@@ -322,7 +323,7 @@ const sectionsMeta = [
         type: "select",
         required: true,
         placeholder: "",
-        validation: number(),
+        validation: string(),
       },
       {
         name: "Exchange Type",
@@ -339,7 +340,7 @@ const sectionsMeta = [
     title: "Exchange Section",
     fields: [
       {
-        name: "Registration No.",
+        name: "Registration Number",
         icon: "hash",
         type: "text",
         required: true,
@@ -397,4 +398,15 @@ const sectionsMeta = [
   },
 ];
 
+const fieldSectionIndexMap = sectionsMeta.reduce((map, section, idx) => {
+  const fieldsMap = section.fields.reduce((fieldMap, fieldMeta) => {
+    fieldMap[fieldMeta.name] = idx;
+    return fieldMap;
+  }, {});
+  return { ...map, ...fieldsMap};
+}, {});
+
+console.log(fieldSectionIndexMap);
+
 export default sectionsMeta;
+export { fieldSectionIndexMap };

@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router-dom";
 
 import { Row } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import { useFormikContext } from "formik";
@@ -11,17 +12,20 @@ import * as yup from "yup";
 import FormCard from "../components/UI/FormCard";
 import SearchFormField from "../components/UI/SearchFormField";
 import FormField from "../components/UI/FormField";
-import formFieldsMetadata, { searchFieldsMeta } from "../data/Delivery";
-import { createSchemaObject, applyData } from "../utils";
+import FormSection from "../components/UI/FormSection";
+import sectionsMeta, {
+  fieldSectionIndexMap, schemaModifier,
+} from "../data/BillingRequest";
+import { createSchemaObject, applyData, checkConditions } from "../utils";
 import { dummySearchData } from "../data/Search";
 
-async function fetchData(sheetName, headerRow) {
+async function fetchData(spreadSheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(sheetName, headerRow);
+        .getSearchData(spreadSheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -42,10 +46,13 @@ const DeliveryForm = (props) => {
 
   const { inputOptions, appConfig } = useOutletContext();
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
+  const [activeSection, setActiveSection] = useState(0);
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
 
   useEffect(() => {
     // set the search values
     fetchData(
+      appConfig.forms.delivery.search.spreadSheetUrl,
       appConfig.forms.delivery.search.sheetName,
       appConfig.forms.delivery.search.headerRow
     )
@@ -61,39 +68,76 @@ const DeliveryForm = (props) => {
       });
   }, [appConfig]);
 
+  useEffect(() => {
+    if (isFormSubmitted === true) {
+      const errorFields = Object.keys(errors);
+      if (errorFields.length > 0) {
+        const sectionIndex = fieldSectionIndexMap[errorFields[0]];
+        setActiveSection(sectionIndex);
+      }
+      setIsFormSubmitted(false);
+    }
+  }, [isFormSubmitted, errors]);
+
+  const submitHandler = (...rest) => {
+    handleSubmit(...rest);
+    setIsFormSubmitted(true);
+  };
+
+  console.log(errors);
+
   return (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={submitHandler}>
       <Row>
-        {searchFieldsMeta.length &&
-          searchFieldsMeta.map((data) => (
-            <SearchFormField
-              key={data.name}
-              id={data.name}
-              name={data.name}
-              icon={data.icon}
-              handleChange={applyData.bind(null, setValues)}
-              optionItems={searchFieldOptions}
-              error={errors[data.name]}
-              value={values[data.name]}
-              touched={touched[data.name]}
-            />
-          ))}
-        {formFieldsMetadata.length &&
-          formFieldsMetadata.map((data) => (
-            <FormField
-              key={data.name}
-              {...data}
-              required={
-                appConfig.mandatoriness.deliveryForm[data.name] || false
-              }
-              value={values[data.name]}
-              touched={touched[data.name]}
-              error={errors[data.name]}
-              handleChange={handleChange}
-              onBlur={handleBlur}
-              optionItems={inputOptions[data.name]}
-            />
-          ))}
+        <Accordion
+          activeKey={activeSection}
+          onSelect={(eventKey, event) => setActiveSection(eventKey)}
+        >
+          {sectionsMeta.length &&
+            sectionsMeta.map((sectionMeta, idx) => (
+              checkConditions(sectionMeta.conditions, values) &&
+                <FormSection key={idx} id={idx} title={sectionMeta.title}>
+                  <Row>
+                    {sectionMeta.fields.map(
+                      (data) =>
+                        (!!data.searchable && (
+                          <SearchFormField
+                            key={data.name}
+                            id={data.name}
+                            name={data.name}
+                            required={
+                              appConfig.mandatoriness.bookingForm[data.name] ||
+                              false
+                            }
+                            icon={data.icon}
+                            handleChange={applyData.bind(null, setValues)}
+                            optionItems={searchFieldOptions}
+                            error={errors[data.name]}
+                            value={values[data.name]}
+                            touched={touched[data.name]}
+                          />
+                        )) ||
+                        (!data.searchable && (
+                          <FormField
+                            key={data.name}
+                            {...data}
+                            required={
+                              appConfig.mandatoriness.bookingForm[data.name] ||
+                              false
+                            }
+                            value={values[data.name]}
+                            touched={touched[data.name]}
+                            error={errors[data.name]}
+                            handleChange={handleChange}
+                            onBlur={handleBlur}
+                            optionItems={inputOptions[data.name]}
+                          />
+                        ))
+                    )}
+                  </Row>
+                </FormSection>
+              ))}
+        </Accordion>
         <Button
           variant="primary"
           type="submit"
@@ -117,13 +161,13 @@ const DeliveryForm = (props) => {
 
 const BillingRequest = (props) => {
   const { location, appConfig, inputOptions } = useOutletContext();
-  const formFieldsMeta = [...searchFieldsMeta, ...formFieldsMetadata];
+  const formFieldsMeta = sectionsMeta.map((sectionMeta) => sectionMeta.fields).flat();
   const schemaObject = createSchemaObject(
     formFieldsMeta,
     appConfig.mandatoriness.deliveryForm,
     inputOptions
   );
-  const schema = yup.object().shape(schemaObject);
+  const schema = yup.object().shape(schemaObject).when(schemaModifier);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
     obj[formField.name] = formField.value || "";
@@ -139,6 +183,7 @@ const BillingRequest = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
+      appConfig.forms.delivery.spreadSheetUrl,
       appConfig.forms.delivery.sheetName,
       appConfig.forms.delivery.headerRow,
       payload,
@@ -162,6 +207,7 @@ const BillingRequest = (props) => {
 export default BillingRequest;
 
 const submitData = (
+  spreadSheetUrl,
   sheetName,
   headerRow,
   payload,
@@ -179,5 +225,5 @@ const submitData = (
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(sheetName, headerRow, payload);
+    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
 };

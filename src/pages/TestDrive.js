@@ -15,16 +15,16 @@ import formFieldsMetadata, {
   searchFieldsMeta,
   schemaModifier,
 } from "../data/TestDrive";
-import {createSchemaObject, checkConditions, applyData } from '../utils';
+import { createSchemaObject, checkConditions, applyData } from '../utils';
 import { dummySearchData } from "../data/Search";
 
-async function fetchData(sheetName, headerRow) {
+async function fetchData(spreadSheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(sheetName, headerRow);
+        .getSearchData(spreadSheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -74,13 +74,14 @@ const EnquiryForm = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
+      appConfig.forms.testDrive.search.spreadSheetUrl,
       appConfig.forms.testDrive.search.sheetName,
       appConfig.forms.testDrive.search.headerRow
     )
       .then((records) => {
-       const filteredRecords = records.filter(
-         (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
-       );
+        const filteredRecords = records.filter(
+          (record) => "Enquiry Number" in record && !!record["Enquiry Number"]
+        );
         console.log(filteredRecords);
         setSearchFieldOptions(filteredRecords);
       })
@@ -177,6 +178,7 @@ const TestDrive = (props) => {
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
+      appConfig.forms.testDrive.spreadSheetUrl,
       appConfig.forms.testDrive.sheetName,
       appConfig.forms.testDrive.headerRow,
       payload,
@@ -202,6 +204,7 @@ const TestDrive = (props) => {
 export default TestDrive;
 
 const submitData = (
+  spreadSheetUrl,
   sheetName,
   headerRow,
   payload,
@@ -219,5 +222,5 @@ const submitData = (
       console.error(err);
       setSubmitting(false);
     })
-    .insertData(sheetName, headerRow, payload);
+    .insertData(spreadSheetUrl, sheetName, headerRow, payload);
 };

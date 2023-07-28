@@ -13,13 +13,13 @@ import FormCard from "../components/UI/FormCard";
 import { dummyCustomerInfo, dummySearchData } from "../data/Search";
 
 
-async function fetchData(sheetName, headerRow) {
+async function fetchData(spreadSheetUrl, sheetName, headerRow) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getSearchData(sheetName, headerRow);
+        .getSearchData(spreadSheetUrl, sheetName, headerRow);
 
     !window.google && resolve(dummySearchData);
   });
@@ -50,6 +50,7 @@ const CustomerInfo = (props) => {
   useEffect(() => {
     // set the search values
     fetchData(
+      appConfig.forms.customerInfo.search.spreadSheetUrl,
       appConfig.forms.customerInfo.search.sheetName,
       appConfig.forms.customerInfo.search.headerRow
     )
