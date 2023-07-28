@@ -106,7 +106,7 @@ const DeliveryForm = (props) => {
                             id={data.name}
                             name={data.name}
                             required={
-                              appConfig.mandatoriness.bookingForm[data.name] ||
+                              appConfig.mandatoriness.deliveryForm[data.name] ||
                               false
                             }
                             icon={data.icon}
@@ -122,7 +122,7 @@ const DeliveryForm = (props) => {
                             key={data.name}
                             {...data}
                             required={
-                              appConfig.mandatoriness.bookingForm[data.name] ||
+                              appConfig.mandatoriness.deliveryForm[data.name] ||
                               false
                             }
                             value={values[data.name]}

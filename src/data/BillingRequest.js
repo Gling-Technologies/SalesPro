@@ -196,18 +196,18 @@ const schemaModifier = (values, schema) => {
   let newSchema = schema;
   if (caseType === "Finance") {
     newSchema = schema.shape({
-      "Finance Type": yup.string().required(),
-      "Financier Name": yup.string().required(),
-      "Financier Contact Number": yup.number().required(),
-      "Finance Amount": yup.number().required(),
-      "DO Upload": yup.string().url().required(),
+      "Finance Type": yup.string(),
+      "Financier Name": yup.string(),
+      "Financier Contact Number": yup.number(),
+      "Finance Amount": yup.number(),
+      "DO Upload": yup.string().url(),
     });
   }
   if (anyDiscount === "Yes") {
     newSchema = schema.shape({
-      "Ex-Showroom Price": yup.number().required(),
-      "Discount Amount": yup.number().required(),
-      "Reason for Change in Discount": yup.string().required(),
+      "Ex-Showroom Price": yup.number(),
+      "Discount Amount": yup.number(),
+      "Reason for Change in Discount": yup.string(),
     });
   }
   return newSchema;
