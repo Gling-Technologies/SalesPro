@@ -123,26 +123,15 @@ const sectionsMeta = [
     ],
   },
   {
-    title: "Discount?",
-    fields: [
-      {
-        name: "Any Change in Discount?",
-        icon: "hash",
-        type: "select",
-        validation: yup.string(),
-      },
-    ],
-  },
-  {
     title: "Ex-showroom/Discount Section",
-    dependent: true,
-    conditions: [
-      {
-        field: "Any Change in Discount?",
-        operator: "===",
-        value: "Yes",
-      },
-    ],
+    // dependent: true,
+    // conditions: [
+    //   {
+    //     field: "Any Change in Discount?",
+    //     operator: "===",
+    //     value: "Yes",
+    //   },
+    // ],
     fields: [
       {
         name: "Ex-Showroom Price",
@@ -153,7 +142,54 @@ const sectionsMeta = [
         dependent: true,
       },
       {
-        name: "Discount Amount",
+        name: "Any Change in Discount?",
+        icon: "hash",
+        type: "select",
+        validation: yup.string(),
+        defaultValue: "No",
+      },
+      {
+        name: "Corporate Discount",
+        icon: "123",
+        type: "number",
+        defaultValue: 0,
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Loyalty Discount",
+        icon: "123",
+        type: "number",
+        defaultValue: 0,
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Exchange Discount",
+        icon: "123",
+        type: "number",
+        defaultValue: 0,
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Retail Discount",
+        icon: "123",
+        type: "number",
+        defaultValue: 0,
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Dealer Discount",
+        icon: "123",
+        type: "number",
+        defaultValue: 0,
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Any Other Discount",
         icon: "123",
         type: "number",
         defaultValue: 0,

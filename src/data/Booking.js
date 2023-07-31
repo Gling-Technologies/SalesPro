@@ -17,10 +17,10 @@ const sectionsMeta = [
       {
         id: "Customer Name",
         name: "Customer Name",
+        type: "text",
         required: true,
         icon: "person-fill",
         placeholder: "Enter a value...",
-        searchable: true,
         validation: string(),
       },
       {
@@ -68,7 +68,7 @@ const sectionsMeta = [
       {
         name: "Aadhaar Number",
         icon: "hash",
-        type: "text",
+        type: "file",
         required: true,
         placeholder: "Enter a value...",
         validation: string().length(12),
@@ -162,7 +162,7 @@ const sectionsMeta = [
         validation: number(),
       },
       {
-        name: "Insurance",
+        name: "Insurance Type",
         icon: "hash",
         type: "select",
         required: true,
@@ -227,6 +227,14 @@ const sectionsMeta = [
         validation: number(),
       },
       {
+        name: "Antirust/Teflon",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
+        validation: number(),
+      },
+      {
         name: "Any Other Charges",
         icon: "123",
         type: "number",
@@ -272,7 +280,14 @@ const sectionsMeta = [
         type: "number",
         required: true,
         placeholder: "",
-
+        validation: number(),
+      },
+      {
+        name: "Dealer Discount",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
         validation: number(),
       },
       {
@@ -369,7 +384,7 @@ const sectionsMeta = [
         validation: number(),
       },
       {
-        name: "Exchange Value Approved by Tata OK",
+        name: "Exchange Value",
         icon: "hash",
         type: "number",
         required: true,
@@ -377,7 +392,7 @@ const sectionsMeta = [
         validation: string(),
       },
       {
-        name: "Exchange Checklist",
+        name: "Others if any",
         icon: "hash",
         type: "text",
         required: true,

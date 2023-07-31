@@ -7,16 +7,24 @@ const Home = () => {
   const { appConfig, uriLocation } = useOutletContext();
 
   // useEffect(() => {
-  //   fetch(uriLocation, {
-  //     method: "POST",
-  //     mode: "no-cors",
-  //     redirect: "follow",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ message: "Life is awesome. And so am I." }),
-  //   }).then((res) => {
+  //   fetch(
+  //     "/macros/s/AKfycbxylyb8bva4uI3sWzAeLKJXtDTsWxppNvi-FIPrcL3O0VkXBmVxKki7cGyShkLPcU22ew/exec",
+  //     {
+  //       method: "POST",
+  //       mode: "no-cors",
+  //       redirect: "follow",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ message: "Life is awesome. And so am I." }),
+  //     }
+  //   ).then((res) => {
   //     console.log("Response", res.ok);
+  //     return  res.json();
+  //   }).then((res) => {
+  //     console.log("Response Data", res);
+  //   }).catch(err => {
+  //     console.error(err);
   //   });
   // }, [uriLocation]);
 
@@ -35,7 +43,7 @@ const Home = () => {
           Enquiry Status
         </div>
       </NavLink>
-      <NavLink to="/test-drive">
+      <NavLink to="/test-drive-exit">
         <div className="d-flex justify-content-center align-items-center">
           Test Drive
         </div>

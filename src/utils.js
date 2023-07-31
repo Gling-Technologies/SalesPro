@@ -23,13 +23,14 @@ const  createSchemaObject = (fieldsMeta, mandatoriness, inputOptions) => {
 const checkConditions = (conditions, values) => {
   if (!conditions) return true;
 
+  let status = false;
   for (const condition of conditions) {
     const { field, value } = condition;
-    if (values[field] !== value) {
-      return false;
+    if (values[field] === value) {
+      status = true;
     }
   }
-  return true;
+  return status;
 };
 
 const applyData = (setter, data, excludes) => {

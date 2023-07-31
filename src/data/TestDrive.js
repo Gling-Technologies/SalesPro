@@ -1,20 +1,9 @@
 import * as yup from "yup";
 
 const entryFormFieldsMetadata = [
-  // {
-  //   id: "Test Drive Type",
-  //   name: "Test Drive Type",
-  //   type: "select",
-  //   required: true,
-  //   icon: "car-front-fill",
-  //   placeholder: "Enter a value...",
-  //   validation: yup.string(),
-  //   // size: 12,
-  //   defaultValue: "Exit",
-  // },
   {
-    id: "Enquiry Number",
-    name: "Enquiry Number",
+    id: "Test Drive Number",
+    name: "Test Drive Number",
     icon: "person-fill",
     required: true,
     placeholder: "Enter a value...",
@@ -28,7 +17,7 @@ const entryFormFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    searchable: true,
+    disabled: true,
   },
   {
     id: "Contact Number",
@@ -39,7 +28,7 @@ const entryFormFieldsMetadata = [
     minLength: 10,
     maxLength: 10,
     validation: yup.string(),
-    searchable: true,
+    disabled: true,
   },
   {
     id: "Email Address",
@@ -78,7 +67,7 @@ const entryFormFieldsMetadata = [
     required: true,
     icon: "car-front-fill",
     placeholder: "Enter a value...",
-    disabled: false,
+    disabled: true,
     validation: yup.string(),
   },
   {
@@ -99,6 +88,7 @@ const entryFormFieldsMetadata = [
     icon: "car-front-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
+    disabled: true,
   },
   {
     id: "Odometer Reading",
@@ -117,6 +107,15 @@ const entryFormFieldsMetadata = [
     icon: "sticky-fill",
     placeholder: "Enter a value...",
     // as: "textarea",
+    validation: yup.string(),
+  },
+  {
+    name: "Customer Remarks",
+    type: "text",
+    icon: "sticky-fill",
+    placeholder: "Enter a value...",
+    as: "textarea",
+    size: 12,
     validation: yup.string(),
   },
 ];
@@ -204,11 +203,10 @@ const exitFormFieldsMetadata = [
   {
     id: "Sales Person Name",
     name: "Sales Person Name",
-    type: "select",
+    type: "text",
     required: true,
     icon: "person-fill",
     placeholder: "Enter a value...",
-    disabled: true,
     validation: yup.string(),
   },
   {

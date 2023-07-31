@@ -3,14 +3,15 @@ import { RouterProvider, createMemoryRouter, createHashRouter } from "react-rout
 import "./App.css";
 import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
-import Error from "./pages/Error";
+// import Error from "./pages/Error";
 import Enquiry from "./pages/Enquiry";
 import EnquiryStatus from "./pages/EnquiryStatus";
-import TestDrive from "./pages/TestDrive";
+import ExitTestDrive from "./pages/ExitTestDrive";
 import Booking from "./pages/Booking";
 import BillingRequest from "./pages/BillingRequest";
-import Demo from "./pages/Demo";
+// import Demo from "./pages/Demo";
 import CustomerInfo from "./pages/CustomerInfo";
+import EntryTestDrive from "./pages/EntryTestDrive";
 
 const router = createMemoryRouter([
   {
@@ -34,8 +35,13 @@ const router = createMemoryRouter([
         children: [],
       },
       {
-        path: "/test-drive",
-        element: <TestDrive />,
+        path: "/test-drive-exit",
+        element: <ExitTestDrive />,
+        children: [],
+      },
+      {
+        path: "/test-drive-entry",
+        element: <EntryTestDrive />,
         children: [],
       },
       {

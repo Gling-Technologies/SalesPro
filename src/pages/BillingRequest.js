@@ -170,7 +170,7 @@ const BillingRequest = (props) => {
   const schema = yup.object().shape(schemaObject).when(schemaModifier);
 
   const initialValues = formFieldsMeta.reduce((obj, formField) => {
-    obj[formField.name] = formField.value || "";
+    obj[formField.name] = formField.defaultValue || "";
     return obj;
   }, {});
 

@@ -10,6 +10,7 @@ import Spinner from "react-bootstrap/Spinner";
 import { Typeahead } from "react-bootstrap-typeahead";
 
 import FormCard from "../components/UI/FormCard";
+import SelectInput from "../components/UI/SelectInput";
 import { dummyCustomerInfo, dummySearchData } from "../data/Search";
 
 
@@ -71,7 +72,7 @@ const CustomerInfo = (props) => {
     if (!option["Enquiry Number"] ){
       return "";
     }
-    return `${option["Enquiry Number"]} | ${option["Customer Name"]} | ${option["Contact Number"]}`;
+    return `${option["Enquiry Number"]} | ${option["Customer Name"]} | ${option["Contact Number"]} | ${option["Sales Person Name"]}`;
   };
 
   const submitHandler = async () => {
@@ -110,6 +111,8 @@ const CustomerInfo = (props) => {
     );
   }
 
+  const searchOptionItems = ["Enquiry Number", "Customer Name", "Contact Number", "Sales Person Name"]
+
   return (
     <FormCard
       initialValues={{}}
@@ -119,26 +122,29 @@ const CustomerInfo = (props) => {
     >
       <>
         <Form noValidate className="mb-5">
-          <Col sm="12">
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="customer-search">Search</Form.Label>
-              <Typeahead
-                id="customer-search"
-                minLength={3}
-                // filterBy={filterByFields}
-                labelKey={optionRenderer}
-                onChange={setSelected}
-                options={searchFieldOptions}
-                placeholder={"Type here..."}
-                selected={selected}
-                paginate={true}
-                // renderMenuItemChildren={optionRenderer}
-              />
-              <Form.Control.Feedback type="invalid">
-                {props.error}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Col>
+          <Row>
+            <SelectInput size="4" name="Search In" optionItems={searchOptionItems} />
+            <Col xs="12" sm="12" md="8">
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="customer-search">Search</Form.Label>
+                <Typeahead
+                  id="customer-search"
+                  minLength={3}
+                  // filterBy={filterByFields}
+                  labelKey={optionRenderer}
+                  onChange={setSelected}
+                  options={searchFieldOptions}
+                  placeholder={"Type here..."}
+                  selected={selected}
+                  paginate={true}
+                  // renderMenuItemChildren={optionRenderer}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {props.error}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Row>
           <Button
             variant="success"
             className="mt-3"
@@ -146,7 +152,9 @@ const CustomerInfo = (props) => {
             disabled={isSubmitting}
             onClick={submitHandler}
           >
-            {isSubmitting && <Spinner as="span" size="sm" animation="border" />}
+            {isSubmitting && (
+              <Spinner as="span" size="sm" animation="border" />
+            )}
             <span> {isSubmitting ? "Searching..." : "Submit"} </span>
           </Button>
         </Form>

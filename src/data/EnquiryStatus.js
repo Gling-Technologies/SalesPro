@@ -76,7 +76,8 @@ const formFieldsMetadata = [
     required: true,
     icon: "hash",
     placeholder: "Enter a value...",
-    validation: yup.string(),
+    validation: yup.string().matches(/^.+-.+$/, "Not a valid CRM ID!"),
+
   },
   {
     id: "Enquiry Status",
@@ -110,6 +111,11 @@ const formFieldsMetadata = [
         field: "Enquiry Status",
         operator: "===",
         value: "In Process",
+      },
+      {
+        field: "Enquiry Status",
+        operator: "===",
+        value: "Hold",
       },
     ],
   },
@@ -158,7 +164,7 @@ const searchFieldsMeta = [
 const schemaModifier = (values, schema) => {
   const { "Enquiry Status": enquiryStatus } = values[0];
   let newSchema = schema;
-  if (enquiryStatus === "In Process") {
+  if (enquiryStatus === "In Process" || enquiryStatus === "Hold") {
     newSchema = schema.shape({
       "Next Follow Up Date": yup.string().required(),
     });
