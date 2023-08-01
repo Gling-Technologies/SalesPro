@@ -27,13 +27,13 @@ async function fetchData(spreadsheetUrl, sheetName, headerRow) {
   return result;
 }
 
-async function fetchCustomerInfo(customerInfo, sourceInfo) {
+async function fetchCustomerInfo(key, value, sourceInfo) {
   const result = await new Promise((resolve, reject) => {
     window.google &&
       window.google.script.run
         .withSuccessHandler(resolve)
         .withFailureHandler(reject)
-        .getCustomerInfo(customerInfo, sourceInfo);
+        .getCustomerInfo(key, value, sourceInfo);
 
     !window.google && resolve(dummyCustomerInfo);
   });
