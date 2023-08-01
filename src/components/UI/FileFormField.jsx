@@ -33,12 +33,12 @@ const FileFormField = (props) => {
   const [show, setShow] = useState(false);
 
   const changeHandler = async (e) => {
-    const file = e.target.files[0]
-    if (!file) return;
+    const files = e.target.files;
+    if (!files.length) return;
 
     try {
       setShow(true);
-      const { filename, fileId, fileUrl, folderUrl } = await saveFile(file);
+      const { filename, fileId, fileUrl, folderUrl } = await window.processFiles(files);
       setIsFileUploaded(true);
       console.log(filename, fileId, fileUrl, folderUrl);
       setShow(false);
