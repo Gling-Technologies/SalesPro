@@ -74,7 +74,11 @@ const FileFormField = (props) => {
           {props.error}
         </Form.Control.Feedback>
       </InputGroup>
-      {!show && props.value}
+      {!show && (
+        <a href={props.value} className="text-truncate" target="_blank" rel="noreferrer">
+          {props.value}
+        </a>
+      )}
       {show && (
         <div>
           <Spinner
