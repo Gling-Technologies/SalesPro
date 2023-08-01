@@ -119,6 +119,7 @@ const EnquiryForm = (props) => {
               name={data.name}
               icon={data.icon}
               required={appConfig.mandatoriness.enquiryStatusForm[data.name] || false}
+              placeholder={data.placeholder}
               handleChange={(x) => applyData(setValues, x, excludedFields)}
               optionItems={searchFieldOptions}
               error={errors[data.name]}

@@ -80,6 +80,7 @@ const EntryForm = (props) => {
                       appConfig.mandatoriness.testDriveEntryForm[data.name] ||
                       false
                     }
+                    placeholder={data.placeholder}
                     handleChange={applyData.bind(null, setValues)}
                     optionItems={searchFieldOptions}
                     error={errors[data.name]}

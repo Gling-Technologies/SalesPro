@@ -132,6 +132,7 @@ const BookingForm = (props) => {
                                   data.name
                                 ] || false
                               }
+                              placeholder={data.placeholder}
                               icon={data.icon}
                               handleChange={applyData.bind(null, setValues)}
                               optionItems={searchFieldOptions}

@@ -43,6 +43,7 @@ async function fetchCustomerInfo(customerInfo, sourceInfo) {
 
 const CustomerInfo = (props) => {
   const { appConfig } = useOutletContext();
+  const [searchKey, setSearchKey] = useState("Customer Name");
   const [searchFieldOptions, setSearchFieldOptions] = useState([]);
   const [selected, setSelected] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -68,7 +69,6 @@ const CustomerInfo = (props) => {
   }, [appConfig]);
 
   const optionRenderer = (option) => {
-
     if (!option["Enquiry Number"] ){
       return "";
     }
@@ -81,11 +81,12 @@ const CustomerInfo = (props) => {
     setIsSubmitting(true);
     try {
       const response = await fetchCustomerInfo(
-        selected[0],
+        searchKey,
+        selected[0][searchKey],
         appConfig.forms.customerInfo
       );
+      console.log(response);
       if(response.success === true){
-        console.log(response);
         setCustomerData(response);
       }
       setIsSubmitting(false);
@@ -120,6 +121,7 @@ const CustomerInfo = (props) => {
   if (appConfig.companyNameSuffix) {
     title = `${title} ${appConfig.companyNameSuffix}`;
   }
+
   return (
     <FormCard
       initialValues={{}}
@@ -130,7 +132,13 @@ const CustomerInfo = (props) => {
       <>
         <Form noValidate className="mb-5">
           <Row>
-            <SelectInput size="4" name="Search In" optionItems={searchOptionItems} />
+            <SelectInput
+              size="4"
+              name="Search In"
+              value={searchKey}
+              handleChange={(e) => setSearchKey(e.target.value)}
+              optionItems={searchOptionItems}
+            />
             <Col xs="12" sm="12" md="8">
               <Form.Group className="mb-3">
                 <Form.Label htmlFor="customer-search">Search</Form.Label>
@@ -138,7 +146,7 @@ const CustomerInfo = (props) => {
                   id="customer-search"
                   minLength={3}
                   // filterBy={filterByFields}
-                  labelKey={optionRenderer}
+                  labelKey={searchKey}
                   onChange={setSelected}
                   options={searchFieldOptions}
                   placeholder={"Type here..."}
@@ -159,9 +167,7 @@ const CustomerInfo = (props) => {
             disabled={isSubmitting}
             onClick={submitHandler}
           >
-            {isSubmitting && (
-              <Spinner as="span" size="sm" animation="border" />
-            )}
+            {isSubmitting && <Spinner as="span" size="sm" animation="border" />}
             <span> {isSubmitting ? "Searching..." : "Submit"} </span>
           </Button>
         </Form>

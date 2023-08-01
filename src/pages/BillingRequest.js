@@ -110,6 +110,7 @@ const DeliveryForm = (props) => {
                               false
                             }
                             icon={data.icon}
+                            placeholder={data.placeholder}
                             handleChange={applyData.bind(null, setValues)}
                             optionItems={searchFieldOptions}
                             error={errors[data.name]}
