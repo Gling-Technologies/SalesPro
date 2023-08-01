@@ -40,10 +40,17 @@ const ExitTestDrive = (props) => {
     );
   };
 
+  let title = "Test Drive Form";
+  if (appConfig.companyNamePrefix) {
+    title = `${appConfig.companyNamePrefix} ${title}`;
+  }
+  if (appConfig.companyNameSuffix) {
+    title = `${title} ${appConfig.companyNameSuffix}`;
+  }
   return (
     <FormCard
       // noFormik={true}
-      title="Test Drive Form"
+      title={title}
       initialValues={initialValues}
       submitHandler={submitHandler}
       validationSchema={schema}

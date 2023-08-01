@@ -113,10 +113,17 @@ const CustomerInfo = (props) => {
 
   const searchOptionItems = ["Enquiry Number", "Customer Name", "Contact Number", "Sales Person Name"]
 
+  let title = "Customer Info";
+  if (appConfig.companyNamePrefix) {
+    title = `${appConfig.companyNamePrefix} ${title}`;
+  }
+  if (appConfig.companyNameSuffix) {
+    title = `${title} ${appConfig.companyNameSuffix}`;
+  }
   return (
     <FormCard
       initialValues={{}}
-      title="Customer Info"
+      title={title}
       submitHandler={console.log}
       //   validationSchema={schema}
     >

@@ -195,10 +195,17 @@ const EnquiryStatus = (props) => {
     );
   };
 
+  let title = "Enquiry Status Form";
+  if (appConfig.companyNamePrefix) {
+    title = `${appConfig.companyNamePrefix} ${title}`;
+  }
+  if (appConfig.companyNameSuffix) {
+    title = `${title} ${appConfig.companyNameSuffix}`;
+  }
   return (
     <FormCard
       initialValues={initialValues}
-      title="Enquiry Status Form"
+      title={title}
       submitHandler={submitHandler}
       validationSchema={schema}
     >

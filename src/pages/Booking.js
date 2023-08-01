@@ -218,10 +218,17 @@ const Booking = (props) => {
     );
   };
 
+  let title = "Booking Form";
+  if (appConfig.companyNamePrefix) {
+    title = `${appConfig.companyNamePrefix} ${title}`;
+  }
+  if (appConfig.companyNameSuffix) {
+    title = `${title} ${appConfig.companyNameSuffix}`;
+  }
   return (
     <FormCard
       initialValues={initialValues}
-      title="Booking Form"
+      title={title}
       submitHandler={submitHandler}
       validationSchema={schema}
     >

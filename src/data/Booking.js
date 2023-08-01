@@ -71,7 +71,7 @@ const sectionsMeta = [
         type: "file",
         required: true,
         placeholder: "Enter a value...",
-        validation: string().length(12),
+        validation: string(),
       },
       {
         name: "GST Number",

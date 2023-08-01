@@ -192,10 +192,17 @@ const BillingRequest = (props) => {
     );
   };
 
+  let title = "Billing Request Form";
+  if (appConfig.companyNamePrefix){
+    title = `${appConfig.companyNamePrefix} ${title}`;
+  }
+  if(appConfig.companyNameSuffix){
+    title = `${title} ${appConfig.companyNameSuffix}`;
+  }
   return (
     <FormCard
       initialValues={initialValues}
-      title="Billing Request Form"
+      title={title}
       submitHandler={submitHandler}
       validationSchema={schema}
     >
