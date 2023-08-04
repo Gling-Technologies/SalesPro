@@ -77,7 +77,6 @@ const formFieldsMetadata = [
     icon: "hash",
     placeholder: "Enter a value...",
     validation: yup.string().matches(/^.+-.+$/, "Not a valid CRM ID!"),
-
   },
   {
     id: "Enquiry Status",
@@ -116,6 +115,38 @@ const formFieldsMetadata = [
         field: "Enquiry Status",
         operator: "===",
         value: "Hold",
+      },
+    ],
+  },
+  {
+    id: "Lost Reason",
+    name: "Lost Reason",
+    type: "select",
+    icon: "patch-question-fill",
+    placeholder: "Enter a value...",
+    validation: yup.string(),
+    dependent: true,
+    conditions: [
+      {
+        field: "Enquiry Status",
+        operator: "===",
+        value: "Lost",
+      },
+    ],
+  },
+  {
+    id: "Lost Sub Reason",
+    name: "Lost Sub Reason",
+    type: "select",
+    icon: "patch-question-fill",
+    placeholder: "Enter a value...",
+    validation: yup.string(),
+    dependent: true,
+    conditions: [
+      {
+        field: "Enquiry Status",
+        operator: "===",
+        value: "Lost",
       },
     ],
   },

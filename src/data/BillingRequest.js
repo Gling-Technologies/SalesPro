@@ -80,7 +80,7 @@ const sectionsMeta = [
       {
         name: "Financier Name",
         icon: "person-fill",
-        type: "text",
+        type: "select",
         placeholder: "Enter a value...",
         validation: yup.string(),
         dependent: true,
@@ -109,7 +109,15 @@ const sectionsMeta = [
         icon: "123",
         type: "number",
         placeholder: "Enter a value...",
-        validation: yup.string(),
+        validation: yup.number(),
+        dependent: true,
+      },
+      {
+        name: "Disbursal Amount",
+        icon: "123",
+        type: "number",
+        placeholder: "Enter a value...",
+        validation: yup.number(),
         dependent: true,
       },
       {

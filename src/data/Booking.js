@@ -66,6 +66,13 @@ const sectionsMeta = [
         validation: string().min(10).max(10),
       },
       {
+        name: "PAN Card Upload",
+        icon: "123",
+        type: "file",
+        required: true,
+        validation: string(),
+      },
+      {
         name: "Aadhaar Number",
         icon: "hash",
         type: "file",
@@ -235,6 +242,30 @@ const sectionsMeta = [
         validation: number(),
       },
       {
+        name: "AMC",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
+        validation: number(),
+      },
+      {
+        name: "Fastag",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
+        validation: number(),
+      },
+      {
+        name: "HSRP/TRC",
+        icon: "123",
+        type: "number",
+        required: true,
+        placeholder: "",
+        validation: number(),
+      },
+      {
         name: "Any Other Charges",
         icon: "123",
         type: "number",
@@ -247,6 +278,20 @@ const sectionsMeta = [
   {
     title: "Discount & Scheme Section",
     fields: [
+      {
+        name: "Scheme Type",
+        icon: "hash",
+        type: "select",
+        placeholder: "",
+        validation: string(),
+      },
+      {
+        name: "Corporate Discount Type",
+        icon: "hash",
+        type: "select",
+        placeholder: "",
+        validation: string(),
+      },
       {
         name: "Corporate Discount",
         icon: "123",
@@ -388,6 +433,13 @@ const sectionsMeta = [
         icon: "hash",
         type: "number",
         required: true,
+        placeholder: "",
+        validation: string(),
+      },
+      {
+        name: "Old RC Upload",
+        icon: "hash",
+        type: "file",
         placeholder: "",
         validation: string(),
       },
