@@ -17,11 +17,11 @@ const sectionsMeta = [
       {
         id: "Customer Name",
         name: "Customer Name",
-        type: "text",
         required: true,
         icon: "person-fill",
         placeholder: "Enter a value...",
         validation: string(),
+        searchable: true,
       },
       {
         id: "Contact Number",
@@ -50,6 +50,15 @@ const sectionsMeta = [
         icon: "envelope-at-fill",
         placeholder: "Enter a value...",
         validation: string(),
+      },
+      {
+        id: "Date of Birth",
+        name: "Date of Birth",
+        type: "date",
+        required: true,
+        icon: "envelope-at-fill",
+        placeholder: "Enter a value...",
+        validation: string().required(),
       },
     ],
   },
@@ -279,13 +288,6 @@ const sectionsMeta = [
     title: "Discount & Scheme Section",
     fields: [
       {
-        name: "Scheme Type",
-        icon: "hash",
-        type: "select",
-        placeholder: "",
-        validation: string(),
-      },
-      {
         name: "Corporate Discount Type",
         icon: "hash",
         type: "select",
@@ -336,12 +338,18 @@ const sectionsMeta = [
         validation: number(),
       },
       {
+        name: "Scheme Type",
+        icon: "hash",
+        type: "select",
+        placeholder: "",
+        validation: string(),
+      },
+      {
         name: "Any Other Discount",
         icon: "123",
         type: "number",
         required: true,
         placeholder: "",
-
         validation: number(),
       },
     ],
@@ -411,6 +419,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         validation: string(),
+        dependent: true,
       },
       {
         name: "Model Description",
@@ -419,6 +428,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         validation: string(),
+        dependent: true,
       },
       {
         name: "MFG Year",
@@ -427,6 +437,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         validation: number(),
+        dependent: true,
       },
       {
         name: "Exchange Value",
@@ -435,6 +446,7 @@ const sectionsMeta = [
         required: true,
         placeholder: "",
         validation: string(),
+        dependent: true,
       },
       {
         name: "Old RC Upload",
@@ -442,6 +454,7 @@ const sectionsMeta = [
         type: "file",
         placeholder: "",
         validation: string(),
+        dependent: true,
       },
       {
         name: "Others if any",
@@ -452,6 +465,7 @@ const sectionsMeta = [
         as: "textarea",
         size: 12,
         validation: string(),
+        dependent: true,
       },
     ],
   },
@@ -480,8 +494,9 @@ const schemaModifier = (values, schema) => {
       "Registration Number": string(),
       "Model Description": string(),
       "MFG Year": number(),
-      "Exchange Value Approved by Tata OK": number(),
-      "Exchange Checklist": string(),
+      "Exchange Value": number(),
+      "Old RC Upload": string(),
+      "Others if any": string(),
     });
   }
   return newSchema;

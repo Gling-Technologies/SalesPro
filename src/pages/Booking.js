@@ -107,6 +107,8 @@ const BookingForm = (props) => {
     setIsFormSubmitted(true);
   }
 
+  console.log(errors);
+
   return (
     <Form noValidate onSubmit={submitHandler}>
       <Row>
