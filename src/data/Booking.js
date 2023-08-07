@@ -11,7 +11,7 @@ const sectionsMeta = [
         icon: "person-fill",
         required: true,
         placeholder: "Enter a value...",
-        searchable: true,
+        typeahead: true,
         validation: string(),
       },
       {
@@ -21,7 +21,7 @@ const sectionsMeta = [
         icon: "person-fill",
         placeholder: "Enter a value...",
         validation: string(),
-        searchable: true,
+        typeahead: true,
       },
       {
         id: "Contact Number",
@@ -29,7 +29,7 @@ const sectionsMeta = [
         required: true,
         icon: "telephone-fill",
         placeholder: "Enter a value...",
-        searchable: true,
+        typeahead: true,
         validation: string(),
       },
       {

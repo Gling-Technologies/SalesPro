@@ -8,7 +8,7 @@ const entryFormFieldsMetadata = [
     required: true,
     placeholder: "Enter a value...",
     validation: yup.string(),
-    searchable: true,
+    typeahead: true,
   },
   {
     id: "Customer Name",
@@ -138,7 +138,7 @@ const exitFormFieldsMetadata = [
     required: true,
     placeholder: "Enter a value...",
     validation: yup.string(),
-    searchable: true,
+    typeahead: true,
   },
   {
     id: "Customer Name",
@@ -147,7 +147,7 @@ const exitFormFieldsMetadata = [
     icon: "person-fill",
     placeholder: "Enter a value...",
     validation: yup.string(),
-    searchable: true,
+    typeahead: true,
   },
   {
     id: "Contact Number",
@@ -158,7 +158,7 @@ const exitFormFieldsMetadata = [
     minLength: 10,
     maxLength: 10,
     validation: yup.string(),
-    searchable: true,
+    typeahead: true,
   },
   {
     id: "Email Address",

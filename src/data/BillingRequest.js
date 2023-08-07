@@ -10,12 +10,12 @@ const sectionsMeta = [
         icon: "person-fill",
         placeholder: "Enter a value...",
         validation: yup.string(),
-        searchable: true,
+        typeahead: true,
       },
       {
         id: "Customer Name",
         name: "Customer Name",
-        searchable: true,
+        typeahead: true,
         icon: "person-fill",
         placeholder: "Enter a value...",
         validation: yup.string(),
@@ -23,7 +23,7 @@ const sectionsMeta = [
       {
         id: "Contact Number",
         name: "Contact Number",
-        searchable: true,
+        typeahead: true,
         icon: "telephone-fill",
         placeholder: "Enter a value...",
         validation: yup
@@ -238,7 +238,6 @@ const fieldSectionIndexMap = sectionsMeta.reduce((map, section, idx) => {
 }, {});
 
 const schemaModifier = (values, schema) => {
-  console.log("Inside schemaModifier");
   const { "Case Type": caseType } = values[0];
   const { "Any Change in Discount?": anyDiscount } = values[0];
   let newSchema = schema;

@@ -68,7 +68,7 @@ const ExitForm = (props) => {
             .filter((data) => checkConditions(data.conditions, values))
             .map(
               (data) =>
-                (!!data.searchable && (
+                (!!data.typeahead && (
                   <SearchFormField
                     key={data.name}
                     id={data.name}
@@ -86,7 +86,7 @@ const ExitForm = (props) => {
                     touched={touched[data.name]}
                   />
                 )) ||
-                (!data.searchable && (
+                (!data.typeahead && (
                   <FormField
                     key={data.name}
                     {...data}
