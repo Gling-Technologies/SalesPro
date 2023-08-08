@@ -209,6 +209,10 @@ const Booking = (props) => {
     if (deliveryDate && /^[\d]{4}-[\d]{2}-[\d]{2}$/.test(deliveryDate)) {
       payload["Expected Delivery Date"] = deliveryDate.split("-").reverse().join("/");
     }
+    const dateOfBirth = payload["Date of Birth"];
+    if (dateOfBirth && /^[\d]{4}-[\d]{2}-[\d]{2}$/.test(dateOfBirth)) {
+      payload["Date of Birth"] = dateOfBirth.split("-").reverse().join("/");
+    }
     payload["Location"] = location;
     console.log("Form Payload", payload);
     submitData(
