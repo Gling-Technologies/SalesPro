@@ -132,14 +132,6 @@ const sectionsMeta = [
   },
   {
     title: "Ex-showroom/Discount Section",
-    // dependent: true,
-    // conditions: [
-    //   {
-    //     field: "Any Change in Discount?",
-    //     operator: "===",
-    //     value: "Yes",
-    //   },
-    // ],
     fields: [
       {
         name: "Ex-Showroom Price",

@@ -510,7 +510,5 @@ const fieldSectionIndexMap = sectionsMeta.reduce((map, section, idx) => {
   return { ...map, ...fieldsMap};
 }, {});
 
-console.log(fieldSectionIndexMap);
-
 export default sectionsMeta;
 export { fieldSectionIndexMap, schemaModifier };
