@@ -29,20 +29,98 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        {formFieldsMetadata.length &&
-          formFieldsMetadata.map((data) => (
-            <FormField
-              key={data.id}
-              {...data}
-              required={appConfig.mandatoriness.enquiryForm[data.name] || false}
-              value={values[data.name]}
-              touched={touched[data.name]}
-              error={errors[data.name]}
-              handleChange={handleChange}
-              onBlur={handleBlur}
-              optionItems={inputOptions[data.name]}
-            />
-          ))}
+        <FormField
+          {...formFieldsMetadata[0]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Customer Name"] || false
+          }
+          value={values["Customer Name"]}
+          touched={touched["Customer Name"]}
+          error={errors["Customer Name"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Customer Name"]}
+        />
+        <FormField
+          {...formFieldsMetadata[1]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Contact Number"] || false
+          }
+          value={values["Contact Number"]}
+          touched={touched["Contact Number"]}
+          error={errors["Contact Number"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Contact Number"]}
+        />
+        <FormField
+          {...formFieldsMetadata[2]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Email Address"] || false
+          }
+          value={values["Email Address"]}
+          touched={touched["Email Address"]}
+          error={errors["Email Address"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Email Address"]}
+        />
+        <FormField
+          {...formFieldsMetadata[3]}
+          required={appConfig.mandatoriness.enquiryForm["Address"] || false}
+          value={values["Address"]}
+          touched={touched["Address"]}
+          error={errors["Address"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Address"]}
+        />
+        <FormField
+          {...formFieldsMetadata[4]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Source of Enquiry"] || false
+          }
+          value={values["Source of Enquiry"]}
+          touched={touched["Source of Enquiry"]}
+          error={errors["Source of Enquiry"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Source of Enquiry"]}
+        />
+        <FormField
+          {...formFieldsMetadata[5]}
+          required={appConfig.mandatoriness.enquiryForm["Model"] || false}
+          value={values["Model"]}
+          touched={touched["Model"]}
+          error={errors["Model"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Model"]}
+        />
+        <FormField
+          {...formFieldsMetadata[6]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Sales Person Name"] || false
+          }
+          value={values["Sales Person Name"]}
+          touched={touched["Sales Person Name"]}
+          error={errors["Sales Person Name"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Sales Person Name"]}
+        />
+        <FormField
+          {...formFieldsMetadata[7]}
+          required={
+            appConfig.mandatoriness.enquiryForm["Customer Remarks"] || false
+          }
+          value={values["Customer Remarks"]}
+          touched={touched["Customer Remarks"]}
+          error={errors["Customer Remarks"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Customer Remarks"]}
+        />
         <Button
           variant="primary"
           type="submit"

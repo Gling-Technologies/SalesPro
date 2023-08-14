@@ -111,36 +111,240 @@ const EnquiryForm = (props) => {
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Row>
-        {searchFieldsMeta.length &&
-          searchFieldsMeta.map((data) => (
-            <SearchFormField
-              key={data.id}
-              id={data.id}
-              name={data.name}
-              icon={data.icon}
-              required={appConfig.mandatoriness.enquiryStatusForm[data.name] || false}
-              placeholder={data.placeholder}
-              handleChange={(x) => applyData(setValues, x, excludedFields)}
-              optionItems={searchFieldOptions}
-              error={errors[data.name]}
-              value={values[data.name]}
-              touched={touched[data.name]}
-            />
-          ))}
-        {formFieldsMetadata.length &&
-          formFieldsMetadata.filter((data) => checkConditions(data.conditions, values)).map((data) => (
-            <FormField
-              key={data.id}
-              {...data}
-              required={appConfig.mandatoriness.enquiryStatusForm[data.name] || false}
-              value={values[data.name]}
-              touched={touched[data.name]}
-              error={errors[data.name]}
-              handleChange={handleChange}
-              onBlur={handleBlur}
-              optionItems={inputOptions[data.name]}
-            />
-          ))}
+        <SearchFormField
+          id="Enquiry Number"
+          name="Enquiry Number"
+          icon={searchFieldsMeta[0].icon}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Enquiry Number"] || false
+          }
+          placeholder={searchFieldsMeta[0].placeholder}
+          handleChange={(x) => applyData(setValues, x, excludedFields)}
+          optionItems={searchFieldOptions}
+          error={errors["Enquiry Number"]}
+          value={values["Enquiry Number"]}
+          touched={touched["Enquiry Number"]}
+        />
+        <SearchFormField
+          id="Customer Name"
+          name="Customer Name"
+          icon={searchFieldsMeta[1].icon}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Customer Name"] || false
+          }
+          placeholder={searchFieldsMeta[0].placeholder}
+          handleChange={(x) => applyData(setValues, x, excludedFields)}
+          optionItems={searchFieldOptions}
+          error={errors["Customer Name"]}
+          value={values["Customer Name"]}
+          touched={touched["Customer Name"]}
+        />
+        <SearchFormField
+          id="Contact Number"
+          name="Contact Number"
+          icon={searchFieldsMeta[2].icon}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Contact Number"] || false
+          }
+          placeholder={searchFieldsMeta[0].placeholder}
+          handleChange={(x) => applyData(setValues, x, excludedFields)}
+          optionItems={searchFieldOptions}
+          error={errors["Contact Number"]}
+          value={values["Contact Number"]}
+          touched={touched["Contact Number"]}
+        />
+        <FormField
+          key={"Email Address"}
+          {...formFieldsMetadata[0]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Email Address"] || false
+          }
+          value={values["Email Address"]}
+          touched={touched["Email Address"]}
+          error={errors["Email Address"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Email Address"]}
+        />
+        <FormField
+          key={"Address"}
+          {...formFieldsMetadata[1]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Address"] || false
+          }
+          value={values["Address"]}
+          touched={touched["Address"]}
+          error={errors["Address"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Address"]}
+        />
+        <FormField
+          key={"Source of Enquiry"}
+          {...formFieldsMetadata[2]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Source of Enquiry"] ||
+            false
+          }
+          value={values["Source of Enquiry"]}
+          touched={touched["Source of Enquiry"]}
+          error={errors["Source of Enquiry"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Source of Enquiry"]}
+        />
+        <FormField
+          key={"Model"}
+          {...formFieldsMetadata[3]}
+          required={appConfig.mandatoriness.enquiryStatusForm["Model"] || false}
+          value={values["Model"]}
+          touched={touched["Model"]}
+          error={errors["Model"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Model"]}
+        />
+        <FormField
+          key={"Sales Person Name"}
+          {...formFieldsMetadata[4]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Sales Person Name"] ||
+            false
+          }
+          value={values["Sales Person Name"]}
+          touched={touched["Sales Person Name"]}
+          error={errors["Sales Person Name"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Sales Person Name"]}
+        />
+        <FormField
+          key={"Customer Type"}
+          {...formFieldsMetadata[5]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Customer Type"] || false
+          }
+          value={values["Customer Type"]}
+          touched={touched["Customer Type"]}
+          error={errors["Customer Type"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Customer Type"]}
+        />
+        <FormField
+          key={"Visit Type"}
+          {...formFieldsMetadata[6]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Visit Type"] || false
+          }
+          value={values["Visit Type"]}
+          touched={touched["Visit Type"]}
+          error={errors["Visit Type"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Visit Type"]}
+        />
+        <FormField
+          key={"CRM ID"}
+          {...formFieldsMetadata[7]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["CRM ID"] || false
+          }
+          value={values["CRM ID"]}
+          touched={touched["CRM ID"]}
+          error={errors["CRM ID"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["CRM ID"]}
+        />
+        <FormField
+          key={"Enquiry Status"}
+          {...formFieldsMetadata[8]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Enquiry Status"] || false
+          }
+          value={values["Enquiry Status"]}
+          touched={touched["Enquiry Status"]}
+          error={errors["Enquiry Status"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Enquiry Status"]}
+        />
+        <FormField
+          key={"Priority"}
+          {...formFieldsMetadata[9]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Priority"] || false
+          }
+          value={values["Priority"]}
+          touched={touched["Priority"]}
+          error={errors["Priority"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Priority"]}
+        />
+        {checkConditions(formFieldsMetadata[10].conditions, values) && (
+          <FormField
+            key={"Next Follow Up Date"}
+            {...formFieldsMetadata[10]}
+            required={
+              appConfig.mandatoriness.enquiryStatusForm[
+                "Next Follow Up Date"
+              ] || false
+            }
+            value={values["Next Follow Up Date"]}
+            touched={touched["Next Follow Up Date"]}
+            error={errors["Next Follow Up Date"]}
+            handleChange={handleChange}
+            onBlur={handleBlur}
+            optionItems={inputOptions["Next Follow Up Date"]}
+          />
+        )}
+        {checkConditions(formFieldsMetadata[11].conditions, values) && (
+          <FormField
+            key={"Lost Reason"}
+            {...formFieldsMetadata[11]}
+            required={
+              appConfig.mandatoriness.enquiryStatusForm["Lost Reason"] || false
+            }
+            value={values["Lost Reason"]}
+            touched={touched["Lost Reason"]}
+            error={errors["Lost Reason"]}
+            handleChange={handleChange}
+            onBlur={handleBlur}
+            optionItems={inputOptions["Lost Reason"]}
+          />
+        )}
+        {checkConditions(formFieldsMetadata[12].conditions, values) && (
+          <FormField
+            key={"Lost Sub Reason"}
+            {...formFieldsMetadata[12]}
+            required={
+              appConfig.mandatoriness.enquiryStatusForm["Lost Sub Reason"] ||
+              false
+            }
+            value={values["Lost Sub Reason"]}
+            touched={touched["Lost Sub Reason"]}
+            error={errors["Lost Sub Reason"]}
+            handleChange={handleChange}
+            onBlur={handleBlur}
+            optionItems={inputOptions["Lost Sub Reason"]}
+          />
+        )}
+        <FormField
+          key={"Customer Remarks"}
+          {...formFieldsMetadata[13]}
+          required={
+            appConfig.mandatoriness.enquiryStatusForm["Customer Remarks"] ||
+            false
+          }
+          value={values["Customer Remarks"]}
+          touched={touched["Customer Remarks"]}
+          error={errors["Customer Remarks"]}
+          handleChange={handleChange}
+          onBlur={handleBlur}
+          optionItems={inputOptions["Customer Remarks"]}
+        />
         <Button
           variant="primary"
           type="submit"
